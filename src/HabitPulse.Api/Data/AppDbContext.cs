@@ -1,12 +1,13 @@
-using HabitPulse.Api.Models;
 using Microsoft.EntityFrameworkCore;
+using HabitPulse.Api.Models;
 
 namespace HabitPulse.Api.Data;
 
 public class AppDbContext : DbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options)
-        : base(options) { }
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    {
+    }
 
     public DbSet<User> Users => Set<User>();
     public DbSet<Goal> Goals => Set<Goal>();
@@ -39,8 +40,7 @@ public class AppDbContext : DbContext
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("now()");
 
-            entity
-                .HasOne(e => e.User)
+            entity.HasOne(e => e.User)
                 .WithMany(u => u.Goals)
                 .HasForeignKey(e => e.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -56,8 +56,7 @@ public class AppDbContext : DbContext
 
             entity.HasIndex(e => new { e.GoalId, e.CompletedOn }).IsUnique();
 
-            entity
-                .HasOne(e => e.Goal)
+            entity.HasOne(e => e.Goal)
                 .WithMany(g => g.Completions)
                 .HasForeignKey(e => e.GoalId)
                 .OnDelete(DeleteBehavior.Cascade);

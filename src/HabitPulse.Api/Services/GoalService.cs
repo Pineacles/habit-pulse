@@ -20,12 +20,14 @@ public class GoalService
         var dayOfWeek = (int)DateTime.UtcNow.DayOfWeek;
 
         var query = _context.Goals
-            .Where(g => g.UserId == userId && g.IsActive);
+            .Where(g => g.UserId == userId);
 
         if (todayOnly)
         {
-            query = query.Where(g => g.ScheduleDays.Contains(dayOfWeek));
+            // For today view: only active goals scheduled for today
+            query = query.Where(g => g.IsActive && g.ScheduleDays.Contains(dayOfWeek));
         }
+        // For all goals view: include ALL goals (active and inactive)
 
         var goals = await query
             .OrderBy(g => g.SortOrder)
@@ -164,5 +166,25 @@ public class GoalService
             await _context.SaveChangesAsync();
             return new ToggleResponse(true);
         }
+    }
+
+    public async Task ReorderGoalsAsync(Guid userId, Guid[] goalIds)
+    {
+        // Get all goals for user
+        var goals = await _context.Goals
+            .Where(g => g.UserId == userId && goalIds.Contains(g.Id))
+            .ToListAsync();
+
+        // Update sort order based on position in array
+        for (int i = 0; i < goalIds.Length; i++)
+        {
+            var goal = goals.FirstOrDefault(g => g.Id == goalIds[i]);
+            if (goal != null)
+            {
+                goal.SortOrder = i;
+            }
+        }
+
+        await _context.SaveChangesAsync();
     }
 }
