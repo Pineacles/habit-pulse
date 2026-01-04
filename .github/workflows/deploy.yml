@@ -16,19 +16,19 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            cd /opt/habit-pulse
+            cd ~/websites/habit-pulse
             
             # Pull latest changes
             git fetch origin main
             git reset --hard origin/main
             
             # Rebuild and restart containers
-            docker-compose down
-            docker-compose build --no-cache
-            docker-compose up -d
+            docker compose down
+            docker compose build --no-cache
+            docker compose up -d
             
             # Clean up old images
             docker image prune -f
             
             # Show status
-            docker-compose ps
+            docker compose ps
