@@ -7,6 +7,7 @@ interface GoalState {
   goals: GoalWithStatus[];
   isLoading: boolean;
   error: string | null;
+  viewMode: 'today' | 'all'; // Track current view mode
 
   // Actions
   fetchGoals: (todayOnly?: boolean) => Promise<void>;
@@ -14,6 +15,7 @@ interface GoalState {
   updateGoal: (id: string, data: UpdateGoalRequest) => Promise<void>;
   deleteGoal: (id: string) => Promise<void>;
   toggleGoal: (id: string) => Promise<void>;
+  reorderGoals: (orderedIds: string[]) => Promise<void>;
   clearError: () => void;
 }
 
@@ -22,10 +24,11 @@ export const useGoalStore = create<GoalState>((set, get) => ({
   goals: [],
   isLoading: false,
   error: null,
+  viewMode: 'today',
 
   // Fetch all goals
   fetchGoals: async (todayOnly = true) => {
-    set({ isLoading: true, error: null });
+    set({ isLoading: true, error: null, viewMode: todayOnly ? 'today' : 'all' });
     try {
       const goals = await goalsApi.getAll(todayOnly);
       set({ goals, isLoading: false });
@@ -42,8 +45,9 @@ export const useGoalStore = create<GoalState>((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       await goalsApi.create(data);
-      // Refresh goals list
-      await get().fetchGoals();
+      // Refresh goals list using current view mode
+      const { viewMode } = get();
+      await get().fetchGoals(viewMode === 'today');
     } catch (err) {
       set({ 
         error: err instanceof Error ? err.message : 'Failed to create goal', 
@@ -55,12 +59,24 @@ export const useGoalStore = create<GoalState>((set, get) => ({
 
   // Update an existing goal
   updateGoal: async (id: string, data: UpdateGoalRequest) => {
-    set({ isLoading: true, error: null });
+    // Optimistic update for isActive toggle
+    if (data.isActive !== undefined) {
+      set((state) => ({
+        goals: state.goals.map((g) =>
+          g.id === id ? { ...g, isActive: data.isActive! } : g
+        ),
+      }));
+    }
+
     try {
       await goalsApi.update(id, data);
-      // Refresh goals list
-      await get().fetchGoals();
+      // Refresh goals list using current view mode
+      const { viewMode } = get();
+      await get().fetchGoals(viewMode === 'today');
     } catch (err) {
+      // Revert on error - refetch to get correct state
+      const { viewMode } = get();
+      await get().fetchGoals(viewMode === 'today');
       set({ 
         error: err instanceof Error ? err.message : 'Failed to update goal', 
         isLoading: false 
@@ -71,16 +87,19 @@ export const useGoalStore = create<GoalState>((set, get) => ({
 
   // Delete a goal
   deleteGoal: async (id: string) => {
-    set({ isLoading: true, error: null });
+    // Optimistic update - remove immediately
+    const previousGoals = get().goals;
+    set((state) => ({
+      goals: state.goals.filter((g) => g.id !== id),
+    }));
+
     try {
       await goalsApi.delete(id);
-      // Remove from local state immediately
-      set((state) => ({
-        goals: state.goals.filter((g) => g.id !== id),
-        isLoading: false,
-      }));
+      set({ isLoading: false });
     } catch (err) {
+      // Revert on error
       set({ 
+        goals: previousGoals,
         error: err instanceof Error ? err.message : 'Failed to delete goal', 
         isLoading: false 
       });
@@ -107,6 +126,30 @@ export const useGoalStore = create<GoalState>((set, get) => ({
         ),
         error: err instanceof Error ? err.message : 'Failed to toggle goal',
       }));
+    }
+  },
+
+  // Reorder goals by priority
+  reorderGoals: async (orderedIds: string[]) => {
+    // Optimistic update - reorder immediately in UI
+    const currentGoals = get().goals;
+    const reorderedGoals = orderedIds
+      .map(id => currentGoals.find(g => g.id === id))
+      .filter((g): g is GoalWithStatus => g !== undefined);
+    
+    // Keep any goals not in the reorder list at the end
+    const remainingGoals = currentGoals.filter(g => !orderedIds.includes(g.id));
+    
+    set({ goals: [...reorderedGoals, ...remainingGoals] });
+
+    try {
+      await goalsApi.reorder(orderedIds);
+    } catch (err) {
+      // Revert on error
+      set({ 
+        goals: currentGoals,
+        error: err instanceof Error ? err.message : 'Failed to reorder goals',
+      });
     }
   },
 

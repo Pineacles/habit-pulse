@@ -5,30 +5,48 @@ import { useGoalStore } from '../stores/goalStore';
 interface GoalCardProps {
   goal: GoalWithStatus;
   onEdit: (goal: GoalWithStatus) => void;
+  // Drag and drop props
+  isDragOver?: boolean;
+  onDragStart?: (e: React.DragEvent) => void;
+  onDragEnd?: (e: React.DragEvent) => void;
+  onDragOver?: (e: React.DragEvent) => void;
+  onDragLeave?: () => void;
+  onDrop?: (e: React.DragEvent) => void;
 }
 
 /**
- * GoalCard
+ * GoalCard - Glass Bento Design with Drag & Drop
  * 
- * Displays a single goal with:
- * - Card fill effect showing completion status
+ * Features:
+ * - Glass card with hover lift effect
  * - Tap to toggle complete
- * - Swipe left to reveal edit/delete actions
- * - Target minutes display in monospace font
+ * - Swipe left to reveal edit/delete (mobile)
+ * - Glowing checkbox when checked
+ * - Drag and drop to reorder
  */
-export function GoalCard({ goal, onEdit }: GoalCardProps) {
+export function GoalCard({ 
+  goal, 
+  onEdit,
+  isDragOver = false,
+  onDragStart,
+  onDragEnd,
+  onDragOver,
+  onDragLeave,
+  onDrop
+}: GoalCardProps) {
   const { toggleGoal, deleteGoal } = useGoalStore();
   
   // Swipe state
   const [swipeOffset, setSwipeOffset] = useState(0);
   const [isRevealed, setIsRevealed] = useState(false);
   const touchStartX = useRef(0);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   // Handle tap to toggle
-  const handleTap = () => {
+  const handleTap = (e: React.MouseEvent) => {
+    // Don't toggle if clicking on drag handle
+    if ((e.target as HTMLElement).closest('.drag-handle')) return;
+    
     if (isRevealed) {
-      // Close swipe menu on tap
       setSwipeOffset(0);
       setIsRevealed(false);
       return;
@@ -43,17 +61,14 @@ export function GoalCard({ goal, onEdit }: GoalCardProps) {
 
   const handleTouchMove = (e: React.TouchEvent) => {
     const diff = touchStartX.current - e.touches[0].clientX;
-    // Only allow left swipe (positive diff), max 120px
     if (diff > 0) {
       setSwipeOffset(Math.min(diff, 120));
     } else if (isRevealed) {
-      // Allow closing by swiping right
       setSwipeOffset(Math.max(120 + diff, 0));
     }
   };
 
   const handleTouchEnd = () => {
-    // Snap to revealed or closed
     if (swipeOffset > 60) {
       setSwipeOffset(120);
       setIsRevealed(true);
@@ -65,7 +80,7 @@ export function GoalCard({ goal, onEdit }: GoalCardProps) {
 
   // Handle delete
   const handleDelete = async () => {
-    if (confirm('Are you sure you want to delete this goal?')) {
+    if (confirm('Delete this goal?')) {
       await deleteGoal(goal.id);
     }
   };
@@ -86,21 +101,19 @@ export function GoalCard({ goal, onEdit }: GoalCardProps) {
     return goal.scheduleDays.map(d => DAY_NAMES[d]).join(', ');
   };
 
+  const isDraggable = !!onDragStart;
+
   return (
-    <div 
-      ref={containerRef}
-      className="relative overflow-hidden rounded-2xl mb-3"
-    >
-      {/* Swipe actions (revealed on swipe left) */}
+    <div className="relative overflow-hidden rounded-2xl mb-3">
+      {/* Swipe actions (mobile) */}
       <div 
         className="absolute right-0 top-0 bottom-0 flex items-center gap-2 px-3"
         style={{ transform: `translateX(${120 - swipeOffset}px)` }}
       >
         <button
           onClick={() => onEdit(goal)}
-          className="w-12 h-12 rounded-xl bg-blue-500/80 flex items-center justify-center
-                     hover:bg-blue-500 transition-colors"
-          aria-label="Edit goal"
+          className="w-12 h-12 rounded-xl bg-blue-500/80 flex items-center justify-center"
+          aria-label="Edit"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
@@ -109,9 +122,8 @@ export function GoalCard({ goal, onEdit }: GoalCardProps) {
         </button>
         <button
           onClick={handleDelete}
-          className="w-12 h-12 rounded-xl bg-red-500/80 flex items-center justify-center
-                     hover:bg-red-500 transition-colors"
-          aria-label="Delete goal"
+          className="w-12 h-12 rounded-xl bg-red-500/80 flex items-center justify-center"
+          aria-label="Delete"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
@@ -120,29 +132,34 @@ export function GoalCard({ goal, onEdit }: GoalCardProps) {
         </button>
       </div>
 
-      {/* Main card content */}
+      {/* Main card */}
       <div
-        className={`
-          glass-solid relative overflow-hidden cursor-pointer
-          transition-all duration-200 active:scale-[0.98]
-          ${goal.isCompletedToday ? 'border-white/30' : ''}
-        `}
+        className={`goal-card ${goal.isCompletedToday ? 'completed' : ''} ${isDraggable ? 'draggable' : ''} ${isDragOver ? 'drag-over' : ''}`}
         style={{ transform: `translateX(-${swipeOffset}px)` }}
         onClick={handleTap}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
+        draggable={isDraggable}
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
+        onDragOver={onDragOver}
+        onDragLeave={onDragLeave}
+        onDrop={onDrop}
       >
-        {/* Progress fill (card background fills when complete) */}
-        <div 
-          className="card-progress"
-          style={{ height: goal.isCompletedToday ? '100%' : '0%' }}
-        />
+        <div className="goal-card-inner">
+          {/* Drag handle (desktop only) */}
+          {isDraggable && (
+            <div className="drag-handle hidden lg:flex" title="Drag to reorder">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                      d="M4 8h16M4 16h16" />
+              </svg>
+            </div>
+          )}
 
-        {/* Card content */}
-        <div className="relative z-10 p-4 flex items-center gap-4">
           {/* Checkbox */}
-          <div className={`checkbox ${goal.isCompletedToday ? 'checked' : ''}`}>
+          <div className={`goal-checkbox ${goal.isCompletedToday ? 'checked' : ''}`}>
             {goal.isCompletedToday && (
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} 
@@ -152,22 +169,17 @@ export function GoalCard({ goal, onEdit }: GoalCardProps) {
           </div>
 
           {/* Goal info */}
-          <div className="flex-1 min-w-0">
-            <h3 className={`font-semibold text-lg truncate
-                          ${goal.isCompletedToday ? 'line-through opacity-60' : ''}`}>
+          <div className="goal-info">
+            <h3 className={`goal-name ${goal.isCompletedToday ? 'completed' : ''}`}>
               {goal.name}
             </h3>
-            <p className="text-sm text-white/50 mt-0.5">
-              {formatSchedule()}
-            </p>
+            <p className="goal-schedule">{formatSchedule()}</p>
           </div>
 
           {/* Target minutes */}
-          <div className="text-right">
-            <span className="font-mono text-2xl font-bold text-white/90">
-              {goal.targetMinutes}
-            </span>
-            <span className="text-xs text-white/40 ml-1">min</span>
+          <div className="goal-minutes">
+            <span className="goal-minutes-value">{goal.targetMinutes}</span>
+            <span className="goal-minutes-label">min</span>
           </div>
         </div>
       </div>

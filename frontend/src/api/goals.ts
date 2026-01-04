@@ -44,4 +44,9 @@ export const goalsApi = {
     const response = await api.post<ToggleResponse>(`/goals/${id}/toggle`);
     return response.data;
   },
+
+  // Reorder goals by priority
+  async reorder(orderedIds: string[]): Promise<void> {
+    await api.post('/goals/reorder', { goalIds: orderedIds });
+  },
 };
