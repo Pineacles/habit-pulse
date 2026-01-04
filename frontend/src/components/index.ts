@@ -1,7 +1,10 @@
 export { AnimatedBackground } from './AnimatedBackground';
 export { BottomNav } from './BottomNav';
+export { FormField } from './FormField';
 export { GlassCard } from './GlassCard';
 export { GoalCard } from './GoalCard';
 export { GoalModal } from './GoalModal';
+export { PasswordInput } from './PasswordInput';
+export { PasswordStrengthChecker, PasswordSatellitePanel } from './PasswordStrengthChecker';
 export { ProtectedRoute } from './ProtectedRoute';
 export { Sidebar } from './Sidebar';

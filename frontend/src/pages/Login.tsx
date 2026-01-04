@@ -1,15 +1,12 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { GlassCard } from '../components/GlassCard';
+import { FormField } from '../components/FormField';
+import { PasswordInput } from '../components/PasswordInput';
 import { useAuthStore } from '../stores/authStore';
 
 /**
- * Login Page
- * 
- * User login form with:
- * - Username and password fields
- * - Error handling
- * - Link to register
+ * Login Page - Crystalline Stratum Design
+ * With shake animation on repeated errors (key-based re-render)
  */
 export function Login() {
   const navigate = useNavigate();
@@ -19,23 +16,29 @@ export function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [errorKey, setErrorKey] = useState(0); // Key to force re-animation
+  const hadErrorRef = useRef(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
     setIsLoading(true);
 
     try {
-      await login({ username, password });
-      navigate('/');
+      await login({ username: username.trim().toLowerCase(), password });
+      navigate('/', { replace: true });
     } catch (err) {
+      // Increment key to force shake animation on repeated errors
+      if (hadErrorRef.current) {
+        setErrorKey(prev => prev + 1);
+      }
+      hadErrorRef.current = true;
+
       if (err instanceof Error) {
-        // Handle axios error
         const axiosError = err as { response?: { status: number } };
         if (axiosError.response?.status === 401) {
-          setError('Invalid username or password');
+          setError('Invalid username or password. Please try again.');
         } else {
-          setError('Something went wrong. Please try again.');
+          setError('Unable to connect. Please check your network.');
         }
       } else {
         setError('Something went wrong. Please try again.');
@@ -46,72 +49,110 @@ export function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center mx-auto mb-4">
-            <span className="text-3xl">🎯</span>
+    <div className="min-h-screen flex items-center justify-center px-6 py-12">
+      <div className="w-full max-w-[400px]">
+        
+        {/* Glass Panel */}
+        <div className="glass-solid" style={{ padding: '32px 40px 40px 40px' }}>
+          
+          {/* Brand Header */}
+          <div className="brand-header">
+            <h1 className="logo-text">
+              Habit Pulse<span className="accent-dot">.</span>
+            </h1>
+            <p className="system-status">Welcome back</p>
           </div>
-          <h1 className="text-2xl font-bold">Habit Pulse</h1>
-          <p className="text-white/50 mt-1">Welcome back</p>
-        </div>
 
-        {/* Login form */}
-        <GlassCard solid>
-          <form onSubmit={handleSubmit}>
-            {/* Error message */}
+          <form onSubmit={handleSubmit} noValidate>
+            
+            {/* Error Alert with shake animation - key forces re-render */}
             {error && (
-              <div className="mb-4 p-3 rounded-lg bg-red-500/20 border border-red-500/30 text-red-200 text-sm">
-                {error}
+              <div 
+                key={errorKey}
+                className="alert alert-error alert-shake"
+                role="alert"
+                aria-live="assertive"
+                style={{ marginBottom: '16px' }}
+              >
+                <svg 
+                  className="alert-icon w-4 h-4 flex-shrink-0" 
+                  fill="currentColor" 
+                  viewBox="0 0 20 20"
+                  aria-hidden="true"
+                >
+                  <path 
+                    fillRule="evenodd" 
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" 
+                    clipRule="evenodd" 
+                  />
+                </svg>
+                <span>{error}</span>
               </div>
             )}
 
-            {/* Username */}
-            <div className="mb-4">
-              <label className="block text-sm text-white/60 mb-2">Username</label>
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Enter your username"
-                required
-                autoComplete="username"
-                autoFocus
-              />
+            {/* Username Field */}
+            <div className="input-group">
+              <FormField label="Username" htmlFor="username">
+                <input
+                  type="text"
+                  id="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Enter your username"
+                  required
+                  autoComplete="username"
+                  autoFocus
+                  aria-required="true"
+                />
+              </FormField>
             </div>
 
-            {/* Password */}
-            <div className="mb-6">
-              <label className="block text-sm text-white/60 mb-2">Password</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
-                required
-                autoComplete="current-password"
-              />
+            {/* Password Field */}
+            <div className="input-group">
+              <FormField label="Password" htmlFor="password">
+                <PasswordInput
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                  autoComplete="current-password"
+                />
+              </FormField>
             </div>
 
-            {/* Submit */}
+            {/* Forgot Password Link */}
+            <div className="forgot-link-container">
+              <Link to="/forgot-password" className="text-link text-sm">
+                Forgot password?
+              </Link>
+            </div>
+
+            {/* Submit Button */}
             <button
               type="submit"
-              className="btn btn-primary w-full"
+              className="btn btn-primary"
               disabled={isLoading}
             >
-              {isLoading ? 'Signing in...' : 'Sign In'}
+              {isLoading ? (
+                <>
+                  <span className="btn-spinner" aria-hidden="true" />
+                  <span>Signing in...</span>
+                </>
+              ) : (
+                <span>Sign In</span>
+              )}
             </button>
           </form>
 
-          {/* Register link */}
-          <p className="text-center mt-6 text-white/50">
-            Don't have an account?{' '}
-            <Link to="/register" className="text-[rgb(var(--color-primary))] hover:underline">
-              Create one
+          {/* Footer */}
+          <div className="footer-links">
+            <span className="text-white/50 text-sm">Don't have an account?</span>
+            {' '}
+            <Link to="/register" className="text-link">
+              Sign up
             </Link>
-          </p>
-        </GlassCard>
+          </div>
+        </div>
       </div>
     </div>
   );
