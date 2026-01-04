@@ -79,6 +79,17 @@
    docker-compose logs -f
    ```
 
+6. **Test Locally:**
+   ```bash
+   curl http://localhost:5100/health
+   ```
+   
+   Access the app at: `http://YOUR_SERVER_IP:4080`
+
+   **Ports used:**
+   - `4080` - Frontend (nginx)
+   - `5100` - API (backend)
+
 ### Auto-Deploy on Push (GitHub Actions)
 
 1. **Add GitHub Secrets:**
@@ -155,9 +166,14 @@ public bool NewField { get; set; } = false;
 
 ---
 
-## SSL/HTTPS Setup (Optional)
+## SSL/HTTPS Setup
 
-For production with HTTPS, add Traefik or use nginx-proxy:
+### Option 1: Cloudflare Tunnel (Recommended)
+
+Point your Cloudflare tunnel to:
+- **Service:** `http://localhost:4080`
+
+### Option 2: Caddy (Self-hosted)
 
 ```bash
 # Using Caddy (easiest)
@@ -165,7 +181,7 @@ sudo apt install caddy
 
 # Edit /etc/caddy/Caddyfile
 yourdomain.com {
-    reverse_proxy localhost:80
+    reverse_proxy localhost:4080
 }
 
 sudo systemctl restart caddy

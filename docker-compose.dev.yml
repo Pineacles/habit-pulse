@@ -1,7 +1,5 @@
 # Development docker-compose - just PostgreSQL
 # Use this locally with: docker-compose -f docker-compose.dev.yml up -d
-version: '3.8'
-
 services:
   db:
     image: postgres:16
