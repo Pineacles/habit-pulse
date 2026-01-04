@@ -4,12 +4,6 @@ interface PasswordStrengthCheckerProps {
   password: string;
 }
 
-interface Requirement {
-  key: string;
-  label: string;
-  test: (password: string) => boolean;
-}
-
 /**
  * PasswordStrengthChecker - Satellite Panel
  * 
@@ -17,48 +11,6 @@ interface Requirement {
  * Mobile: Inline strength bar
  */
 export function PasswordStrengthChecker({ password }: PasswordStrengthCheckerProps) {
-  // Define requirements based on modern guidelines
-  const requirements: Requirement[] = [
-    {
-      key: 'length',
-      label: 'At least 8 characters',
-      test: (p) => p.length >= 8,
-    },
-    {
-      key: 'lengthGood',
-      label: '12+ characters',
-      test: (p) => p.length >= 12,
-    },
-    {
-      key: 'lowercase',
-      label: 'Lowercase letter',
-      test: (p) => /[a-z]/.test(p),
-    },
-    {
-      key: 'uppercase',
-      label: 'Uppercase letter',
-      test: (p) => /[A-Z]/.test(p),
-    },
-    {
-      key: 'number',
-      label: 'One number',
-      test: (p) => /[0-9]/.test(p),
-    },
-    {
-      key: 'special',
-      label: 'Special character',
-      test: (p) => /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(p),
-    },
-  ];
-
-  // Calculate which requirements are met
-  const results = useMemo(() => {
-    return requirements.map((req) => ({
-      ...req,
-      met: password.length > 0 && req.test(password),
-    }));
-  }, [password]);
-
   // Calculate strength score (0-100)
   const strengthScore = useMemo(() => {
     if (password.length === 0) return 0;
