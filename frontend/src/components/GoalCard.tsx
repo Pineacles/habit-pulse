@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react';
-import type { GoalWithStatus } from '../types';
-import { DAY_NAMES } from '../types';
+import { DAY_NAMES, type GoalWithStatus } from '../types';
 import { useGoalStore } from '../stores/goalStore';
 
 interface GoalCardProps {

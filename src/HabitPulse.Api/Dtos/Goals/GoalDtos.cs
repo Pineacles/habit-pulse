@@ -1,10 +1,6 @@
 namespace HabitPulse.Api.Dtos.Goals;
 
-public record CreateGoalRequest(
-    string Name,
-    int TargetMinutes,
-    int[]? ScheduleDays = null
-);
+public record CreateGoalRequest(string Name, int TargetMinutes, int[]? ScheduleDays = null);
 
 public record UpdateGoalRequest(
     string? Name = null,

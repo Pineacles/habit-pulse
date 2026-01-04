@@ -26,10 +26,17 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // If 401 Unauthorized, clear token and redirect to login
+    // If 401 Unauthorized, check if it's from a protected route (not login/register)
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-      window.location.href = '/login';
+      const requestUrl = error.config?.url || '';
+      const isAuthEndpoint = requestUrl.includes('/auth/login') || 
+                             requestUrl.includes('/auth/register');
+      
+      // Only redirect if NOT an auth endpoint (i.e., token expired on protected route)
+      if (!isAuthEndpoint) {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }

@@ -6,9 +6,17 @@ import { useGoalStore } from '../stores/goalStore';
 interface GoalModalProps {
   isOpen: boolean;
   onClose: () => void;
-  goal?: GoalWithStatus | null;
+  goal?: GoalWithStatus | null; // If provided, we're editing
 }
 
+/**
+ * GoalModal
+ * 
+ * Modal dialog for creating or editing goals.
+ * - Name input
+ * - Target minutes selector
+ * - Schedule day picker
+ */
 export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
   const { createGoal, updateGoal } = useGoalStore();
   
@@ -20,12 +28,14 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
 
   const isEditing = !!goal;
 
+  // Populate form when editing
   useEffect(() => {
     if (goal) {
       setName(goal.name);
       setTargetMinutes(goal.targetMinutes);
       setScheduleDays([...goal.scheduleDays]);
     } else {
+      // Reset form for new goal
       setName('');
       setTargetMinutes(30);
       setScheduleDays([0, 1, 2, 3, 4, 5, 6]);
@@ -33,8 +43,10 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
     setError('');
   }, [goal, isOpen]);
 
+  // Toggle a day in schedule
   const toggleDay = (day: number) => {
     if (scheduleDays.includes(day)) {
+      // Don't allow removing all days
       if (scheduleDays.length > 1) {
         setScheduleDays(scheduleDays.filter(d => d !== day));
       }
@@ -43,6 +55,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
     }
   };
 
+  // Quick schedule presets
   const setPreset = (preset: 'everyday' | 'weekdays' | 'weekends') => {
     switch (preset) {
       case 'everyday':
@@ -57,6 +70,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
     }
   };
 
+  // Handle form submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -104,14 +118,17 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       onClick={onClose}
     >
+      {/* Backdrop */}
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
       
+      {/* Modal */}
       <GlassCard 
         className="relative w-full max-w-md max-h-[90vh] overflow-y-auto"
         solid
-        onClick={(e) => e?.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
       >
         <form onSubmit={handleSubmit}>
+          {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold">
               {isEditing ? 'Edit Goal' : 'New Goal'}
@@ -128,12 +145,14 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
             </button>
           </div>
 
+          {/* Error message */}
           {error && (
             <div className="mb-4 p-3 rounded-lg bg-red-500/20 border border-red-500/30 text-red-200 text-sm">
               {error}
             </div>
           )}
 
+          {/* Name input */}
           <div className="mb-4">
             <label className="block text-sm text-white/60 mb-2">Goal Name</label>
             <input
@@ -145,6 +164,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
             />
           </div>
 
+          {/* Target minutes */}
           <div className="mb-4">
             <label className="block text-sm text-white/60 mb-2">Target Minutes</label>
             <div className="flex items-center gap-3">
@@ -158,6 +178,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
               />
               <span className="text-white/40">minutes per day</span>
             </div>
+            {/* Quick presets */}
             <div className="flex gap-2 mt-2">
               {[15, 30, 60, 90].map((mins) => (
                 <button
@@ -175,9 +196,11 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
             </div>
           </div>
 
+          {/* Schedule days */}
           <div className="mb-6">
             <label className="block text-sm text-white/60 mb-2">Schedule</label>
             
+            {/* Presets */}
             <div className="flex gap-2 mb-3">
               <button
                 type="button"
@@ -211,6 +234,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
               </button>
             </div>
 
+            {/* Day toggles */}
             <div className="flex gap-2">
               {DAY_NAMES.map((day, index) => (
                 <button
@@ -228,6 +252,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
             </div>
           </div>
 
+          {/* Actions */}
           <div className="flex gap-3">
             <button
               type="button"

@@ -17,6 +17,7 @@ namespace HabitPulse.Api.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false, defaultValueSql: "gen_random_uuid()"),
                     Username = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
                     PasswordHash = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()")
                 },
