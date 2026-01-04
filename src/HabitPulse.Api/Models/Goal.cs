@@ -5,7 +5,9 @@ public class Goal
     public Guid Id { get; set; }
     public Guid UserId { get; set; }
     public string Name { get; set; } = string.Empty;
-    public int TargetMinutes { get; set; }
+    public bool IsMeasurable { get; set; } = false; // Simple checkbox vs measured goal
+    public int TargetValue { get; set; } = 0; // Target amount (only used if IsMeasurable)
+    public string Unit { get; set; } = "minutes"; // minutes, pages, reps, liters, etc.
     public int[] ScheduleDays { get; set; } = [0, 1, 2, 3, 4, 5, 6]; // 0=Sun, 6=Sat
     public int SortOrder { get; set; } = 0;
     public bool IsActive { get; set; } = true;

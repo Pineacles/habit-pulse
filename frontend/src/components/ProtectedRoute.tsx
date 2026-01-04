@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore';
+import { AnimatedBackground } from './AnimatedBackground';
 
 /**
  * ProtectedRoute
@@ -11,15 +12,24 @@ import { useAuthStore } from '../stores/authStore';
 export function ProtectedRoute() {
   const { isAuthenticated, isLoading } = useAuthStore();
 
-  // Show loading spinner while checking auth
+  // Show branded loading screen while checking auth
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-12 h-12 rounded-xl gradient-primary flex items-center justify-center mx-auto mb-4 animate-pulse">
-            <span className="text-2xl">🎯</span>
+      <div className="loading-screen">
+        <AnimatedBackground />
+        <div className="loading-content">
+          {/* Brand */}
+          <h1 className="loading-brand">
+            Habit Pulse<span className="loading-dot">.</span>
+          </h1>
+          
+          {/* Spinner */}
+          <div className="loading-spinner">
+            <div className="spinner-ring"></div>
           </div>
-          <p className="text-white/50">Loading...</p>
+          
+          {/* Status text */}
+          <p className="loading-text">Loading your goals...</p>
         </div>
       </div>
     );

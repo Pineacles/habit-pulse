@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { GoalModal } from '../components/GoalModal';
 import { useGoalStore } from '../stores/goalStore';
-import { DAY_NAMES, type GoalWithStatus } from '../types';
+import { DAY_NAMES_SHORT, type GoalWithStatus } from '../types';
 
 /**
  * AllGoals Page - Glass Design with Drag & Drop Reorder
@@ -10,6 +10,7 @@ import { DAY_NAMES, type GoalWithStatus } from '../types';
  * - Transparent header with Add Goal button
  * - Glass goal cards with hover effects
  * - Drag and drop to reorder priorities
+ * - Shows target value+unit or "Simple" badge
  */
 export function AllGoals() {
   const { goals, isLoading, fetchGoals, deleteGoal, updateGoal, reorderGoals } = useGoalStore();
@@ -52,7 +53,23 @@ export function AllGoals() {
     if (days.length === 7) return 'Every day';
     if (days.length === 5 && !days.includes(0) && !days.includes(6)) return 'Weekdays';
     if (days.length === 2 && days.includes(0) && days.includes(6)) return 'Weekends';
-    return days.map(d => DAY_NAMES[d]).join(', ');
+    return days.map(d => DAY_NAMES_SHORT[d]).join(', ');
+  };
+
+  // Format target display
+  const formatTarget = (goal: GoalWithStatus) => {
+    if (!goal.isMeasurable) {
+      return 'Simple';
+    }
+    const unitLabels: Record<string, string> = {
+      minutes: 'min',
+      pages: 'pg',
+      reps: 'reps',
+      liters: 'L',
+      km: 'km',
+      items: 'items',
+    };
+    return `${goal.targetValue}${unitLabels[goal.unit] || goal.unit}`;
   };
 
   // Drag and Drop handlers
@@ -141,7 +158,9 @@ export function AllGoals() {
       ) : goals.length === 0 ? (
         // Empty state
         <div className="empty-state">
-          <div className="empty-state-icon">📋</div>
+          <div className="empty-state-icon-text">
+            <span>HP</span><span className="dot">.</span>
+          </div>
           <h3 className="empty-state-title">No goals yet</h3>
           <p className="empty-state-text">
             Create goals to track your daily habits
@@ -184,7 +203,7 @@ export function AllGoals() {
                       <div className="goal-info">
                         <h3 className="goal-name">{goal.name}</h3>
                         <div className="goal-schedule">
-                          <span className="font-mono">{goal.targetMinutes}min</span>
+                          <span className="font-mono">{formatTarget(goal)}</span>
                           <span className="mx-2">•</span>
                           <span>{formatSchedule(goal.scheduleDays)}</span>
                         </div>
@@ -244,7 +263,7 @@ export function AllGoals() {
                           {goal.name}
                         </h3>
                         <div className="goal-schedule">
-                          <span className="font-mono">{goal.targetMinutes}min</span>
+                          <span className="font-mono">{formatTarget(goal)}</span>
                           <span className="mx-2">•</span>
                           <span>{formatSchedule(goal.scheduleDays)}</span>
                         </div>

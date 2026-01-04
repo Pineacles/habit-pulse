@@ -2,26 +2,31 @@ namespace HabitPulse.Api.Dtos.Goals;
 
 public record CreateGoalRequest(
     string Name,
-    int TargetMinutes,
+    bool IsMeasurable = false,
+    int TargetValue = 0,
+    string Unit = "minutes",
     int[]? ScheduleDays = null
 );
 
 public record UpdateGoalRequest(
     string? Name = null,
-    int? TargetMinutes = null,
+    bool? IsMeasurable = null,
+    int? TargetValue = null,
+    string? Unit = null,
     int[]? ScheduleDays = null,
     int? SortOrder = null,
     bool? IsActive = null
 );
 
-public record ReorderGoalsRequest(
-    Guid[] GoalIds
-);
+public record ReorderGoalsRequest(Guid[] GoalIds);
 
 public record GoalResponse(
     Guid Id,
     string Name,
-    int TargetMinutes,
+    bool IsMeasurable,
+    int TargetValue,
+    string Unit,
+    int TargetMinutes, // Backward compatibility
     int[] ScheduleDays,
     int SortOrder,
     bool IsActive,
@@ -31,7 +36,10 @@ public record GoalResponse(
 public record GoalWithStatusResponse(
     Guid Id,
     string Name,
-    int TargetMinutes,
+    bool IsMeasurable,
+    int TargetValue,
+    string Unit,
+    int TargetMinutes, // Backward compatibility
     int[] ScheduleDays,
     int SortOrder,
     bool IsActive,

@@ -1,13 +1,12 @@
-using Microsoft.EntityFrameworkCore;
 using HabitPulse.Api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace HabitPulse.Api.Data;
 
 public class AppDbContext : DbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-    {
-    }
+    public AppDbContext(DbContextOptions<AppDbContext> options)
+        : base(options) { }
 
     public DbSet<User> Users => Set<User>();
     public DbSet<Goal> Goals => Set<Goal>();
@@ -34,13 +33,16 @@ public class AppDbContext : DbContext
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id).HasDefaultValueSql("gen_random_uuid()");
             entity.Property(e => e.Name).HasMaxLength(100).IsRequired();
-            entity.Property(e => e.TargetMinutes).IsRequired();
+            entity.Property(e => e.IsMeasurable).HasDefaultValue(false);
+            entity.Property(e => e.TargetValue).HasDefaultValue(0);
+            entity.Property(e => e.Unit).HasMaxLength(20).HasDefaultValue("minutes");
             entity.Property(e => e.ScheduleDays).HasDefaultValueSql("'{0,1,2,3,4,5,6}'");
             entity.Property(e => e.SortOrder).HasDefaultValue(0);
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("now()");
 
-            entity.HasOne(e => e.User)
+            entity
+                .HasOne(e => e.User)
                 .WithMany(u => u.Goals)
                 .HasForeignKey(e => e.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -56,7 +58,8 @@ public class AppDbContext : DbContext
 
             entity.HasIndex(e => new { e.GoalId, e.CompletedOn }).IsUnique();
 
-            entity.HasOne(e => e.Goal)
+            entity
+                .HasOne(e => e.Goal)
                 .WithMany(g => g.Completions)
                 .HasForeignKey(e => e.GoalId)
                 .OnDelete(DeleteBehavior.Cascade);

@@ -9,44 +9,59 @@ public static class AuthEndpoints
     {
         var group = app.MapGroup("/api/auth").WithTags("Authentication");
 
-        group.MapPost("/register", async (AuthService authService, RegisterRequest request) =>
-        {
-            var (success, error) = await authService.RegisterAsync(request);
+        group
+            .MapPost(
+                "/register",
+                async (AuthService authService, RegisterRequest request) =>
+                {
+                    var (success, error) = await authService.RegisterAsync(request);
 
-            if (!success)
-                return Results.BadRequest(new { error });
+                    if (!success)
+                        return Results.BadRequest(new { error });
 
-            return Results.Created("/api/auth/me", new { message = "User registered successfully" });
-        })
-        .WithName("Register")
-        .WithSummary("Register a new user");
+                    return Results.Created(
+                        "/api/auth/me",
+                        new { message = "User registered successfully" }
+                    );
+                }
+            )
+            .WithName("Register")
+            .WithSummary("Register a new user");
 
-        group.MapPost("/login", async (AuthService authService, LoginRequest request) =>
-        {
-            var token = await authService.LoginAsync(request);
+        group
+            .MapPost(
+                "/login",
+                async (AuthService authService, LoginRequest request) =>
+                {
+                    var token = await authService.LoginAsync(request);
 
-            if (token == null)
-                return Results.Unauthorized();
+                    if (token == null)
+                        return Results.Unauthorized();
 
-            return Results.Ok(token);
-        })
-        .WithName("Login")
-        .WithSummary("Login and receive JWT token");
+                    return Results.Ok(token);
+                }
+            )
+            .WithName("Login")
+            .WithSummary("Login and receive JWT token");
 
-        group.MapGet("/me", async (AuthService authService, HttpContext context) =>
-        {
-            var userId = context.User.GetUserId();
-            if (userId == null)
-                return Results.Unauthorized();
+        group
+            .MapGet(
+                "/me",
+                async (AuthService authService, HttpContext context) =>
+                {
+                    var userId = context.User.GetUserId();
+                    if (userId == null)
+                        return Results.Unauthorized();
 
-            var user = await authService.GetUserByIdAsync(userId.Value);
-            if (user == null)
-                return Results.NotFound();
+                    var user = await authService.GetUserByIdAsync(userId.Value);
+                    if (user == null)
+                        return Results.NotFound();
 
-            return Results.Ok(user);
-        })
-        .RequireAuthorization()
-        .WithName("GetCurrentUser")
-        .WithSummary("Get current authenticated user");
+                    return Results.Ok(user);
+                }
+            )
+            .RequireAuthorization()
+            .WithName("GetCurrentUser")
+            .WithSummary("Get current authenticated user");
     }
 }

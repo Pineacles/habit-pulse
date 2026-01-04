@@ -1,22 +1,60 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:16-alpine
-    container_name: habitpulse-db
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: habitpulse
+  api:
+    build:
+      context: ./src/HabitPulse.Api
+      dockerfile: Dockerfile
     ports:
-      - "5433:5432"
+      - "5100:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__Default=Host=db;Database=habitpulse;Username=postgres;Password=${DB_PASSWORD}
+      - Jwt__Key=${JWT_KEY}
+      - Jwt__Issuer=HabitPulse
+      - Jwt__Audience=HabitPulse
+      - Cors__Origins__0=${FRONTEND_URL:-http://localhost}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - habit-pulse-network
+
+  db:
+    image: postgres:16
+    environment:
+      - POSTGRES_DB=habitpulse
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     volumes:
-      - habitpulse_postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
+      interval: 5s
       timeout: 5s
       retries: 5
+    restart: unless-stopped
+    networks:
+      - habit-pulse-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=${API_URL:-http://localhost:5100}
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+    networks:
+      - habit-pulse-network
 
 volumes:
-  habitpulse_postgres_data:
+  postgres_data:
+
+networks:
+  habit-pulse-network:
+    driver: bridge

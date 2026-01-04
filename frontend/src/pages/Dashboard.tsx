@@ -3,6 +3,7 @@ import { GoalCard } from '../components/GoalCard';
 import { GoalModal } from '../components/GoalModal';
 import { useGoalStore } from '../stores/goalStore';
 import { DAY_NAMES_FULL, type GoalWithStatus } from '../types';
+import { goalsApi } from '../api/goals';
 
 /**
  * Dashboard (Today View) - Glass Design with Drag & Drop
@@ -12,6 +13,7 @@ import { DAY_NAMES_FULL, type GoalWithStatus } from '../types';
  * - Glass progress card
  * - Glass goal cards with drag-drop reorder
  * - Glowing add button
+ * - Two empty states: no goals ever vs no goals today
  */
 export function Dashboard() {
   const { goals, isLoading, error, fetchGoals, reorderGoals } = useGoalStore();
@@ -19,10 +21,18 @@ export function Dashboard() {
   const [editingGoal, setEditingGoal] = useState<GoalWithStatus | null>(null);
   const [draggedGoal, setDraggedGoal] = useState<GoalWithStatus | null>(null);
   const [dragOverGoalId, setDragOverGoalId] = useState<string | null>(null);
+  const [hasAnyGoals, setHasAnyGoals] = useState<boolean | null>(null);
 
   // Fetch goals on mount
   useEffect(() => {
     fetchGoals(true); // true = today only
+    
+    // Also check if user has any goals at all
+    goalsApi.getAll(false).then(allGoals => {
+      setHasAnyGoals(allGoals.length > 0);
+    }).catch(() => {
+      setHasAnyGoals(false);
+    });
   }, [fetchGoals]);
 
   // Calculate completion stats
@@ -51,6 +61,10 @@ export function Dashboard() {
   const handleModalClose = () => {
     setIsModalOpen(false);
     setEditingGoal(null);
+    // Refresh hasAnyGoals after modal closes (in case a goal was created)
+    goalsApi.getAll(false).then(allGoals => {
+      setHasAnyGoals(allGoals.length > 0);
+    }).catch(() => {});
   };
 
   // Drag and Drop handlers
@@ -99,6 +113,34 @@ export function Dashboard() {
 
     setDraggedGoal(null);
     setDragOverGoalId(null);
+  };
+
+  // Render empty state based on whether user has any goals
+  const renderEmptyState = () => {
+    if (hasAnyGoals === false) {
+      // No goals at all - show full empty state with branding
+      return (
+        <div className="empty-state">
+          <h3 className="empty-state-title">No goals yet</h3>
+          <p className="empty-state-text">
+            Create your first goal to start tracking your progress
+          </p>
+          <div className="empty-state-icon-text">
+            <span>HP</span><span className="dot">.</span>
+          </div>
+          <button onClick={() => setIsModalOpen(true)} className="btn-glow">
+            Create Goal
+          </button>
+        </div>
+      );
+    } else {
+      // Has goals but none scheduled for today - minimal message
+      return (
+        <div className="empty-state-minimal">
+          <p className="empty-state-minimal-text">No goals scheduled for today</p>
+        </div>
+      );
+    }
   };
 
   return (
@@ -176,17 +218,7 @@ export function Dashboard() {
             ))}
           </div>
         ) : goals.length === 0 ? (
-          // Empty state
-          <div className="empty-state">
-            <div className="empty-state-icon">🎯</div>
-            <h3 className="empty-state-title">No goals for today</h3>
-            <p className="empty-state-text">
-              Create your first goal to start tracking your progress
-            </p>
-            <button onClick={() => setIsModalOpen(true)} className="btn-glow">
-              Create Goal
-            </button>
-          </div>
+          renderEmptyState()
         ) : (
           // Goals list with drag and drop
           <div>
