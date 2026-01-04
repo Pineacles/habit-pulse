@@ -18,7 +18,9 @@ public record UpdateGoalRequest(
     bool? IsActive = null
 );
 
-public record ReorderGoalsRequest(Guid[] GoalIds);
+public record ReorderGoalsRequest(
+    Guid[] GoalIds
+);
 
 public record GoalResponse(
     Guid Id,
