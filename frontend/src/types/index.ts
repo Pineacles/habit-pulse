@@ -27,7 +27,10 @@ export interface TokenResponse {
 export interface Goal {
   id: string;
   name: string;
-  targetMinutes: number;
+  isMeasurable: boolean;
+  targetValue: number;
+  unit: string;
+  targetMinutes: number; // Backward compatibility
   scheduleDays: number[];
   sortOrder: number;
   isActive: boolean;
@@ -40,13 +43,17 @@ export interface GoalWithStatus extends Goal {
 
 export interface CreateGoalRequest {
   name: string;
-  targetMinutes: number;
+  isMeasurable?: boolean;
+  targetValue?: number;
+  unit?: string;
   scheduleDays?: number[];
 }
 
 export interface UpdateGoalRequest {
   name?: string;
-  targetMinutes?: number;
+  isMeasurable?: boolean;
+  targetValue?: number;
+  unit?: string;
   scheduleDays?: number[];
   sortOrder?: number;
   isActive?: boolean;
@@ -63,6 +70,19 @@ export interface UserSettings {
   theme: ThemeColor;
 }
 
+// Unit options for measurable goals
+export const UNIT_OPTIONS = [
+  { value: 'minutes', label: 'Minutes' },
+  { value: 'pages', label: 'Pages' },
+  { value: 'reps', label: 'Reps' },
+  { value: 'liters', label: 'Liters' },
+  { value: 'km', label: 'Kilometers' },
+  { value: 'items', label: 'Items' },
+] as const;
+
+export type UnitType = typeof UNIT_OPTIONS[number]['value'];
+
 // Day names for schedule display
-export const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const;
+export const DAY_NAMES = ['S', 'M', 'T', 'W', 'T', 'F', 'S'] as const;
+export const DAY_NAMES_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const;
 export const DAY_NAMES_FULL = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] as const;

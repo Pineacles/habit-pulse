@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { DAY_NAMES, type GoalWithStatus } from '../types';
+import { DAY_NAMES_SHORT, type GoalWithStatus } from '../types';
 import { useGoalStore } from '../stores/goalStore';
 
 interface GoalCardProps {
@@ -23,6 +23,7 @@ interface GoalCardProps {
  * - Swipe left to reveal edit/delete (mobile)
  * - Glowing checkbox when checked
  * - Drag and drop to reorder
+ * - Shows unit or checkmark for simple goals
  */
 export function GoalCard({ 
   goal, 
@@ -98,10 +99,29 @@ export function GoalCard({
         goal.scheduleDays.includes(6)) {
       return 'Weekends';
     }
-    return goal.scheduleDays.map(d => DAY_NAMES[d]).join(', ');
+    return goal.scheduleDays.map(d => DAY_NAMES_SHORT[d]).join(', ');
+  };
+
+  // Format target display
+  const formatTarget = () => {
+    if (!goal.isMeasurable) {
+      return null; // Simple goal - no target display
+    }
+    
+    const unitLabels: Record<string, string> = {
+      minutes: 'min',
+      pages: 'pg',
+      reps: 'reps',
+      liters: 'L',
+      km: 'km',
+      items: 'items',
+    };
+    
+    return `${goal.targetValue}${unitLabels[goal.unit] || goal.unit}`;
   };
 
   const isDraggable = !!onDragStart;
+  const targetDisplay = formatTarget();
 
   return (
     <div className="relative overflow-hidden rounded-2xl mb-3">
@@ -176,10 +196,20 @@ export function GoalCard({
             <p className="goal-schedule">{formatSchedule()}</p>
           </div>
 
-          {/* Target minutes */}
-          <div className="goal-minutes">
-            <span className="goal-minutes-value">{goal.targetMinutes}</span>
-            <span className="goal-minutes-label">min</span>
+          {/* Target display - either value+unit or checkmark icon for simple */}
+          <div className="goal-target">
+            {targetDisplay ? (
+              <>
+                <span className="goal-target-value">{goal.targetValue}</span>
+                <span className="goal-target-unit">{goal.unit === 'minutes' ? 'min' : goal.unit}</span>
+              </>
+            ) : (
+              <span className="goal-simple-badge">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+              </span>
+            )}
           </div>
         </div>
       </div>
