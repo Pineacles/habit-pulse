@@ -14,24 +14,38 @@ public class GoalService
         _context = context;
     }
 
+    // Helper method to check if a goal is scheduled for a specific date
+    private static bool IsGoalScheduledForDate(Goal goal, DateOnly date)
+    {
+        // If interval-based scheduling
+        if (goal.IntervalDays.HasValue && goal.IntervalStartDate.HasValue)
+        {
+            var daysSinceStart = date.DayNumber - goal.IntervalStartDate.Value.DayNumber;
+            return daysSinceStart >= 0 && daysSinceStart % goal.IntervalDays.Value == 0;
+        }
+        
+        // Otherwise use weekday-based scheduling
+        var dayOfWeek = (int)date.DayOfWeek;
+        return goal.ScheduleDays.Contains(dayOfWeek);
+    }
+
     public async Task<List<GoalWithStatusResponse>> GetGoalsAsync(Guid userId, bool todayOnly = true)
     {
         var today = DateOnly.FromDateTime(DateTime.UtcNow);
-        var dayOfWeek = (int)DateTime.UtcNow.DayOfWeek;
 
         var query = _context.Goals
             .Where(g => g.UserId == userId);
 
-        if (todayOnly)
-        {
-            // For today view: only active goals scheduled for today
-            query = query.Where(g => g.IsActive && g.ScheduleDays.Contains(dayOfWeek));
-        }
         // For all goals view: include ALL goals (active and inactive)
-
-        var goals = await query
+        var allGoals = await query
             .OrderBy(g => g.SortOrder)
             .ThenBy(g => g.CreatedAt)
+            .Include(g => g.Completions.Where(c => c.CompletedOn == today))
+            .ToListAsync();
+
+        // Filter in memory for interval-based goals (can't do this in SQL easily)
+        var goals = allGoals
+            .Where(g => !todayOnly || (g.IsActive && IsGoalScheduledForDate(g, today)))
             .Select(g => new GoalWithStatusResponse(
                 g.Id,
                 g.Name,
@@ -40,12 +54,14 @@ public class GoalService
                 g.Unit,
                 g.Unit == "minutes" ? g.TargetValue : 0, // TargetMinutes for backward compatibility
                 g.ScheduleDays,
+                g.IntervalDays,
+                g.IntervalStartDate,
                 g.SortOrder,
                 g.IsActive,
                 g.CreatedAt,
                 g.Completions.Any(c => c.CompletedOn == today)
             ))
-            .ToListAsync();
+            .ToList();
 
         return goals;
     }
@@ -65,6 +81,8 @@ public class GoalService
             goal.Unit,
             goal.Unit == "minutes" ? goal.TargetValue : 0, // TargetMinutes
             goal.ScheduleDays,
+            goal.IntervalDays,
+            goal.IntervalStartDate,
             goal.SortOrder,
             goal.IsActive,
             goal.CreatedAt
@@ -85,6 +103,8 @@ public class GoalService
             TargetValue = request.TargetValue,
             Unit = request.Unit,
             ScheduleDays = request.ScheduleDays ?? [0, 1, 2, 3, 4, 5, 6],
+            IntervalDays = request.IntervalDays,
+            IntervalStartDate = request.IntervalStartDate,
             SortOrder = maxSortOrder + 1
         };
 
@@ -99,6 +119,8 @@ public class GoalService
             goal.Unit,
             goal.Unit == "minutes" ? goal.TargetValue : 0,
             goal.ScheduleDays,
+            goal.IntervalDays,
+            goal.IntervalStartDate,
             goal.SortOrder,
             goal.IsActive,
             goal.CreatedAt
@@ -119,6 +141,10 @@ public class GoalService
         if (request.ScheduleDays != null) goal.ScheduleDays = request.ScheduleDays;
         if (request.SortOrder != null) goal.SortOrder = request.SortOrder.Value;
         if (request.IsActive != null) goal.IsActive = request.IsActive.Value;
+        
+        // Handle interval fields - allow setting to null to clear
+        if (request.IntervalDays != null) goal.IntervalDays = request.IntervalDays;
+        if (request.IntervalStartDate != null) goal.IntervalStartDate = request.IntervalStartDate;
 
         await _context.SaveChangesAsync();
 
@@ -130,6 +156,8 @@ public class GoalService
             goal.Unit,
             goal.Unit == "minutes" ? goal.TargetValue : 0,
             goal.ScheduleDays,
+            goal.IntervalDays,
+            goal.IntervalStartDate,
             goal.SortOrder,
             goal.IsActive,
             goal.CreatedAt

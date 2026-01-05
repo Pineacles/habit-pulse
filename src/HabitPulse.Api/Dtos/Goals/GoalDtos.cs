@@ -5,7 +5,9 @@ public record CreateGoalRequest(
     bool IsMeasurable = false,
     int TargetValue = 0,
     string Unit = "minutes",
-    int[]? ScheduleDays = null
+    int[]? ScheduleDays = null,
+    int? IntervalDays = null,
+    DateOnly? IntervalStartDate = null
 );
 
 public record UpdateGoalRequest(
@@ -14,6 +16,8 @@ public record UpdateGoalRequest(
     int? TargetValue = null,
     string? Unit = null,
     int[]? ScheduleDays = null,
+    int? IntervalDays = null,
+    DateOnly? IntervalStartDate = null,
     int? SortOrder = null,
     bool? IsActive = null
 );
@@ -30,6 +34,8 @@ public record GoalResponse(
     string Unit,
     int TargetMinutes, // Backward compatibility
     int[] ScheduleDays,
+    int? IntervalDays,
+    DateOnly? IntervalStartDate,
     int SortOrder,
     bool IsActive,
     DateTime CreatedAt
@@ -43,6 +49,8 @@ public record GoalWithStatusResponse(
     string Unit,
     int TargetMinutes, // Backward compatibility
     int[] ScheduleDays,
+    int? IntervalDays,
+    DateOnly? IntervalStartDate,
     int SortOrder,
     bool IsActive,
     DateTime CreatedAt,
