@@ -32,6 +32,8 @@ export interface Goal {
   unit: string;
   targetMinutes: number; // Backward compatibility
   scheduleDays: number[];
+  intervalDays: number | null;
+  intervalStartDate: string | null; // ISO date string "2025-01-05"
   sortOrder: number;
   isActive: boolean;
   createdAt: string;
@@ -47,6 +49,8 @@ export interface CreateGoalRequest {
   targetValue?: number;
   unit?: string;
   scheduleDays?: number[];
+  intervalDays?: number | null;
+  intervalStartDate?: string | null;
 }
 
 export interface UpdateGoalRequest {
@@ -55,6 +59,8 @@ export interface UpdateGoalRequest {
   targetValue?: number;
   unit?: string;
   scheduleDays?: number[];
+  intervalDays?: number | null;
+  intervalStartDate?: string | null;
   sortOrder?: number;
   isActive?: boolean;
 }
@@ -86,3 +92,6 @@ export type UnitType = typeof UNIT_OPTIONS[number]['value'];
 export const DAY_NAMES = ['S', 'M', 'T', 'W', 'T', 'F', 'S'] as const;
 export const DAY_NAMES_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const;
 export const DAY_NAMES_FULL = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] as const;
+
+// Schedule type helper
+export type ScheduleType = 'everyday' | 'weekdays' | 'weekends' | 'custom-days' | 'custom-interval';

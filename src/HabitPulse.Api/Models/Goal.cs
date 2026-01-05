@@ -9,6 +9,11 @@ public class Goal
     public int TargetValue { get; set; } = 0; // Target amount (only used if IsMeasurable)
     public string Unit { get; set; } = "minutes"; // minutes, pages, reps, liters, etc.
     public int[] ScheduleDays { get; set; } = [0, 1, 2, 3, 4, 5, 6]; // 0=Sun, 6=Sat
+    
+    // Interval-based scheduling (alternative to ScheduleDays)
+    public int? IntervalDays { get; set; } // e.g., 2 = every 2 days
+    public DateOnly? IntervalStartDate { get; set; } // When interval counting starts
+    
     public int SortOrder { get; set; } = 0;
     public bool IsActive { get; set; } = true;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
