@@ -38,9 +38,9 @@ A modern, self-hosted habit tracking application to help build consistent daily 
 | React | 18.3 | UI framework |
 | TypeScript | 5.6 | Type safety |
 | Vite | 6.0 | Build tool |
-| Tailwind CSS | 4.0 | Styling |
 | Zustand | 5.0 | State management |
 | React Router | 7.1 | Routing |
+| Framer Motion | 11.15 | Animations |
 
 ### Infrastructure
 | Technology | Purpose |

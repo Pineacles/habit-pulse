@@ -16,7 +16,7 @@ export function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [errorKey, setErrorKey] = useState(0); // Key to force re-animation
+  const [errorKey, setErrorKey] = useState(0);
   const hadErrorRef = useRef(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -27,7 +27,6 @@ export function Login() {
       await login({ username: username.trim().toLowerCase(), password });
       navigate('/', { replace: true });
     } catch (err) {
-      // Increment key to force shake animation on repeated errors
       if (hadErrorRef.current) {
         setErrorKey(prev => prev + 1);
       }
@@ -49,109 +48,110 @@ export function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-6 py-12">
-      <div className="w-full max-w-[400px]">
+    <div className="auth-page">
+      <div className="animated-bg" />
+      
+      {/* Glass Panel */}
+      <div className="glass-solid glass-form">
         
-        {/* Glass Panel */}
-        <div className="glass-solid" style={{ padding: '32px 40px 40px 40px' }}>
+        {/* Brand Header */}
+        <div className="brand-header">
+          <h1 className="logo-text">
+            Habit Pulse<span className="accent-dot">.</span>
+          </h1>
+          <p className="system-status">Welcome back</p>
+        </div>
+
+        <form onSubmit={handleSubmit} noValidate>
           
-          {/* Brand Header */}
-          <div className="brand-header">
-            <h1 className="logo-text">
-              Habit Pulse<span className="accent-dot">.</span>
-            </h1>
-            <p className="system-status">Welcome back</p>
+          {/* Error Alert with shake animation */}
+          {error && (
+            <div 
+              key={errorKey}
+              className="alert alert-error alert-shake"
+              role="alert"
+              aria-live="assertive"
+              style={{ marginBottom: '16px' }}
+            >
+              <svg 
+                className="alert-icon w-4 h-4 flex-shrink-0" 
+                fill="currentColor" 
+                viewBox="0 0 20 20"
+                aria-hidden="true"
+              >
+                <path 
+                  fillRule="evenodd" 
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" 
+                  clipRule="evenodd" 
+                />
+              </svg>
+              <span>{error}</span>
+            </div>
+          )}
+
+          {/* Username Field */}
+          <div className="input-group">
+            <FormField label="Username" htmlFor="username">
+              <input
+                type="text"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Enter your username"
+                required
+                autoComplete="username"
+                autoFocus
+                aria-required="true"
+              />
+            </FormField>
           </div>
 
-          <form onSubmit={handleSubmit} noValidate>
-            
-            {/* Error Alert with shake animation - key forces re-render */}
-            {error && (
-              <div 
-                key={errorKey}
-                className="alert alert-error alert-shake"
-                role="alert"
-                aria-live="assertive"
-                style={{ marginBottom: '16px' }}
-              >
-                <svg 
-                  className="alert-icon w-4 h-4 flex-shrink-0" 
-                  fill="currentColor" 
-                  viewBox="0 0 20 20"
-                  aria-hidden="true"
-                >
-                  <path 
-                    fillRule="evenodd" 
-                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" 
-                    clipRule="evenodd" 
-                  />
-                </svg>
-                <span>{error}</span>
-              </div>
-            )}
+          {/* Password Field */}
+          <div className="input-group">
+            <FormField label="Password" htmlFor="password">
+              <PasswordInput
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                autoComplete="current-password"
+              />
+            </FormField>
+          </div>
 
-            {/* Username Field */}
-            <div className="input-group">
-              <FormField label="Username" htmlFor="username">
-                <input
-                  type="text"
-                  id="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Enter your username"
-                  required
-                  autoComplete="username"
-                  autoFocus
-                  aria-required="true"
-                />
-              </FormField>
-            </div>
-
-            {/* Password Field */}
-            <div className="input-group">
-              <FormField label="Password" htmlFor="password">
-                <PasswordInput
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
-                  autoComplete="current-password"
-                />
-              </FormField>
-            </div>
-
-            {/* Forgot Password Link */}
-            <div className="forgot-link-container">
-              <Link to="/forgot-password" className="text-link text-sm">
-                Forgot password?
-              </Link>
-            </div>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <span className="btn-spinner" aria-hidden="true" />
-                  <span>Signing in...</span>
-                </>
-              ) : (
-                <span>Sign In</span>
-              )}
-            </button>
-          </form>
-
-          {/* Footer */}
-          <div className="footer-links">
-            <span className="text-white/50 text-sm">Don't have an account?</span>
-            {' '}
-            <Link to="/register" className="text-link">
-              Sign up
+          {/* Forgot Password Link */}
+          <div className="forgot-link-container">
+            <Link to="/forgot-password" className="text-link">
+              Forgot password?
             </Link>
           </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <span className="btn-spinner" aria-hidden="true" />
+                <span>Signing in...</span>
+              </>
+            ) : (
+              <span>Sign In</span>
+            )}
+          </button>
+        </form>
+
+        {/* Footer */}
+        <div className="footer-links">
+          <span style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '14px' }}>
+            Don't have an account?
+          </span>
+          {' '}
+          <Link to="/register" className="text-link">
+            Sign up
+          </Link>
         </div>
       </div>
     </div>
