@@ -1,9 +1,9 @@
-import { useMemo } from 'react';
-import { DayPicker } from 'react-day-picker';
-import { addDays, isSameDay, startOfDay, differenceInDays } from 'date-fns';
+import { useMemo } from "react";
+import { DayPicker } from "react-day-picker";
+import { addDays, startOfDay, differenceInDays } from "date-fns";
 
 interface ScheduleCalendarProps {
-  mode: 'days' | 'interval';
+  mode: "days" | "interval";
   scheduleDays?: number[]; // 0=Sun, 6=Sat
   intervalDays?: number;
   intervalStartDate?: string; // YYYY-MM-DD
@@ -19,14 +19,13 @@ export function ScheduleCalendar({
   intervalDays = 2,
   intervalStartDate,
 }: ScheduleCalendarProps) {
-  
   // Calculate which dates should be highlighted
   const highlightedDates = useMemo(() => {
     const dates: Date[] = [];
     const today = startOfDay(new Date());
     const endDate = addDays(today, 60); // Show 2 months ahead
-    
-    if (mode === 'days') {
+
+    if (mode === "days") {
       // Weekday-based scheduling
       let current = today;
       while (current <= endDate) {
@@ -36,11 +35,11 @@ export function ScheduleCalendar({
         }
         current = addDays(current, 1);
       }
-    } else if (mode === 'interval' && intervalStartDate) {
+    } else if (mode === "interval" && intervalStartDate) {
       // Interval-based scheduling
       const start = startOfDay(new Date(intervalStartDate));
       let current = start;
-      
+
       // If start is in the past, find first occurrence from today
       if (current < today) {
         const daysSinceStart = differenceInDays(today, start);
@@ -50,13 +49,13 @@ export function ScheduleCalendar({
           current = addDays(current, intervalDays);
         }
       }
-      
+
       while (current <= endDate) {
         dates.push(new Date(current));
         current = addDays(current, intervalDays);
       }
     }
-    
+
     return dates;
   }, [mode, scheduleDays, intervalDays, intervalStartDate]);
 
@@ -67,8 +66,8 @@ export function ScheduleCalendar({
   };
 
   const modifiersClassNames = {
-    highlighted: 'schedule-day-highlighted',
-    today: 'schedule-day-today',
+    highlighted: "schedule-day-highlighted",
+    today: "schedule-day-today",
   };
 
   return (
