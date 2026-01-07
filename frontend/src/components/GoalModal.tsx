@@ -283,7 +283,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
             <div className="modal-header">
               <h2 className="modal-title">{isEditing ? 'Edit Goal' : 'New Goal'}</h2>
               <button type="button" onClick={onClose} className="modal-close">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="icon icon-md" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -314,7 +314,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
                   className={`type-btn ${!isMeasurable ? 'active' : ''}`}
                   onClick={() => handleMeasurableChange(false)}
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="icon icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                   <span>Simple</span>
@@ -324,7 +324,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
                   className={`type-btn ${isMeasurable ? 'active' : ''}`}
                   onClick={() => handleMeasurableChange(true)}
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="icon icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                   </svg>
                   <span>Measurable</span>

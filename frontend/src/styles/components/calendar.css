@@ -1,0 +1,291 @@
+/* ==========================================
+   ROOT CONTAINER
+   ========================================== */
+
+.schedule-calendar {
+  background: transparent;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.calendar-drawer {
+  width: 100%;
+}
+
+/* ==========================================
+   REACT DAY PICKER GRID ENFORCEMENT
+   ========================================== */
+
+.rdp {
+  --rdp-cell-size: 40px;
+  --rdp-accent-color: var(--accent-electric);
+  --rdp-background-color: var(--accent-glow);
+  margin: 0;
+  width: 100%;
+}
+
+.rdp-month {
+  width: 100%;
+}
+
+/* HEADER ROW (Mo Tu We...) */
+.rdp-head_row,
+.rdp-weekdays {
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr) !important;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 8px;
+  width: 100%;
+}
+
+.rdp-head_cell,
+.rdp-weekday {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+}
+
+/* BODY ROWS (The Days) */
+.rdp-tbody,
+.rdp-weeks {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+}
+
+.rdp-row,
+.rdp-week {
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr) !important;
+  width: 100%;
+  gap: 0;
+}
+
+/* DAY CELLS */
+.rdp-cell,
+.rdp-day {
+  width: 100%;
+  height: var(--rdp-cell-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ==========================================
+   DAY BUTTON STYLING (support v8/v9 classnames)
+   ========================================== */
+
+.rdp-day,
+.rdp-day_button,
+.rdp-button,
+.rdp-button_reset {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+/* Hover (support whichever is the button) */
+.rdp-day:hover:not([disabled]),
+.rdp-day_button:hover:not([disabled]),
+.rdp-button:hover:not([disabled]) {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* ==========================================
+   HIGHLIGHTED (your schedule)
+   ========================================== */
+
+/* If the modifier class lands on the BUTTON */
+.schedule-day-highlighted {
+  background-color: var(--accent-electric) !important;
+  color: white !important;
+  font-weight: 700 !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 0 15px var(--accent-glow) !important;
+}
+
+/* If the modifier class lands on the CELL/WRAPPER, color the button inside */
+.schedule-day-highlighted .rdp-day,
+.schedule-day-highlighted .rdp-day_button,
+.schedule-day-highlighted .rdp-button,
+.schedule-day-highlighted .rdp-button_reset {
+  background-color: var(--accent-electric) !important;
+  color: white !important;
+  font-weight: 700 !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 0 15px var(--accent-glow) !important;
+}
+
+/* ==========================================
+   SELECTED (aria-selected)
+   ========================================== */
+
+/* Works regardless of which class is used for the button */
+.rdp-day[aria-selected="true"],
+.rdp-day_button[aria-selected="true"],
+.rdp-button[aria-selected="true"] {
+  background-color: var(--accent-electric) !important;
+  color: white !important;
+  font-weight: 700 !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 0 15px var(--accent-glow) !important;
+}
+
+/* ==========================================
+   TODAY + DISABLED
+   ========================================== */
+
+/* TODAY border (v8 class + v9 data attr) */
+.schedule-day-today,
+.rdp-day_today,
+[data-today="true"] {
+  box-shadow: inset 0 0 0 1px var(--accent-electric), 0 0 10px var(--accent-glow) !important;
+  border-radius: 10px; /* ensure wrapper looks right */
+}
+
+/* If today marker is on a wrapper, style the actual clickable element too */
+.schedule-day-today .rdp-day,
+.schedule-day-today .rdp-day_button,
+.schedule-day-today .rdp-button,
+.schedule-day-today .rdp-button_reset,
+.rdp-day_today .rdp-day,
+.rdp-day_today .rdp-day_button,
+.rdp-day_today .rdp-button,
+.rdp-day_today .rdp-button_reset,
+[data-today="true"] .rdp-day,
+[data-today="true"] .rdp-day_button,
+[data-today="true"] .rdp-button,
+[data-today="true"] .rdp-button_reset {
+  box-shadow: inset 0 0 0 1px var(--accent-electric), 0 0 10px var(--accent-glow) !important;
+  border-radius: 10px;
+}
+
+/* PAST / DISABLED days = greyed out */
+.rdp-day_disabled,
+.rdp-day_disabled .rdp-day,
+.rdp-day_disabled .rdp-day_button,
+.rdp-day_disabled .rdp-button,
+.rdp-day_disabled .rdp-button_reset,
+.rdp-day[disabled],
+.rdp-day_button[disabled],
+.rdp-button[disabled] {
+  color: rgba(255, 255, 255, 0.18) !important;
+  opacity: 0.45 !important;
+  background: transparent !important;
+  text-decoration: none !important; /* remove line-through if you want */
+  box-shadow: none !important;
+  filter: grayscale(0.4);
+  pointer-events: none;
+}
+
+/* ==========================================
+   CALENDAR LEGEND (New)
+   ========================================== */
+
+.calendar-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding-top: 16px;
+  margin-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.legend-dot.active {
+  background: var(--accent-electric);
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+.legend-dot.today {
+  border: 1px solid var(--accent-electric);
+  background: transparent;
+}
+
+/* ==========================================
+   HEADER NAVIGATION
+   ========================================== */
+
+.rdp-caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  position: relative;
+  height: 40px;
+}
+
+.rdp-caption_label {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.rdp-nav {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  z-index: 2;
+}
+
+.rdp-nav_button {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.rdp-nav_button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+}

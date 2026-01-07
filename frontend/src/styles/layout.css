@@ -1,0 +1,117 @@
+/* ==========================================
+   AMBIENT AURORA BACKGROUND
+   ========================================== */
+
+.animated-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  
+  /* Living Aurora - strong visible light behind the glass */
+  background: 
+    /* Top-left: Blue aurora - MORE VISIBLE */
+    radial-gradient(
+      1400px 900px at 15% 5%,
+      rgba(40, 100, 180, 0.25),
+      transparent 55%
+    ),
+    /* Bottom-right: Orange warmth - MORE VISIBLE */
+    radial-gradient(
+      1200px 800px at 90% 90%,
+      rgba(255, 100, 50, 0.15),
+      transparent 50%
+    ),
+    /* Center-right: Teal accent */
+    radial-gradient(
+      900px 700px at 70% 40%,
+      rgba(0, 200, 200, 0.1),
+      transparent 45%
+    ),
+    /* Base color */
+    #050508;
+  background-attachment: fixed;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animated-bg {
+    background-image: 
+      radial-gradient(circle at 10% 20%, rgba(30, 40, 60, 0.3) 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(255, 77, 0, 0.03) 0%, transparent 40%);
+  }
+}
+
+/* ==========================================
+   GLASS DASHBOARD - FLOATING ISLAND LAYOUT
+   ========================================== */
+
+/* Main app layout */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Main content area - centered column */
+.main-content {
+  flex: 1;
+  min-height: 100vh;
+  padding-left: 0;
+}
+
+/* Dashboard content wrapper - centered with max-width */
+.dashboard-content {
+  max-width: 900px;
+  width: 92%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 48px;
+  padding-bottom: 100px; /* Room for mobile nav */
+}
+
+@media (min-width: 1024px) {
+  .main-content {
+    /* Sidebar (220px) + left gap (24px) + breathing room */
+    padding-left: 268px;
+  }
+  
+  .dashboard-content {
+    max-width: 960px;
+    padding-top: 56px;
+    padding-bottom: 60px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .dashboard-content {
+    max-width: 1000px;
+  }
+}
+
+/* ==========================================
+   AUTH LAYOUTS
+   ========================================== */
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.auth-layout {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  position: relative; 
+  width: 100%;
+  max-width: 100%;
+  padding-top: 5vh;
+}
+
+.auth-card-wrapper {
+  position: relative;
+  width: 400px;
+  z-index: 10;
+  margin: 0 auto;
+}

@@ -1,0 +1,351 @@
+/* ==========================================
+   STANDARD BUTTONS
+   ========================================== */
+
+.btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.btn-primary {
+  background: linear-gradient(180deg, var(--accent-electric) 0%, var(--accent-dim) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 10px 20px -10px var(--accent-glow);
+}
+
+.btn-primary:hover:not(:disabled) {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 15px 30px -10px var(--accent-glow);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+/* Button spinner */
+.btn-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ==========================================
+   PRIMARY BUTTON - Theme-Aware Electric Glow
+   ========================================== */
+
+.btn-glow {
+  background: linear-gradient(180deg, var(--accent-electric) 0%, var(--accent-dim) 100%);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  /* Electric glow - uses theme color */
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow:
+    0 0 24px var(--accent-glow),
+    0 4px 16px var(--accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+  transition: all 0.15s ease-out;
+}
+
+.btn-glow:hover {
+  box-shadow:
+    0 0 32px var(--accent-glow),
+    0 6px 24px var(--accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.btn-glow:active {
+  transform: translateY(0);
+  box-shadow:
+    0 0 20px var(--accent-glow),
+    0 2px 8px var(--accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Theme-specific button glow variants */
+[data-theme="teal"] .btn-glow {
+  background: linear-gradient(180deg, #14B8A6 0%, #0D9488 100%);
+  box-shadow: 0 0 24px rgba(20, 184, 166, 0.5), 0 4px 16px rgba(20, 184, 166, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="teal"] .btn-glow:hover {
+  box-shadow: 0 0 32px rgba(20, 184, 166, 0.6), 0 6px 24px rgba(20, 184, 166, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+[data-theme="purple"] .btn-glow {
+  background: linear-gradient(180deg, #A855F7 0%, #7E22CE 100%);
+  box-shadow: 0 0 24px rgba(168, 85, 247, 0.5), 0 4px 16px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="purple"] .btn-glow:hover {
+  box-shadow: 0 0 32px rgba(168, 85, 247, 0.6), 0 6px 24px rgba(168, 85, 247, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+[data-theme="blue"] .btn-glow {
+  background: linear-gradient(180deg, #3B82F6 0%, #2563EB 100%);
+  box-shadow: 0 0 24px rgba(59, 130, 246, 0.5), 0 4px 16px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="blue"] .btn-glow:hover {
+  box-shadow: 0 0 32px rgba(59, 130, 246, 0.6), 0 6px 24px rgba(59, 130, 246, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+[data-theme="rose"] .btn-glow {
+  background: linear-gradient(180deg, #F43F5E 0%, #BE123C 100%);
+  box-shadow: 0 0 24px rgba(244, 63, 94, 0.5), 0 4px 16px rgba(244, 63, 94, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="rose"] .btn-glow:hover {
+  box-shadow: 0 0 32px rgba(244, 63, 94, 0.6), 0 6px 24px rgba(244, 63, 94, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+[data-theme="emerald"] .btn-glow {
+  background: linear-gradient(180deg, #10B981 0%, #047857 100%);
+  box-shadow: 0 0 24px rgba(16, 185, 129, 0.5), 0 4px 16px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="emerald"] .btn-glow:hover {
+  box-shadow: 0 0 32px rgba(16, 185, 129, 0.6), 0 6px 24px rgba(16, 185, 129, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+/* ==========================================
+   INTERACTIVE TOGGLES & ACTIONS
+   ========================================== */
+
+/* Goal Action Buttons (Icons) */
+.goal-action-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease-out;
+}
+
+.goal-action-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: white;
+}
+
+.goal-action-btn.danger:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #EF4444;
+}
+
+/* Modal Close Button */
+.modal-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease-out;
+}
+
+.modal-close:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: white;
+}
+
+/* Preset Buttons (Pill Switches) */
+.preset-btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.15s ease-out;
+}
+
+.preset-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.preset-btn.active {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+/* Frequency Buttons */
+.freq-btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.freq-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.freq-btn.active {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+/* Segmented Control Buttons */
+.segment-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.segment-btn:hover {
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.segment-btn.active {
+  background: var(--accent-electric);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 0 16px var(--accent-glow);
+}
+
+/* Theme variants for segmented control */
+[data-theme="teal"] .segment-btn.active {
+  background: #14B8A6;
+  box-shadow: 0 0 16px rgba(20, 184, 166, 0.5);
+}
+
+[data-theme="purple"] .segment-btn.active {
+  background: #A855F7;
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.5);
+}
+
+[data-theme="blue"] .segment-btn.active {
+  background: #3B82F6;
+  box-shadow: 0 0 16px rgba(59, 130, 246, 0.5);
+}
+
+[data-theme="rose"] .segment-btn.active {
+  background: #F43F5E;
+  box-shadow: 0 0 16px rgba(244, 63, 94, 0.5);
+}
+
+[data-theme="emerald"] .segment-btn.active {
+  background: #10B981;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.5);
+}
+
+/* Signout / Destructive Button */
+.signout-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.08);
+  color: #EF4444;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.signout-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.35);
+}

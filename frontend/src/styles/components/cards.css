@@ -1,0 +1,440 @@
+/* ==========================================
+   GLASS PANELS - Base Card Styles
+   ========================================== */
+
+.glass {
+  background: rgba(20, 25, 35, 0.55);
+  backdrop-filter: blur(24px) saturate(120%);
+  -webkit-backdrop-filter: blur(24px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+
+  /* Edge lighting - etched crystal */
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.glass-solid {
+  background: rgba(20, 25, 35, 0.65);
+  backdrop-filter: blur(24px) saturate(120%);
+  -webkit-backdrop-filter: blur(24px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+
+  /* Edge lighting */
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* Card with form layout */
+.glass-form {
+  width: 100%;
+  max-width: 420px;
+  padding: 48px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Fallback for browsers without backdrop-filter */
+@supports not (backdrop-filter: blur(1px)) {
+  .glass,
+  .glass-solid {
+    background: rgba(20, 20, 25, 0.95);
+  }
+}
+
+/* ==========================================
+   GOAL CARDS - Interactive Glass Capsules
+   ========================================== */
+
+.goal-card {
+  /* Glass panel - matches progress card visibility */
+  background: rgba(20, 25, 35, 0.5);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 24px;
+  margin-bottom: 16px;
+
+  /* Etched crystal edge */
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.goal-card:hover {
+  background: rgba(20, 25, 35, 0.65);
+  /* Uses theme color */
+  border-color: var(--accent-electric);
+  transform: translateX(4px);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.35),
+    0 0 24px var(--accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Theme-specific goal card hover */
+[data-theme="teal"] .goal-card:hover {
+  border-color: #14B8A6;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 24px rgba(20, 184, 166, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="purple"] .goal-card:hover {
+  border-color: #A855F7;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 24px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="blue"] .goal-card:hover {
+  border-color: #3B82F6;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 24px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="rose"] .goal-card:hover {
+  border-color: #F43F5E;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 24px rgba(244, 63, 94, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="emerald"] .goal-card:hover {
+  border-color: #10B981;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 24px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Completed state - green light activation */
+.goal-card.completed {
+  border-color: rgba(0, 255, 148, 0.25);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.25),
+    0 0 20px rgba(0, 255, 148, 0.08),
+    inset 0 1px 0 rgba(0, 255, 148, 0.1);
+}
+
+.goal-card.completed:hover {
+  border-color: rgba(0, 255, 148, 0.4);
+}
+
+/* Goal Card Internals */
+.goal-card-inner {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.goal-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.goal-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: white;
+  margin: 0 0 6px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.goal-name.completed {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.goal-schedule {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  color: rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
+}
+
+.goal-target {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.goal-target-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 26px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.goal-target-unit {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  margin-top: 2px;
+}
+
+.goal-simple-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Goal card actions */
+.goal-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.goal-action-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease-out;
+}
+
+.goal-action-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: white;
+}
+
+.goal-action-btn.danger:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #EF4444;
+}
+
+/* Card Progress Fill */
+.card-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(
+    to top,
+    rgba(255, 77, 0, 0.2),
+    rgba(255, 77, 0, 0.08) 50%,
+    transparent
+  );
+  transition: height 0.4s ease;
+  border-radius: 0 0 20px 20px;
+  pointer-events: none;
+}
+
+/* ==========================================
+   DRAG AND DROP CARDS
+   ========================================== */
+
+.goal-card.draggable {
+  cursor: grab;
+}
+
+.goal-card.draggable:active {
+  cursor: grabbing;
+}
+
+.drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  color: rgba(255, 255, 255, 0.25);
+  cursor: grab;
+  flex-shrink: 0;
+  margin-right: 8px;
+  transition: color 0.15s ease;
+}
+
+.drag-handle:hover {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.goal-card.draggable:active .drag-handle {
+  cursor: grabbing;
+}
+
+/* Drag over state - shows drop target */
+.goal-card.drag-over {
+  border-color: var(--accent-electric) !important;
+  background: rgba(255, 77, 0, 0.08);
+  box-shadow:
+    0 0 24px var(--accent-glow),
+    0 8px 32px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* Theme-specific drag over */
+[data-theme="teal"] .goal-card.drag-over {
+  background: rgba(20, 184, 166, 0.08);
+  box-shadow: 0 0 24px rgba(20, 184, 166, 0.4), 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="purple"] .goal-card.drag-over {
+  background: rgba(168, 85, 247, 0.08);
+  box-shadow: 0 0 24px rgba(168, 85, 247, 0.4), 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="blue"] .goal-card.drag-over {
+  background: rgba(59, 130, 246, 0.08);
+  box-shadow: 0 0 24px rgba(59, 130, 246, 0.4), 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="rose"] .goal-card.drag-over {
+  background: rgba(244, 63, 94, 0.08);
+  box-shadow: 0 0 24px rgba(244, 63, 94, 0.4), 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="emerald"] .goal-card.drag-over {
+  background: rgba(16, 185, 129, 0.08);
+  box-shadow: 0 0 24px rgba(16, 185, 129, 0.4), 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* ==========================================
+   PROGRESS CARD - Instrument Readout Panel
+   ========================================== */
+
+.progress-card {
+  /* Primary floating island */
+  background: rgba(20, 25, 35, 0.55);
+  backdrop-filter: blur(24px) saturate(120%);
+  -webkit-backdrop-filter: blur(24px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 28px;
+  margin-bottom: 32px;
+
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.progress-stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.progress-text-small {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: 8px;
+}
+
+.progress-text-large {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.progress-text-large .separator {
+  color: rgba(255, 255, 255, 0.2);
+  margin: 0 6px;
+}
+
+.progress-text-large .label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  font-weight: 400;
+  margin-left: 12px;
+}
+
+/* Circular progress - glowing instrument */
+.circular-progress {
+  position: relative;
+  width: 72px;
+  height: 72px;
+}
+
+.circular-progress svg {
+  width: 72px;
+  height: 72px;
+  transform: rotate(-90deg);
+}
+
+.circular-progress .bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 5;
+}
+
+.circular-progress .fill {
+  fill: none;
+  stroke: var(--accent-electric);
+  stroke-width: 5;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.5s ease-out;
+  filter: drop-shadow(0 0 8px var(--accent-glow));
+}
+
+.circular-progress .percent {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* ==========================================
+   SETTINGS CARDS - Island Cards
+   ========================================== */
+
+.settings-card {
+  background: rgba(255, 255, 255, 0.025);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+  padding: 32px;
+
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.settings-section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.settings-description {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: 20px;
+}

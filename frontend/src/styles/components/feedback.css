@@ -1,0 +1,114 @@
+/* components/feedback.css */
+
+/* ==========================================
+   LOADING SCREEN - Branded Splash
+   ========================================== */
+
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  padding: 40px;
+}
+
+.loading-brand {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: white;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .loading-brand {
+    font-size: 64px;
+  }
+}
+
+.loading-dot {
+  color: var(--accent-electric);
+  text-shadow: 0 0 30px var(--accent-glow);
+}
+
+.loading-spinner {
+  position: relative;
+  width: 48px;
+  height: 48px;
+}
+
+.spinner-ring {
+  position: absolute;
+  inset: 0;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--accent-electric);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* ==========================================
+   ALERTS
+   ========================================== */
+
+.alert {
+  padding: 14px 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+}
+
+.alert-error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #FCA5A5;
+}
+
+/* Shake animation for repeated errors */
+.alert-shake {
+  animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes shake {
+  10%,
+  90% { transform: translateX(-1px); }
+  20%,
+  80% { transform: translateX(2px); }
+  30%,
+  50%,
+  70% { transform: translateX(-4px); }
+  40%,
+  60% { transform: translateX(4px); }
+}
+
+.alert-icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+}

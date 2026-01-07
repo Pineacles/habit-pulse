@@ -1,0 +1,57 @@
+/* ==========================================
+   CRYSTALLINE STRATUM DESIGN SYSTEM
+   Theme: Functional Luxury / Precision Instrument
+   ========================================== */
+
+:root {
+  /* COLOR PALETTE */
+  --bg-deep: #050505;           /* Pure Black base */
+  --bg-elevated: #0a0a0c;       /* Slightly elevated surfaces */
+  --accent-electric: #FF4D00;   /* High-voltage Orange */
+  --accent-dim: #CC3D00;        /* Darker orange for gradients */
+  --accent-glow: rgba(255, 77, 0, 0.6);
+  
+  /* GLASS VARIABLES */
+  --glass-surface: rgba(20, 20, 25, 0.6);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+  --glass-blur: 24px;
+  
+  /* TEXT */
+  --text-main: #FFFFFF;
+  --text-muted: rgba(255, 255, 255, 0.5);
+  --text-dim: rgba(255, 255, 255, 0.3);
+  
+  /* FOCUS */
+  --focus-ring: rgba(255, 77, 0, 0.15);
+}
+
+/* Theme variants */
+[data-theme="teal"] {
+  --accent-electric: #14B8A6;
+  --accent-dim: #0D9488;
+  --accent-glow: rgba(20, 184, 166, 0.6);
+}
+
+[data-theme="purple"] {
+  --accent-electric: #A855F7;
+  --accent-dim: #7E22CE;
+  --accent-glow: rgba(168, 85, 247, 0.6);
+}
+
+[data-theme="blue"] {
+  --accent-electric: #3B82F6;
+  --accent-dim: #2563EB;
+  --accent-glow: rgba(59, 130, 246, 0.6);
+}
+
+[data-theme="rose"] {
+  --accent-electric: #F43F5E;
+  --accent-dim: #BE123C;
+  --accent-glow: rgba(244, 63, 94, 0.6);
+}
+
+[data-theme="emerald"] {
+  --accent-electric: #10B981;
+  --accent-dim: #047857;
+  --accent-glow: rgba(16, 185, 129, 0.6);
+}
