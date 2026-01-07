@@ -1,0 +1,356 @@
+/* ROOT CONTAINER
+   The floating glass panel housing the calendar
+*/
+.schedule-calendar {
+  position: relative;
+  background: var(--glass-surface);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: var(--glass-border);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Header section within the schedule component */
+.schedule-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.schedule-calendar-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+}
+
+/* ==========================================
+   CALENDAR DRAWER
+   The sliding/modal context for date selection
+   ========================================== */
+
+.calendar-drawer {
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.calendar-drawer-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Quick Action Buttons (Today / Clear)
+   Styled as tactile glass pills
+*/
+.calendar-quick-actions {
+  display: flex;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  margin-top: 8px;
+}
+
+.calendar-action-btn {
+  flex: 1;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  border: 1px solid transparent;
+}
+
+/* Primary Action: Electric Glow */
+.calendar-action-btn.primary {
+  background: var(--accent-electric);
+  color: #000; /* High contrast against neon */
+  color: white;
+  box-shadow: 0 0 15px var(--accent-glow);
+}
+
+.calendar-action-btn.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px var(--accent-glow);
+}
+
+/* Secondary Action: Ghost Glass */
+.calendar-action-btn.secondary {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.calendar-action-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ==========================================
+   REACT DAY PICKER (v9) OVERRIDES
+   Targeting the specific DOM structure of RDP
+   ========================================== */
+
+.schedule-calendar .rdp,
+.calendar-drawer .rdp {
+  --rdp-cell-size: 40px; /* Base grid unit */
+  --rdp-accent-color: var(--accent-electric);
+  --rdp-background-color: var(--accent-glow);
+  margin: 0;
+  width: 100%;
+}
+
+.rdp-root {
+  width: 100%;
+}
+
+.rdp-month {
+  width: 100%;
+}
+
+/* MONTH CAPTION
+   Format: <  Month Year  >
+*/
+.rdp-month_caption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  height: 44px;
+}
+
+.rdp-caption_label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-main);
+  text-transform: capitalize;
+  letter-spacing: -0.01em;
+  z-index: 1;
+}
+
+/* NAVIGATION BUTTONS
+   Left/Right Chevrons
+*/
+.rdp-nav {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+  position: absolute; /* Overlay on caption */
+  left: 0;
+  justify-content: space-between;
+  pointer-events: none; /* Let clicks pass through to label */
+}
+
+.rdp-button_previous,
+.rdp-button_next {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  pointer-events: auto; /* Re-enable clicks */
+  transition: all 0.2s ease;
+}
+
+.rdp-button_previous:hover,
+.rdp-button_next:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: var(--text-main);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+}
+
+.rdp-chevron {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+/* TABLE STRUCTURE
+   Ensuring grid alignment for "Instrument" feel
+*/
+.rdp-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Weekday Headers (Mon, Tue, Wed...) */
+.rdp-head_row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 8px;
+}
+
+.rdp-head_cell {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Weeks */
+.rdp-tbody {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rdp-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.rdp-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* DAY BUTTONS
+   The core interactive elements
+*/
+.rdp-day_button {
+  width: var(--rdp-cell-size);
+  height: var(--rdp-cell-size);
+  border-radius: 12px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: rgba(255, 255, 255, 0.8);
+
+  font-family: 'JetBrains Mono', monospace; /* Monospace for alignment */
+  font-size: 14px;
+  font-weight: 400;
+
+  cursor: pointer;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hover State */
+.rdp-day_button:not(:disabled):hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+/* Today State (Current Date) */
+.rdp-day_today:not(.rdp-day_selected) .rdp-day_button {
+  color: var(--accent-electric);
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.rdp-day_today:not(.rdp-day_selected) .rdp-day_button::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent-electric);
+  box-shadow: 0 0 6px var(--accent-glow);
+}
+
+/* SELECTED STATE
+   Active "Light On" Effect
+*/
+.rdp-day_selected .rdp-day_button {
+  background: var(--accent-electric) !important;
+  border-color: var(--accent-electric) !important;
+  color: #fff !important; /* Force white for legibility */
+  font-weight: 700;
+  box-shadow:
+    0 0 20px var(--accent-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+  z-index: 2;
+}
+
+/* Outside Month (faded) */
+.rdp-day_outside .rdp-day_button {
+  color: rgba(255, 255, 255, 0.15);
+}
+
+/* Disabled */
+.rdp-day_disabled .rdp-day_button {
+  color: rgba(255, 255, 255, 0.1);
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+/* ==========================================
+   SCHEDULE INDICATORS
+   Dots/Markers for days with events
+   ========================================== */
+
+/* Example class for a day with scheduled items */
+.has-schedule .rdp-day_button::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 4px;
+  height: 4px;
+  background: #00FF94; /* Success Green */
+  border-radius: 50%;
+  box-shadow: 0 0 5px rgba(0, 255, 148, 0.6);
+}
+
+/* ==========================================
+   THEME VARIANTS
+   Ensuring variables update correctly
+   (Inherits form global CSS, but specific fixes here)
+   ========================================== */
+
+[data-theme="teal"] .schedule-calendar { --focus-ring: rgba(20, 184, 166, 0.3); }
+[data-theme="purple"] .schedule-calendar { --focus-ring: rgba(168, 85, 247, 0.3); }
+[data-theme="blue"] .schedule-calendar { --focus-ring: rgba(59, 130, 246, 0.3); }
+[data-theme="rose"] .schedule-calendar { --focus-ring: rgba(244, 63, 94, 0.3); }
+[data-theme="emerald"] .schedule-calendar { --focus-ring: rgba(16, 185, 129, 0.3); }
+
+/* Focus states for accessibility */
+.rdp-day_button:focus-visible,
+.rdp-button_previous:focus-visible,
+.rdp-button_next:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+  border-radius: 8px;
+}

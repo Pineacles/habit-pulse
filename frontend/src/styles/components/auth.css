@@ -1,0 +1,217 @@
+/* ==========================================
+
+   PASSWORD STRENGTH - SATELLITE PANEL
+
+   ========================================== */
+
+/* The satellite panel - absolute positioned "ghost wing" */
+
+.satellite-panel {
+  /* Remove from document flow */
+
+  position: absolute;
+
+  /* Pin to right side of centered card */
+
+  left: 50%;
+
+  margin-left: 200px; /* Half of card width (400px / 2) */
+
+  /* Vertical alignment with password field */
+
+  top: 200px;
+
+  width: 240px;
+
+  padding: 24px;
+
+  /* Visual styles */
+
+  background: rgba(255, 255, 255, 0.02);
+
+  backdrop-filter: blur(12px);
+
+  -webkit-backdrop-filter: blur(12px);
+
+  /* "Bracket" look */
+
+  border-radius: 0 16px 16px 0;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+  border-left: none;
+}
+
+.satellite-title {
+  font-family: "Space Grotesk", sans-serif;
+
+  font-size: 11px;
+
+  text-transform: uppercase;
+
+  color: rgba(255, 255, 255, 0.4);
+
+  margin-bottom: 16px;
+
+  letter-spacing: 0.1em;
+}
+
+.password-checklist {
+  list-style: none;
+
+  padding: 0;
+
+  margin: 0;
+}
+
+.password-checklist li {
+  font-family: "JetBrains Mono", monospace;
+
+  font-size: 11px;
+
+  margin-bottom: 10px;
+
+  color: rgba(255, 255, 255, 0.5);
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.password-checklist li.valid {
+  color: #00ff94;
+
+  text-shadow: 0 0 10px rgba(0, 255, 148, 0.4);
+}
+
+.password-checklist li.pending {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Strength indicator for mobile (inside card) */
+
+.password-strength-mobile {
+  margin-top: 8px;
+
+  font-family: "JetBrains Mono", monospace;
+
+  font-size: 11px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+.password-strength-mobile .strength-bar {
+  flex: 1;
+
+  height: 3px;
+
+  background: rgba(255, 255, 255, 0.1);
+
+  border-radius: 2px;
+
+  overflow: hidden;
+}
+
+.password-strength-mobile .strength-fill {
+  height: 100%;
+
+  border-radius: 2px;
+
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.password-strength-mobile .strength-fill.weak {
+  background: #ef4444;
+}
+
+.password-strength-mobile .strength-fill.fair {
+  background: #f59e0b;
+}
+
+.password-strength-mobile .strength-fill.good {
+  background: #3b82f6;
+}
+
+.password-strength-mobile .strength-fill.strong {
+  background: #00ff94;
+}
+
+.password-strength-mobile .strength-label {
+  min-width: 50px;
+
+  text-align: right;
+}
+
+.password-strength-mobile .strength-label.weak {
+  color: #ef4444;
+}
+
+.password-strength-mobile .strength-label.fair {
+  color: #f59e0b;
+}
+
+.password-strength-mobile .strength-label.good {
+  color: #3b82f6;
+}
+
+.password-strength-mobile .strength-label.strong {
+  color: #00ff94;
+}
+
+/* Mobile: hide satellite panel */
+
+@media (max-width: 850px) {
+  .satellite-panel {
+    display: none;
+  }
+
+  .auth-card-wrapper {
+    width: 100%;
+
+    max-width: 400px;
+
+    padding: 0 16px;
+  }
+}
+
+/* Desktop: hide mobile strength indicator */
+
+@media (min-width: 851px) {
+  .password-strength-mobile {
+    display: none;
+  }
+}
+
+/* Forgot password link positioning */
+
+.forgot-link-container {
+  text-align: right;
+
+  margin-top: -4px;
+
+  margin-bottom: 16px;
+}
+
+/* Footer links section */
+
+.footer-links {
+  text-align: center;
+
+  margin-top: 20px;
+
+  padding-top: 20px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}

@@ -1,0 +1,119 @@
+/* components/typography.css */
+
+/* ==========================================
+   PAGE HEADERS - Hero Date Treatment
+   ========================================== */
+
+.page-header {
+  background: transparent;
+  padding: 0 0 32px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+/* Hero date - massive anchor */
+.page-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 56px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  margin: 0;
+  
+  /* Subtle gradient text */
+  background: linear-gradient(to right, #ffffff 60%, rgba(255,255,255,0.5));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@media (min-width: 768px) {
+  .page-title {
+    font-size: 72px;
+  }
+}
+
+/* Date subtitle - theme accent color, larger */
+.page-subtitle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-electric);
+  margin-top: 12px;
+  opacity: 0.95;
+}
+
+/* Button alignment in header */
+.page-header .btn-glow {
+  margin-top: 8px;
+}
+
+/* ==========================================
+   BRANDING - Typographic Minimalism
+   ========================================== */
+
+.brand-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.logo-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.05em;
+  margin: 0;
+  line-height: 1;
+}
+
+.accent-dot {
+  color: var(--accent-electric);
+  text-shadow: 0 0 20px var(--accent-glow);
+}
+
+.system-status {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: none;
+  letter-spacing: normal;
+  margin-top: 4px;
+}
+
+/* LINKS */
+.text-link {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.text-link:hover {
+  color: var(--accent-electric);
+  text-decoration: underline;
+}
+
+.text-link:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* SECTION HEADERS */
+.section-header {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 16px;
+  padding-left: 2px;
+}

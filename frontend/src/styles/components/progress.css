@@ -1,0 +1,147 @@
+/* ==========================================
+   CARD PROGRESS FILL
+   (Ambient gradient fill at bottom of cards)
+   ========================================== */
+
+.card-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(
+    to top,
+    rgba(255, 77, 0, 0.2),
+    rgba(255, 77, 0, 0.08) 50%,
+    transparent
+  );
+  transition: height 0.4s ease;
+  border-radius: 0 0 20px 20px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Theme adaptation for Card Progress is handled via
+   variable redefinition in root or specific overrides if needed */
+
+/* ==========================================
+   PROGRESS CARD CONTAINER
+   (Floating Island Layout)
+   ========================================== */
+
+.progress-card {
+  /* Primary floating island */
+  background: rgba(20, 25, 35, 0.55);
+  backdrop-filter: blur(24px) saturate(120%);
+  -webkit-backdrop-filter: blur(24px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 28px;
+  margin-bottom: 32px;
+
+  /* Etched crystal shadow */
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 2;
+}
+
+/* ==========================================
+   INSTRUMENT READOUT TYPOGRAPHY
+   ========================================== */
+
+/* Label - Terminal grade, uppercase */
+.progress-text-small {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: 8px;
+}
+
+/* Value - Large data display */
+.progress-text-large {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+  line-height: 1.1;
+}
+
+.progress-text-large .separator {
+  color: rgba(255, 255, 255, 0.2);
+  margin: 0 6px;
+}
+
+.progress-text-large .label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+  font-weight: 400;
+  margin-left: 12px;
+}
+
+/* ==========================================
+   CIRCULAR PROGRESS - GLOWING GAUGE
+   ========================================== */
+
+.circular-progress {
+  position: relative;
+  width: 72px;
+  height: 72px;
+}
+
+/* Rotates the SVG so the progress starts from the top */
+.circular-progress svg {
+  width: 72px;
+  height: 72px;
+  transform: rotate(-90deg);
+}
+
+/* The background track of the circle */
+.circular-progress .bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 5;
+}
+
+/* The active progress fill */
+.circular-progress .fill {
+  fill: none;
+  stroke: var(--accent-electric);
+  stroke-width: 5;
+  stroke-linecap: round; /* Rounded ends for cleaner look */
+
+  /* Animation for the stroke filling up */
+  transition: stroke-dasharray 0.5s ease-out;
+
+  /* Neon glow effect */
+  filter: drop-shadow(0 0 8px var(--accent-glow));
+}
+
+/* The percentage text centered inside the circle */
+.circular-progress .percent {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-main);
+}

@@ -1,0 +1,145 @@
+/* ==========================================
+   COMPONENT: EMPTY STATE
+   Style: Invitation Panel / Glass Hologram
+   ========================================== */
+
+/* Main Container - The "Floating Island" */
+.empty-state {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 56px 32px;
+
+  /* Glass panel surface */
+  background: rgba(20, 25, 35, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  /* Etched Crystal Borders */
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 20px;
+
+  /* Depth and inner light */
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Optional hover effect for interactive empty states */
+.empty-state.interactive:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================
+   ICONOGRAPHY
+   ========================================== */
+
+/* Standard Icon (SVG/Font) */
+.empty-state-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+  color: rgba(255, 255, 255, 0.2);
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+}
+
+/* Typographic "Logo" Icon */
+.empty-state-icon-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: rgba(255, 255, 255, 0.15);
+  margin-top: 24px;
+  margin-bottom: 24px;
+  line-height: 1;
+}
+
+/* The Accent Dot - Responds to global theme variables */
+.empty-state-icon-text .dot {
+  color: var(--accent-electric);
+  text-shadow: 0 0 20px var(--accent-glow);
+  display: inline-block;
+  animation: pulse-glow 3s infinite ease-in-out;
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(0.9); }
+}
+
+/* ==========================================
+   TYPOGRAPHY
+   ========================================== */
+
+.empty-state-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+.empty-state-text {
+  font-family: 'Space Grotesk', sans-serif; /* or inherit body font */
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: 0;
+  line-height: 1.6;
+  max-width: 400px;
+}
+
+/* Action Area (Buttons) */
+.empty-state-actions {
+  margin-top: 32px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  width: 100%;
+}
+
+/* ==========================================
+   VARIANT: MINIMAL
+   Usage: Small widgets or side panels
+   ========================================== */
+
+.empty-state-minimal {
+  text-align: center;
+  padding: 40px 24px;
+
+  /* Subtler glass */
+  background: rgba(20, 25, 35, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-state-minimal .empty-state-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+  opacity: 0.5;
+}
+
+.empty-state-minimal-text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+  line-height: 1.4;
+}

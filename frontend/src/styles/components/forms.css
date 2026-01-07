@@ -1,0 +1,583 @@
+/* ==========================================
+   BASE INPUTS - "Cockpit Slots"
+   ========================================== */
+
+input,
+textarea,
+.modal-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 14px 16px;
+  color: white;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 15px;
+  transition: all 0.15s ease-out;
+  outline: none;
+}
+
+input::placeholder,
+textarea::placeholder,
+.modal-input::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+input:hover,
+textarea:hover,
+.modal-input:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+input:focus,
+textarea:focus,
+.modal-input:focus {
+  border-color: var(--accent-electric);
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0 3px rgba(255, 77, 0, 0.12), 0 0 20px rgba(255, 77, 0, 0.1);
+}
+
+/* Error State */
+input.input-error,
+textarea.input-error {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+input.input-error:focus,
+textarea.input-error:focus {
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
+}
+
+/* Input with Icon Wrapper */
+.input-with-icon {
+  position: relative;
+}
+
+.input-with-icon input {
+  padding-right: 50px;
+}
+
+.input-with-icon .input-icon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  background: none;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.input-with-icon .input-icon:hover {
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.input-with-icon .input-icon:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+/* ==========================================
+   FORM FIELD WRAPPERS
+   ========================================== */
+
+.form-field {
+  margin-bottom: 0;
+}
+
+.form-field-label {
+  display: block;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: none;
+  letter-spacing: 0.02em;
+  margin-bottom: 6px;
+}
+
+/* Modal specific label style */
+.modal-label {
+  display: block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: 10px;
+}
+
+.form-field-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: #f87171;
+}
+
+.form-field-hint {
+  margin-top: 6px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.input-group {
+  margin-bottom: 12px;
+}
+
+/* ==========================================
+   CHECKBOXES
+   ========================================== */
+
+.checkbox {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.checkbox:hover {
+  border-color: var(--accent-electric);
+  background: rgba(255, 77, 0, 0.1);
+}
+
+.checkbox.checked {
+  background: linear-gradient(
+    180deg,
+    var(--accent-electric) 0%,
+    var(--accent-dim) 100%
+  );
+  border-color: transparent;
+  box-shadow: 0 4px 12px -4px var(--accent-glow);
+}
+
+.checkbox:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+/* ==========================================
+   SPECIALIZED INPUTS (Instrument Style)
+   ========================================== */
+
+/* Digital Slot Input (Number Spinner) */
+.digital-input-container {
+  flex: 2;
+  display: flex;
+  align-items: stretch;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.digital-input-container.compact {
+  max-width: 110px;
+}
+
+.digital-btn {
+  width: 44px;
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 20px;
+  font-weight: 300;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.digital-input-container.compact .digital-btn {
+  width: 36px;
+}
+
+.digital-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.digital-btn:active {
+  background: var(--accent-electric);
+  color: white;
+}
+
+.digital-btn.minus {
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.digital-btn.plus {
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.digital-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 28px;
+  font-weight: 600;
+  text-align: center;
+  padding: 12px 8px;
+  min-width: 0;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.digital-input-container.compact .digital-input {
+  font-size: 20px;
+  padding: 8px 4px;
+}
+
+.digital-input:focus {
+  outline: none;
+}
+
+.digital-input::-webkit-outer-spin-button,
+.digital-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Select / Dropdown */
+.unit-select {
+  flex: 1;
+  min-width: 110px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  border-radius: 12px;
+  padding: 0 16px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(255,255,255,0.5)'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 36px;
+}
+
+.unit-select:focus {
+  outline: none;
+  border-color: var(--accent-electric);
+}
+
+.unit-select option {
+  background: #1a1f2e;
+  color: white;
+}
+
+/* Date Input */
+.date-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.date-input:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.date-input:focus {
+  outline: none;
+  border-color: var(--accent-electric);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.date-input::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.date-input::-webkit-calendar-picker-indicator:hover {
+  opacity: 0.8;
+}
+
+/* Start Date Trigger Button */
+.start-date-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: var(--text-main);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.start-date-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.start-date-btn.active {
+  border-color: var(--accent-electric);
+  border-width: 2px;
+  background: rgba(255, 77, 0, 0.08);
+}
+
+/* ==========================================
+   SEGMENTED CONTROLS & CHIPS
+   ========================================== */
+
+/* Goal Type Toggle / Segmented Control */
+.goal-type-toggle,
+.segmented-control {
+  display: flex;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 4px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.segmented-control {
+  background: rgba(0, 0, 0, 0.3);
+  margin-bottom: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.type-btn,
+.segment-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 12px 16px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.segment-btn {
+  gap: 6px;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: 10px;
+}
+
+.type-btn:hover,
+.segment-btn:hover {
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.type-btn.active,
+.segment-btn.active {
+  background: var(--accent-electric);
+  color: white;
+  box-shadow: 0 4px 16px var(--accent-glow);
+  font-weight: 600;
+}
+
+/* Preset Chips */
+.value-presets,
+.frequency-chips {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.frequency-chips {
+  gap: 6px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+
+.preset-chip,
+.freq-chip {
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.5);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.freq-chip {
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: 12px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.preset-chip:hover,
+.freq-chip:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.preset-chip.active,
+.freq-chip.active {
+  background: var(--accent-electric);
+  border-color: var(--accent-electric);
+  color: white;
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.freq-chip.active {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Day Pills */
+.day-pill {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.day-pill:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.day-pill.active {
+  background: var(--accent-electric);
+  color: white;
+  border-color: var(--accent-electric);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+/* ==========================================
+   THEME VARIANTS (Active States)
+   ========================================== */
+
+/* Teal */
+[data-theme="teal"] .type-btn.active,
+[data-theme="teal"] .segment-btn.active,
+[data-theme="teal"] .preset-chip.active,
+[data-theme="teal"] .day-pill.active {
+  background: #14b8a6;
+  border-color: #14b8a6;
+  box-shadow: 0 0 16px rgba(20, 184, 166, 0.5);
+}
+
+[data-theme="teal"] .start-date-btn.active {
+  border-color: #14b8a6;
+  background: rgba(20, 184, 166, 0.08);
+}
+
+/* Purple */
+[data-theme="purple"] .type-btn.active,
+[data-theme="purple"] .segment-btn.active,
+[data-theme="purple"] .preset-chip.active,
+[data-theme="purple"] .day-pill.active {
+  background: #a855f7;
+  border-color: #a855f7;
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.5);
+}
+
+[data-theme="purple"] .start-date-btn.active {
+  border-color: #a855f7;
+  background: rgba(168, 85, 247, 0.08);
+}
+
+/* Blue */
+[data-theme="blue"] .type-btn.active,
+[data-theme="blue"] .segment-btn.active,
+[data-theme="blue"] .preset-chip.active,
+[data-theme="blue"] .day-pill.active {
+  background: #3b82f6;
+  border-color: #3b82f6;
+  box-shadow: 0 0 16px rgba(59, 130, 246, 0.5);
+}
+
+[data-theme="blue"] .start-date-btn.active {
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.08);
+}
+
+/* Rose */
+[data-theme="rose"] .type-btn.active,
+[data-theme="rose"] .segment-btn.active,
+[data-theme="rose"] .preset-chip.active,
+[data-theme="rose"] .day-pill.active {
+  background: #f43f5e;
+  border-color: #f43f5e;
+  box-shadow: 0 0 16px rgba(244, 63, 94, 0.5);
+}
+
+[data-theme="rose"] .start-date-btn.active {
+  border-color: #f43f5e;
+  background: rgba(244, 63, 94, 0.08);
+}
+
+/* Emerald */
+[data-theme="emerald"] .type-btn.active,
+[data-theme="emerald"] .segment-btn.active,
+[data-theme="emerald"] .preset-chip.active,
+[data-theme="emerald"] .day-pill.active {
+  background: #10b981;
+  border-color: #10b981;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.5);
+}
+
+[data-theme="emerald"] .start-date-btn.active {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.08);
+}
+
+/* ==========================================
+   SCHEDULE GRID (The missing horizontal layout)
+   ========================================== */
+
+.schedule-grid {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  justify-content: center;
+  width: 100%;
+}
