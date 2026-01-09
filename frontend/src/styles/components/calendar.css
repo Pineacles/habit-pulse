@@ -1,5 +1,6 @@
 /* ==========================================
-   ROOT CONTAINER
+   CALENDAR ROOT CONTAINER
+   Base container for schedule calendar component
    ========================================== */
 
 .schedule-calendar {
@@ -14,7 +15,8 @@
 }
 
 /* ==========================================
-   REACT DAY PICKER GRID ENFORCEMENT
+   REACT DAY PICKER STYLING
+   Grid layout enforcement and base styling
    ========================================== */
 
 .rdp {
@@ -29,7 +31,7 @@
   width: 100%;
 }
 
-/* HEADER ROW (Mo Tu We...) */
+/* Header Row - Weekday labels */
 .rdp-head_row,
 .rdp-weekdays {
   display: grid !important;
@@ -54,7 +56,7 @@
   height: 32px;
 }
 
-/* BODY ROWS (The Days) */
+/* Body Rows - Calendar day rows */
 .rdp-tbody,
 .rdp-weeks {
   display: flex;
@@ -71,7 +73,7 @@
   gap: 0;
 }
 
-/* DAY CELLS */
+/* Day Cells - Individual day containers */
 .rdp-cell,
 .rdp-day {
   width: 100%;
@@ -82,7 +84,8 @@
 }
 
 /* ==========================================
-   DAY BUTTON STYLING (support v8/v9 classnames)
+   DAY BUTTON STYLING
+   Supports React Day Picker v8 and v9 classnames
    ========================================== */
 
 .rdp-day,
@@ -104,7 +107,7 @@
   transition: all 0.2s ease;
 }
 
-/* Hover (support whichever is the button) */
+/* Hover State - Works with any button classname */
 .rdp-day:hover:not([disabled]),
 .rdp-day_button:hover:not([disabled]),
 .rdp-button:hover:not([disabled]) {
@@ -113,10 +116,11 @@
 }
 
 /* ==========================================
-   HIGHLIGHTED (your schedule)
+   HIGHLIGHTED STATE
+   Days with scheduled events
    ========================================== */
 
-/* If the modifier class lands on the BUTTON */
+/* When modifier class is on the button element */
 .schedule-day-highlighted {
   background-color: var(--accent-electric) !important;
   color: white !important;
@@ -125,7 +129,7 @@
   box-shadow: 0 0 15px var(--accent-glow) !important;
 }
 
-/* If the modifier class lands on the CELL/WRAPPER, color the button inside */
+/* When modifier class is on the cell/wrapper, style the button inside */
 .schedule-day-highlighted .rdp-day,
 .schedule-day-highlighted .rdp-day_button,
 .schedule-day-highlighted .rdp-button,
@@ -138,10 +142,11 @@
 }
 
 /* ==========================================
-   SELECTED (aria-selected)
+   SELECTED STATE
+   Days selected via aria-selected attribute
    ========================================== */
 
-/* Works regardless of which class is used for the button */
+/* Works with any button classname */
 .rdp-day[aria-selected="true"],
 .rdp-day_button[aria-selected="true"],
 .rdp-button[aria-selected="true"] {
@@ -153,18 +158,18 @@
 }
 
 /* ==========================================
-   TODAY + DISABLED
+   TODAY & DISABLED STATES
    ========================================== */
 
-/* TODAY border (v8 class + v9 data attr) */
+/* Today State - Supports v8 class and v9 data attribute */
 .schedule-day-today,
 .rdp-day_today,
 [data-today="true"] {
   box-shadow: inset 0 0 0 1px var(--accent-electric), 0 0 10px var(--accent-glow) !important;
-  border-radius: 10px; /* ensure wrapper looks right */
+  border-radius: 10px;
 }
 
-/* If today marker is on a wrapper, style the actual clickable element too */
+/* When today marker is on wrapper, style the clickable element */
 .schedule-day-today .rdp-day,
 .schedule-day-today .rdp-day_button,
 .schedule-day-today .rdp-button,
@@ -181,7 +186,7 @@
   border-radius: 10px;
 }
 
-/* PAST / DISABLED days = greyed out */
+/* Disabled State - Past dates are greyed out */
 .rdp-day_disabled,
 .rdp-day_disabled .rdp-day,
 .rdp-day_disabled .rdp-day_button,
@@ -193,14 +198,15 @@
   color: rgba(255, 255, 255, 0.18) !important;
   opacity: 0.45 !important;
   background: transparent !important;
-  text-decoration: none !important; /* remove line-through if you want */
+  text-decoration: none !important;
   box-shadow: none !important;
   filter: grayscale(0.4);
   pointer-events: none;
 }
 
 /* ==========================================
-   CALENDAR LEGEND (New)
+   CALENDAR LEGEND
+   Visual indicators for calendar states
    ========================================== */
 
 .calendar-legend {

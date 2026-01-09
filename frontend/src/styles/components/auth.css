@@ -1,40 +1,20 @@
 /* ==========================================
-
-   PASSWORD STRENGTH - SATELLITE PANEL
-
+   PASSWORD STRENGTH INDICATOR
+   Satellite panel for password validation feedback
    ========================================== */
 
-/* The satellite panel - absolute positioned "ghost wing" */
-
+/* Satellite Panel - Absolute positioned side panel */
 .satellite-panel {
-  /* Remove from document flow */
-
   position: absolute;
-
-  /* Pin to right side of centered card */
-
   left: 50%;
-
-  margin-left: 200px; /* Half of card width (400px / 2) */
-
-  /* Vertical alignment with password field */
-
+  margin-left: 200px;
   top: 200px;
 
   width: 240px;
-
   padding: 24px;
-
-  /* Visual styles */
-
   background: rgba(255, 255, 255, 0.02);
-
   backdrop-filter: blur(12px);
-
   -webkit-backdrop-filter: blur(12px);
-
-  /* "Bracket" look */
-
   border-radius: 0 16px 16px 0;
 
   border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -100,35 +80,24 @@
 
 .password-strength-mobile {
   margin-top: 8px;
-
   font-family: "JetBrains Mono", monospace;
-
   font-size: 11px;
-
   display: flex;
-
   align-items: center;
-
   gap: 8px;
 }
 
 .password-strength-mobile .strength-bar {
   flex: 1;
-
   height: 3px;
-
   background: rgba(255, 255, 255, 0.1);
-
   border-radius: 2px;
-
   overflow: hidden;
 }
 
 .password-strength-mobile .strength-fill {
   height: 100%;
-
   border-radius: 2px;
-
   transition: width 0.3s ease, background-color 0.3s ease;
 }
 
@@ -170,8 +139,11 @@
   color: #00ff94;
 }
 
-/* Mobile: hide satellite panel */
+/* ==========================================
+   RESPONSIVE BEHAVIOR
+   ========================================== */
 
+/* Mobile: Hide satellite panel, show inline indicator */
 @media (max-width: 850px) {
   .satellite-panel {
     display: none;
@@ -179,39 +151,33 @@
 
   .auth-card-wrapper {
     width: 100%;
-
     max-width: 400px;
-
     padding: 0 16px;
   }
 }
 
-/* Desktop: hide mobile strength indicator */
-
+/* Desktop: Hide mobile strength indicator */
 @media (min-width: 851px) {
   .password-strength-mobile {
     display: none;
   }
 }
 
-/* Forgot password link positioning */
+/* ==========================================
+   AUTH PAGE HELPERS
+   ========================================== */
 
+/* Forgot Password Link */
 .forgot-link-container {
   text-align: right;
-
   margin-top: -4px;
-
   margin-bottom: 16px;
 }
 
-/* Footer links section */
-
+/* Footer Links Section */
 .footer-links {
   text-align: center;
-
   margin-top: 20px;
-
   padding-top: 20px;
-
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }

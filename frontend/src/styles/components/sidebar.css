@@ -1,6 +1,8 @@
-/* Detached Navigation Pill
-   Floating glass panel positioned on the left
-*/
+/* ==========================================
+   FLOATING SIDEBAR
+   Detached navigation panel with glass morphism
+   ========================================== */
+
 .floating-sidebar {
   position: fixed;
   left: 24px;
@@ -9,10 +11,9 @@
   width: 220px;
   z-index: 40;
 
-  /* Pill geometry */
   border-radius: 24px;
 
-  /* Stronger glass blur than content - holographic overlay */
+  /* Enhanced glass blur for sidebar prominence */
   background: rgba(15, 20, 30, 0.7);
   backdrop-filter: blur(32px) saturate(130%);
   -webkit-backdrop-filter: blur(32px) saturate(130%);
@@ -22,15 +23,17 @@
   flex-direction: column;
   padding: 20px 14px;
 
-  /* Etched crystal shadow */
+  /* Etched crystal depth effect */
   box-shadow:
     0 12px 48px rgba(0, 0, 0, 0.5),
     0 0 0 1px rgba(255, 255, 255, 0.03),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-/* Sidebar Branding
-*/
+/* ==========================================
+   SIDEBAR BRANDING
+   ========================================== */
+
 .sidebar-brand {
   padding: 8px 12px 24px 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
@@ -50,9 +53,11 @@
   text-shadow: 0 0 20px var(--accent-glow);
 }
 
-/* Navigation Items
-   Tactile Light Activation
-*/
+/* ==========================================
+   NAVIGATION ITEMS
+   Tactile light activation on interaction
+   ========================================== */
+
 .nav-item {
   display: flex;
   align-items: center;
@@ -85,9 +90,7 @@
   transition: all 0.15s ease-out;
 }
 
-/* Active State
-   Light turns on inside the glass with theme color
-*/
+/* Active State - Theme color activation */
 .nav-item.active {
   color: #FFFFFF;
   background: rgba(255, 77, 0, 0.12);
@@ -102,7 +105,12 @@
   filter: drop-shadow(0 0 6px var(--accent-glow));
 }
 
-/* Indicator for active - uses theme color */
+.nav-item:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+/* Active indicator bar - uses theme color */
 .nav-item.active::before {
   content: '';
   position: absolute;
@@ -116,9 +124,7 @@
   box-shadow: 0 0 8px var(--accent-glow);
 }
 
-/* Theme-specific Nav Active Colors
-   Overrides the default orange for other themes
-*/
+/* Theme-specific navigation active states */
 [data-theme="teal"] .nav-item.active {
   background: rgba(20, 184, 166, 0.12);
   border-color: rgba(20, 184, 166, 0.3);
@@ -149,8 +155,10 @@
   box-shadow: 0 0 20px rgba(16, 185, 129, 0.15), inset 0 0 12px rgba(16, 185, 129, 0.05);
 }
 
-/* User Profile Section
-*/
+/* ==========================================
+   USER PROFILE SECTION
+   ========================================== */
+
 .sidebar-user {
   margin-top: auto;
   padding-top: 16px;
@@ -211,9 +219,21 @@
   color: rgba(255, 255, 255, 0.6);
 }
 
-/* Responsive Visibility
-   Hide sidebar on mobile (use Bottom Nav instead)
-*/
+.sidebar-signout:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+.sidebar-signout:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ==========================================
+   RESPONSIVE BEHAVIOR
+   Hide sidebar on mobile (use bottom navigation instead)
+   ========================================== */
+
 @media (max-width: 1023px) {
   .floating-sidebar {
     display: none;
