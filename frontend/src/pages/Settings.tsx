@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import { useAuthStore } from '../stores/authStore';
 import { useThemeStore, THEME_OPTIONS } from '../stores/themeStore';
 
@@ -16,12 +17,17 @@ export function Settings() {
   return (
     <>
       {/* Header */}
-      <div className="page-header">
+      <motion.div 
+        className="page-header"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+      >
         <div>
           <h1 className="page-title">Settings</h1>
           <p className="page-subtitle">Customize your experience</p>
         </div>
-      </div>
+      </motion.div>
 
       {/* Settings Grid */}
       <div className="settings-grid">

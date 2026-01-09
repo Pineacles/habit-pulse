@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { addDays, startOfDay, differenceInDays, format } from 'date-fns';
 import { GoalModal } from '../components/GoalModal';
 import { DescriptionModal } from '../components/DescriptionModal';
@@ -181,7 +182,12 @@ export function AllGoals() {
   return (
     <>
       {/* Page Header - Same as Dashboard */}
-      <div className="page-header">
+      <motion.div 
+        className="page-header"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+      >
         <div>
           <h1 className="page-title">All Goals</h1>
           <p className="page-subtitle">Drag to reorder priorities</p>
@@ -193,7 +199,7 @@ export function AllGoals() {
           </svg>
           New Goal
         </button>
-      </div>
+      </motion.div>
 
       {isLoading && goals.length === 0 ? (
         // Loading
@@ -225,18 +231,28 @@ export function AllGoals() {
           {activeGoals.length > 0 && (
             <div className="mb-8">
               <h2 className="section-header">Active ({activeGoals.length})</h2>
-              <div>
+              <motion.div layout>
                 {activeGoals.map((goal, index) => (
-                  <div 
-                    key={goal.id} 
-                    className={`goal-card draggable ${dragOverGoalId === goal.id ? 'drag-over' : ''}`}
-                    draggable
-                    onDragStart={(e) => handleDragStart(e, goal)}
-                    onDragEnd={handleDragEnd}
-                    onDragOver={(e) => handleDragOver(e, goal)}
-                    onDragLeave={handleDragLeave}
-                    onDrop={(e) => handleDrop(e, goal)}
+                  <motion.div
+                    key={goal.id}
+                    layout
+                    initial={false}
+                    transition={{
+                      layout: {
+                        duration: 0.25,
+                        ease: [0.2, 0, 0, 1],
+                      },
+                    }}
                   >
+                    <div
+                      className={`goal-card draggable ${dragOverGoalId === goal.id ? 'drag-over' : ''}`}
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, goal)}
+                      onDragEnd={handleDragEnd}
+                      onDragOver={(e) => handleDragOver(e, goal)}
+                      onDragLeave={handleDragLeave}
+                      onDrop={(e) => handleDrop(e, goal)}
+                    >
                     <div className="goal-card-inner">
                       {/* Drag handle */}
                       <div className="drag-handle" title="Drag to reorder">
@@ -305,9 +321,10 @@ export function AllGoals() {
                         </button>
                       </div>
                     </div>
-                  </div>
+                    </div>
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
             </div>
           )}
 
