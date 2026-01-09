@@ -34,6 +34,7 @@ export interface Goal {
   scheduleDays: number[];
   intervalDays: number | null;
   intervalStartDate: string | null; // ISO date string "2025-01-05"
+  description: string | null;
   sortOrder: number;
   isActive: boolean;
   createdAt: string;
@@ -51,6 +52,7 @@ export interface CreateGoalRequest {
   scheduleDays?: number[];
   intervalDays?: number | null;
   intervalStartDate?: string | null;
+  description?: string | null;
 }
 
 export interface UpdateGoalRequest {
@@ -61,6 +63,7 @@ export interface UpdateGoalRequest {
   scheduleDays?: number[];
   intervalDays?: number | null;
   intervalStartDate?: string | null;
+  description?: string | null;
   sortOrder?: number;
   isActive?: boolean;
 }

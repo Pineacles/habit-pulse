@@ -38,11 +38,17 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
     return `${year}-${month}-${day}`;
   });
   
+  // Description state
+  const [description, setDescription] = useState<string>('');
+  
   // Active editing section
-  const [activeEdit, setActiveEdit] = useState<'target' | 'interval' | null>(null);
+  const [activeEdit, setActiveEdit] = useState<'target' | 'interval' | 'description' | null>(null);
   
   // Calendar drawer state - ONLY opened by explicit icon click
   const [showCalendar, setShowCalendar] = useState(false);
+  
+  // Description drawer state
+  const [showDescription, setShowDescription] = useState(false);
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -61,6 +67,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
       setTargetValue(goal.targetValue || 30);
       setUnit(goal.unit || 'minutes');
       setScheduleDays([...goal.scheduleDays]);
+      setDescription(goal.description || '');
       
       if (goal.intervalDays && goal.intervalStartDate) {
         setFrequencyType('custom');
@@ -91,18 +98,21 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
       setCustomMode('specific-days');
       setIntervalDays(2);
       setIntervalStartDate(new Date().toISOString().split('T')[0]);
+      setDescription('');
       setActiveEdit(null);
     }
     setError('');
     setShowCalendar(false); // Always start with calendar closed
+    setShowDescription(false); // Always start with description closed
   }, [goal, isOpen]);
 
-  // Handle measurable toggle - closes calendar when switching to target
+  // Handle measurable toggle - closes calendar/description when switching to target
   const handleMeasurableChange = (measurable: boolean) => {
     setIsMeasurable(measurable);
     if (measurable) {
       setActiveEdit('target');
       setShowCalendar(false); // Close calendar
+      setShowDescription(false); // Close description
     } else {
       setActiveEdit(isIntervalMode ? 'interval' : null);
     }
@@ -112,6 +122,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
   const handleFrequencyChange = (type: FrequencyType) => {
     setFrequencyType(type);
     setShowCalendar(false); // Close calendar on any frequency change
+    setShowDescription(false); // Close description on any frequency change
     switch (type) {
       case 'daily':
         setScheduleDays([0, 1, 2, 3, 4, 5, 6]);
@@ -134,6 +145,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
   const handleCustomModeChange = (mode: CustomMode) => {
     setCustomMode(mode);
     setShowCalendar(false); // Close calendar when switching modes
+    setShowDescription(false); // Close description when switching modes
     if (mode === 'interval') {
       setActiveEdit('interval');
       // Calendar stays closed - only opens via icon click
@@ -181,8 +193,64 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
 
   // Open calendar - ONLY way to open it
   const openCalendar = () => {
-    setActiveEdit('interval');
-    setShowCalendar(true);
+    if (showCalendar && activeEdit === 'interval') {
+      // If already open, close it but preserve the previous activeEdit state
+      setShowCalendar(false);
+      // Restore previous activeEdit (target or description) instead of null
+      if (isMeasurable) {
+        setActiveEdit('target');
+      } else {
+        setActiveEdit(null);
+      }
+    } else {
+      // Close description first, then open calendar
+      // Set activeEdit to null first to ensure description fully closes
+      if (showDescription) {
+        setShowDescription(false);
+        setActiveEdit(null);
+        // Wait for description exit animation to complete before opening calendar
+        setTimeout(() => {
+          setActiveEdit('interval');
+          setShowCalendar(true);
+        }, 300); // Increased delay to match animation duration
+      } else {
+        // Description not open, can open calendar immediately
+        setActiveEdit('interval');
+        setShowCalendar(true);
+      }
+    }
+  };
+  
+  // Open/close description sidebar (toggles)
+  const openDescription = () => {
+    if (showDescription && activeEdit === 'description') {
+      // If already open, close it but preserve the previous activeEdit state
+      setShowDescription(false);
+      // Restore previous activeEdit (target or interval) instead of null
+      if (isMeasurable) {
+        setActiveEdit('target');
+      } else if (isIntervalMode) {
+        setActiveEdit('interval');
+      } else {
+        setActiveEdit(null);
+      }
+    } else {
+      // Close calendar first, then open description
+      // Set activeEdit to null first to ensure calendar fully closes
+      if (showCalendar) {
+        setShowCalendar(false);
+        setActiveEdit(null);
+        // Wait for calendar exit animation to complete before opening description
+        setTimeout(() => {
+          setActiveEdit('description');
+          setShowDescription(true);
+        }, 300); // Increased delay to match animation duration
+      } else {
+        // Calendar not open, can open description immediately
+        setActiveEdit('description');
+        setShowDescription(true);
+      }
+    }
   };
 
   // Set to today
@@ -237,6 +305,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
           scheduleDays: useInterval ? [0, 1, 2, 3, 4, 5, 6] : scheduleDays,
           intervalDays: useInterval ? intervalDays : null,
           intervalStartDate: useInterval ? intervalStartDate : null,
+          description: description.trim() || null,
         };
         await updateGoal(goal.id, data);
       } else {
@@ -248,6 +317,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
           scheduleDays: useInterval ? [0, 1, 2, 3, 4, 5, 6] : scheduleDays,
           intervalDays: useInterval ? intervalDays : null,
           intervalStartDate: useInterval ? intervalStartDate : null,
+          description: description.trim() || null,
         };
         await createGoal(data);
       }
@@ -263,9 +333,9 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
 
   // Determine what to show
   const showTargetExpanded = isMeasurable && activeEdit === 'target';
-  const showTargetCollapsed = isMeasurable && activeEdit === 'interval';
+  const showTargetCollapsed = isMeasurable && (activeEdit === 'interval' || activeEdit === 'description' || activeEdit === null);
   const showIntervalExpanded = isIntervalMode && activeEdit === 'interval';
-  const showIntervalCollapsed = isIntervalMode && activeEdit === 'target';
+  const showIntervalCollapsed = isIntervalMode && (activeEdit === 'target' || activeEdit === 'description' || activeEdit === null);
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
@@ -292,17 +362,38 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
             {/* Error */}
             {error && <div className="modal-error">{error}</div>}
 
-            {/* Goal Name */}
+            {/* Goal Name with Description Button */}
             <div className="modal-section">
               <label className="modal-label">Goal Name</label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="e.g., Meditate, Read, Exercise"
-                autoFocus
-                className="modal-input"
-              />
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="e.g., Meditate, Read, Exercise"
+                  autoFocus
+                  className="modal-input"
+                  style={{ flex: 1 }}
+                />
+                <button
+                  type="button"
+                  onClick={openDescription}
+                  className={`goal-name-description-btn ${showDescription && activeEdit === 'description' ? 'active' : ''}`}
+                  title={description ? 'Edit description' : 'Add description'}
+                  aria-label={description ? 'Edit description' : 'Add description'}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  {description && (
+                    <span className="description-indicator" title="Description added">
+                      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                    </span>
+                  )}
+                </button>
+              </div>
             </div>
 
             {/* Goal Type Toggle */}
@@ -588,6 +679,51 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
                   </button>
                   <button type="button" onClick={() => setShowCalendar(false)} className="calendar-action-btn secondary">
                     Close
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Description Drawer */}
+        <AnimatePresence mode="popLayout">
+          {showDescription && activeEdit === 'description' && (
+            <motion.div
+              initial={{ width: 0, opacity: 0 }}
+              animate={{ width: 'auto', opacity: 1 }}
+              exit={{ width: 0, opacity: 0 }}
+              transition={spring}
+              className="calendar-drawer description-drawer"
+            >
+              <div className="calendar-drawer-inner">
+                {/* Header */}
+                <div className="calendar-drawer-header">
+                  <span className="calendar-drawer-title">
+                    {description ? 'Edit description' : 'Add description'}
+                  </span>
+                </div>
+                
+                {/* Textarea */}
+                <textarea
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Add notes or details about this goal..."
+                  maxLength={500}
+                  className="description-textarea"
+                  rows={8}
+                  autoFocus
+                />
+                
+                {/* Character count */}
+                <div style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.4)', textAlign: 'right' }}>
+                  {description.length}/500
+                </div>
+                
+                {/* Quick Actions */}
+                <div className="calendar-quick-actions">
+                  <button type="button" onClick={() => setShowDescription(false)} className="calendar-action-btn">
+                    Done
                   </button>
                 </div>
               </div>

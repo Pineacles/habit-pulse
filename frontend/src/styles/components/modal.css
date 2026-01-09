@@ -852,6 +852,93 @@
 }
 
 /* ==========================================
+   DESCRIPTION DRAWER
+   Description input sidebar
+   ========================================== */
+
+.description-drawer {
+  /* Reuses calendar-drawer styles */
+}
+
+.description-textarea {
+  width: 100%;
+  min-height: 200px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: white;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  resize: vertical;
+  transition: all 0.15s ease;
+}
+
+.description-textarea:focus {
+  outline: none;
+  border-color: var(--accent-electric, #FF4D00);
+  box-shadow: 0 0 0 3px var(--accent-glow, rgba(255, 77, 0, 0.1));
+}
+
+.description-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ==========================================
+   GOAL NAME DESCRIPTION BUTTON
+   Inline button next to goal name input
+   ========================================== */
+
+.goal-name-description-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.goal-name-description-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+.goal-name-description-btn.active {
+  border-color: var(--accent-electric, #FF4D00);
+  background: rgba(255, 77, 0, 0.1);
+  color: var(--accent-electric, #FF4D00);
+}
+
+.goal-name-description-btn:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+.description-indicator {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 16px;
+  height: 16px;
+  background: var(--accent-electric, #FF4D00);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  border: 2px solid rgba(20, 25, 35, 0.8);
+}
+
+/* ==========================================
    GOAL CREATION LAYOUT HELPERS
    ========================================== */
 

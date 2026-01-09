@@ -7,7 +7,8 @@ public record CreateGoalRequest(
     string Unit = "minutes",
     int[]? ScheduleDays = null,
     int? IntervalDays = null,
-    DateOnly? IntervalStartDate = null
+    DateOnly? IntervalStartDate = null,
+    string? Description = null
 );
 
 public record UpdateGoalRequest(
@@ -18,6 +19,7 @@ public record UpdateGoalRequest(
     int[]? ScheduleDays = null,
     int? IntervalDays = null,
     DateOnly? IntervalStartDate = null,
+    string? Description = null,
     int? SortOrder = null,
     bool? IsActive = null
 );
@@ -36,6 +38,7 @@ public record GoalResponse(
     int[] ScheduleDays,
     int? IntervalDays,
     DateOnly? IntervalStartDate,
+    string? Description,
     int SortOrder,
     bool IsActive,
     DateTime CreatedAt
@@ -51,6 +54,7 @@ public record GoalWithStatusResponse(
     int[] ScheduleDays,
     int? IntervalDays,
     DateOnly? IntervalStartDate,
+    string? Description,
     int SortOrder,
     bool IsActive,
     DateTime CreatedAt,
