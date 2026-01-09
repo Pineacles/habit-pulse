@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+import { addDays, startOfDay, differenceInDays, format } from 'date-fns';
 import { GoalModal } from '../components/GoalModal';
+import { DescriptionModal } from '../components/DescriptionModal';
 import { useGoalStore } from '../stores/goalStore';
 import { DAY_NAMES_SHORT, type GoalWithStatus } from '../types';
 
@@ -18,6 +20,7 @@ export function AllGoals() {
   const [editingGoal, setEditingGoal] = useState<GoalWithStatus | null>(null);
   const [draggedGoal, setDraggedGoal] = useState<GoalWithStatus | null>(null);
   const [dragOverGoalId, setDragOverGoalId] = useState<string | null>(null);
+  const [descriptionModalGoal, setDescriptionModalGoal] = useState<GoalWithStatus | null>(null);
 
   // Fetch ALL goals (not just today's)
   useEffect(() => {
@@ -48,8 +51,55 @@ export function AllGoals() {
     setEditingGoal(null);
   };
 
+  // Calculate next occurrence date for interval schedules
+  const getNextOccurrence = (intervalDays: number, intervalStartDate: string): Date | null => {
+    try {
+      // Parse the start date (ISO format "2025-01-13" from backend)
+      const [year, month, day] = intervalStartDate.split('-').map(Number);
+      const startDate = new Date(year, month - 1, day);
+      
+      const today = startOfDay(new Date());
+      const start = startOfDay(startDate);
+      
+      // If start is in the future, that's the next occurrence
+      if (start >= today) {
+        return start;
+      }
+      
+      // Calculate how many intervals have passed
+      const daysSinceStart = differenceInDays(today, start);
+      const cyclesPassed = Math.floor(daysSinceStart / intervalDays);
+      
+      // Calculate the next occurrence
+      let nextOccurrence = addDays(start, cyclesPassed * intervalDays);
+      
+      // If we landed on today or before, add one more interval
+      if (nextOccurrence < today) {
+        nextOccurrence = addDays(nextOccurrence, intervalDays);
+      }
+      
+      return nextOccurrence;
+    } catch (e) {
+      console.error('Error calculating next occurrence:', e);
+      return null;
+    }
+  };
+
   // Format schedule
-  const formatSchedule = (days: number[]) => {
+  const formatSchedule = (goal: GoalWithStatus) => {
+    // Check for interval schedule first
+    if (goal.intervalDays && goal.intervalStartDate) {
+      const nextOccurrence = getNextOccurrence(goal.intervalDays, goal.intervalStartDate);
+      if (nextOccurrence) {
+        const formattedDate = format(nextOccurrence, 'MMM d');
+        const today = startOfDay(new Date());
+        const isToday = startOfDay(nextOccurrence).getTime() === today.getTime();
+        return `Every ${goal.intervalDays} days${isToday ? ' (Today)' : ` (Next: ${formattedDate})`}`;
+      }
+      return `Every ${goal.intervalDays} days`;
+    }
+    
+    const days = goal.scheduleDays;
     if (days.length === 7) return 'Every day';
     if (days.length === 5 && !days.includes(0) && !days.includes(6)) return 'Weekdays';
     if (days.length === 2 && days.includes(0) && days.includes(6)) return 'Weekends';
@@ -205,12 +255,24 @@ export function AllGoals() {
                         <div className="goal-schedule">
                           <span className="font-mono">{formatTarget(goal)}</span>
                           <span className="mx-2">•</span>
-                          <span>{formatSchedule(goal.scheduleDays)}</span>
+                          <span>{formatSchedule(goal)}</span>
                         </div>
                       </div>
 
                       {/* Actions */}
                       <div className="goal-actions">
+                        {goal.description && (
+                          <button
+                            onClick={() => setDescriptionModalGoal(goal)}
+                            className="goal-action-btn"
+                            aria-label="View description"
+                            title="View description"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                          </button>
+                        )}
                         <button
                           onClick={() => handleEdit(goal)}
                           className="goal-action-btn"
@@ -265,12 +327,24 @@ export function AllGoals() {
                         <div className="goal-schedule">
                           <span className="font-mono">{formatTarget(goal)}</span>
                           <span className="mx-2">•</span>
-                          <span>{formatSchedule(goal.scheduleDays)}</span>
+                          <span>{formatSchedule(goal)}</span>
                         </div>
                       </div>
 
                       {/* Actions */}
                       <div className="goal-actions">
+                        {goal.description && (
+                          <button
+                            onClick={() => setDescriptionModalGoal(goal)}
+                            className="goal-action-btn"
+                            aria-label="View description"
+                            title="View description"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                          </button>
+                        )}
                         <button
                           onClick={() => handleToggleActive(goal)}
                           className="goal-action-btn"
@@ -307,6 +381,13 @@ export function AllGoals() {
         isOpen={isModalOpen}
         onClose={handleModalClose}
         goal={editingGoal}
+      />
+
+      {/* Description modal */}
+      <DescriptionModal
+        isOpen={!!descriptionModalGoal}
+        onClose={() => setDescriptionModalGoal(null)}
+        goal={descriptionModalGoal}
       />
     </>
   );

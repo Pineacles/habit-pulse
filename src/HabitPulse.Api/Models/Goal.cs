@@ -14,6 +14,8 @@ public class Goal
     public int? IntervalDays { get; set; } // e.g., 2 = every 2 days
     public DateOnly? IntervalStartDate { get; set; } // When interval counting starts
     
+    public string? Description { get; set; } // Optional description/notes for the goal
+    
     public int SortOrder { get; set; } = 0;
     public bool IsActive { get; set; } = true;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

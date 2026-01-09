@@ -56,6 +56,7 @@ public class GoalService
                 g.ScheduleDays,
                 g.IntervalDays,
                 g.IntervalStartDate,
+                g.Description,
                 g.SortOrder,
                 g.IsActive,
                 g.CreatedAt,
@@ -83,6 +84,7 @@ public class GoalService
             goal.ScheduleDays,
             goal.IntervalDays,
             goal.IntervalStartDate,
+            goal.Description,
             goal.SortOrder,
             goal.IsActive,
             goal.CreatedAt
@@ -105,6 +107,7 @@ public class GoalService
             ScheduleDays = request.ScheduleDays ?? [0, 1, 2, 3, 4, 5, 6],
             IntervalDays = request.IntervalDays,
             IntervalStartDate = request.IntervalStartDate,
+            Description = request.Description,
             SortOrder = maxSortOrder + 1
         };
 
@@ -121,6 +124,7 @@ public class GoalService
             goal.ScheduleDays,
             goal.IntervalDays,
             goal.IntervalStartDate,
+            goal.Description,
             goal.SortOrder,
             goal.IsActive,
             goal.CreatedAt
@@ -145,6 +149,9 @@ public class GoalService
         // Handle interval fields - allow setting to null to clear
         if (request.IntervalDays != null) goal.IntervalDays = request.IntervalDays;
         if (request.IntervalStartDate != null) goal.IntervalStartDate = request.IntervalStartDate;
+        
+        // Handle description - allow setting to null to clear
+        if (request.Description != null) goal.Description = request.Description;
 
         await _context.SaveChangesAsync();
 
@@ -158,6 +165,7 @@ public class GoalService
             goal.ScheduleDays,
             goal.IntervalDays,
             goal.IntervalStartDate,
+            goal.Description,
             goal.SortOrder,
             goal.IsActive,
             goal.CreatedAt

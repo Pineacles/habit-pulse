@@ -1,6 +1,8 @@
-import { useState, useRef } from 'react';
-import { DAY_NAMES_SHORT, type GoalWithStatus } from '../types';
-import { useGoalStore } from '../stores/goalStore';
+import { useState, useRef } from "react";
+import { addDays, startOfDay, differenceInDays, format } from "date-fns";
+import { DAY_NAMES_SHORT, type GoalWithStatus } from "../types";
+import { useGoalStore } from "../stores/goalStore";
+import { DescriptionModal } from "./DescriptionModal";
 
 interface GoalCardProps {
   goal: GoalWithStatus;
@@ -16,7 +18,7 @@ interface GoalCardProps {
 
 /**
  * GoalCard - Glass Bento Design with Drag & Drop
- * 
+ *
  * Features:
  * - Glass card with hover lift effect
  * - Tap to toggle complete
@@ -25,28 +27,35 @@ interface GoalCardProps {
  * - Drag and drop to reorder
  * - Shows unit or checkmark for simple goals
  */
-export function GoalCard({ 
-  goal, 
+export function GoalCard({
+  goal,
   onEdit,
   isDragOver = false,
   onDragStart,
   onDragEnd,
   onDragOver,
   onDragLeave,
-  onDrop
+  onDrop,
 }: GoalCardProps) {
   const { toggleGoal, deleteGoal } = useGoalStore();
-  
+
   // Swipe state
   const [swipeOffset, setSwipeOffset] = useState(0);
   const [isRevealed, setIsRevealed] = useState(false);
   const touchStartX = useRef(0);
 
+  // Description modal state
+  const [showDescriptionModal, setShowDescriptionModal] = useState(false);
+
   // Handle tap to toggle
   const handleTap = (e: React.MouseEvent) => {
-    // Don't toggle if clicking on drag handle
-    if ((e.target as HTMLElement).closest('.drag-handle')) return;
-    
+    // Don't toggle if clicking on drag handle or description button
+    if (
+      (e.target as HTMLElement).closest(".drag-handle") ||
+      (e.target as HTMLElement).closest(".goal-description-btn")
+    )
+      return;
+
     if (isRevealed) {
       setSwipeOffset(0);
       setIsRevealed(false);
@@ -81,25 +90,84 @@ export function GoalCard({
 
   // Handle delete
   const handleDelete = async () => {
-    if (confirm('Delete this goal?')) {
+    if (confirm("Delete this goal?")) {
       await deleteGoal(goal.id);
+    }
+  };
+
+  // Calculate next occurrence date for interval schedules
+  const getNextOccurrence = (
+    intervalDays: number,
+    intervalStartDate: string
+  ): Date | null => {
+    try {
+      // Parse the start date (ISO format "2025-01-13" from backend)
+      const [year, month, day] = intervalStartDate.split("-").map(Number);
+      const startDate = new Date(year, month - 1, day);
+
+      const today = startOfDay(new Date());
+      const start = startOfDay(startDate);
+
+      // If start is in the future, that's the next occurrence
+      if (start >= today) {
+        return start;
+      }
+
+      // Calculate how many intervals have passed
+      const daysSinceStart = differenceInDays(today, start);
+      const cyclesPassed = Math.floor(daysSinceStart / intervalDays);
+
+      // Calculate the next occurrence
+      let nextOccurrence = addDays(start, cyclesPassed * intervalDays);
+
+      // If we landed on today or before, add one more interval
+      if (nextOccurrence < today) {
+        nextOccurrence = addDays(nextOccurrence, intervalDays);
+      }
+
+      return nextOccurrence;
+    } catch (e) {
+      console.error("Error calculating next occurrence:", e);
+      return null;
     }
   };
 
   // Format schedule days
   const formatSchedule = () => {
-    if (goal.scheduleDays.length === 7) return 'Every day';
-    if (goal.scheduleDays.length === 5 && 
-        !goal.scheduleDays.includes(0) && 
-        !goal.scheduleDays.includes(6)) {
-      return 'Weekdays';
+    // Check for interval schedule first
+    if (goal.intervalDays && goal.intervalStartDate) {
+      const nextOccurrence = getNextOccurrence(
+        goal.intervalDays,
+        goal.intervalStartDate
+      );
+      if (nextOccurrence) {
+        const formattedDate = format(nextOccurrence, "MMM d");
+        const today = startOfDay(new Date());
+        const isToday =
+          startOfDay(nextOccurrence).getTime() === today.getTime();
+        return `Every ${goal.intervalDays} days${
+          isToday ? " (Today)" : ` (Next: ${formattedDate})`
+        }`;
+      }
+      return `Every ${goal.intervalDays} days`;
     }
-    if (goal.scheduleDays.length === 2 && 
-        goal.scheduleDays.includes(0) && 
-        goal.scheduleDays.includes(6)) {
-      return 'Weekends';
+
+    if (goal.scheduleDays.length === 7) return "Every day";
+    if (
+      goal.scheduleDays.length === 5 &&
+      !goal.scheduleDays.includes(0) &&
+      !goal.scheduleDays.includes(6)
+    ) {
+      return "Weekdays";
     }
-    return goal.scheduleDays.map(d => DAY_NAMES_SHORT[d]).join(', ');
+    if (
+      goal.scheduleDays.length === 2 &&
+      goal.scheduleDays.includes(0) &&
+      goal.scheduleDays.includes(6)
+    ) {
+      return "Weekends";
+    }
+    return goal.scheduleDays.map((d) => DAY_NAMES_SHORT[d]).join(", ");
   };
 
   // Format target display
@@ -107,16 +175,16 @@ export function GoalCard({
     if (!goal.isMeasurable) {
       return null; // Simple goal - no target display
     }
-    
+
     const unitLabels: Record<string, string> = {
-      minutes: 'min',
-      pages: 'pg',
-      reps: 'reps',
-      liters: 'L',
-      km: 'km',
-      items: 'items',
+      minutes: "min",
+      pages: "pg",
+      reps: "reps",
+      liters: "L",
+      km: "km",
+      items: "items",
     };
-    
+
     return `${goal.targetValue}${unitLabels[goal.unit] || goal.unit}`;
   };
 
@@ -126,7 +194,7 @@ export function GoalCard({
   return (
     <div className="relative rounded-2xl mb-3">
       {/* Swipe actions (mobile) */}
-      <div 
+      <div
         className="absolute right-0 top-0 bottom-0 flex items-center gap-2 px-3"
         style={{ transform: `translateX(${120 - swipeOffset}px)` }}
       >
@@ -135,9 +203,18 @@ export function GoalCard({
           className="w-12 h-12 rounded-xl bg-blue-500/80 flex items-center justify-center"
           aria-label="Edit"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+            />
           </svg>
         </button>
         <button
@@ -145,16 +222,27 @@ export function GoalCard({
           className="w-12 h-12 rounded-xl bg-red-500/80 flex items-center justify-center"
           aria-label="Delete"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+            />
           </svg>
         </button>
       </div>
 
       {/* Main card */}
       <div
-        className={`goal-card ${goal.isCompletedToday ? 'completed' : ''} ${isDraggable ? 'draggable' : ''} ${isDragOver ? 'drag-over' : ''}`}
+        className={`goal-card ${goal.isCompletedToday ? "completed" : ""} ${
+          isDraggable ? "draggable" : ""
+        } ${isDragOver ? "drag-over" : ""}`}
         style={{ transform: `translateX(-${swipeOffset}px)` }}
         onClick={handleTap}
         onTouchStart={handleTouchStart}
@@ -171,26 +259,52 @@ export function GoalCard({
           {/* Drag handle (desktop only) */}
           {isDraggable && (
             <div className="drag-handle hidden lg:flex" title="Drag to reorder">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                      d="M4 8h16M4 16h16" />
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 8h16M4 16h16"
+                />
               </svg>
             </div>
           )}
 
           {/* Checkbox */}
-          <div className={`goal-checkbox ${goal.isCompletedToday ? 'checked' : ''}`}>
+          <div
+            className={`goal-checkbox ${
+              goal.isCompletedToday ? "checked" : ""
+            }`}
+          >
             {goal.isCompletedToday && (
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} 
-                      d="M5 13l4 4L19 7" />
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={3}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
             )}
           </div>
 
           {/* Goal info */}
           <div className="goal-info">
-            <h3 className={`goal-name ${goal.isCompletedToday ? 'completed' : ''}`}>
+            <h3
+              className={`goal-name ${
+                goal.isCompletedToday ? "completed" : ""
+              }`}
+            >
               {goal.name}
             </h3>
             <p className="goal-schedule">{formatSchedule()}</p>
@@ -201,18 +315,64 @@ export function GoalCard({
             {targetDisplay ? (
               <>
                 <span className="goal-target-value">{goal.targetValue}</span>
-                <span className="goal-target-unit">{goal.unit === 'minutes' ? 'min' : goal.unit}</span>
+                <span className="goal-target-unit">
+                  {goal.unit === "minutes" ? "min" : goal.unit}
+                </span>
               </>
             ) : (
               <span className="goal-simple-badge">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
                 </svg>
               </span>
             )}
           </div>
+
+          {/* Description button - only show if description exists */}
+          {goal.description && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowDescriptionModal(true);
+              }}
+              className="goal-description-btn"
+              aria-label="View description"
+              title="View description"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </button>
+          )}
         </div>
       </div>
+
+      {/* Description Modal */}
+      <DescriptionModal
+        isOpen={showDescriptionModal}
+        onClose={() => setShowDescriptionModal(false)}
+        goal={goal}
+      />
     </div>
   );
 }

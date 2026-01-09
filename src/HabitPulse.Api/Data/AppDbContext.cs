@@ -38,6 +38,7 @@ public class AppDbContext : DbContext
             entity.Property(e => e.TargetValue).HasDefaultValue(0);
             entity.Property(e => e.Unit).HasMaxLength(20).HasDefaultValue("minutes");
             entity.Property(e => e.ScheduleDays).HasDefaultValueSql("'{0,1,2,3,4,5,6}'");
+            entity.Property(e => e.Description).HasMaxLength(500);
             entity.Property(e => e.SortOrder).HasDefaultValue(0);
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("now()");
