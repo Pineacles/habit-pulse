@@ -33,6 +33,14 @@
       radial-gradient(circle at 10% 20%, rgba(30, 40, 60, 0.3) 0%, transparent 40%),
       radial-gradient(circle at 90% 80%, rgba(255, 77, 0, 0.03) 0%, transparent 40%);
   }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* ==========================================

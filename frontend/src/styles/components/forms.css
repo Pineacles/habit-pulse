@@ -150,12 +150,14 @@ textarea.input-error:focus {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s ease, transform 0.15s ease, box-shadow 0.3s ease;
+  will-change: transform, box-shadow;
 }
 
 .checkbox:hover {
   border-color: var(--accent-electric);
   background: rgba(255, 77, 0, 0.1);
+  transform: scale(1.1);
 }
 
 .checkbox.checked {
@@ -165,7 +167,20 @@ textarea.input-error:focus {
     var(--accent-dim) 100%
   );
   border-color: transparent;
-  box-shadow: 0 4px 12px -4px var(--accent-glow);
+  box-shadow: 0 4px 12px -4px var(--accent-glow), 0 0 16px var(--accent-glow);
+  transform: scale(1.05);
+  animation: checkbox-pulse 0.3s ease;
+}
+
+@keyframes checkbox-pulse {
+  0% {
+    transform: scale(1.2);
+    box-shadow: 0 0 24px var(--accent-glow);
+  }
+  100% {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px -4px var(--accent-glow), 0 0 16px var(--accent-glow);
+  }
 }
 
 .checkbox:focus-visible {

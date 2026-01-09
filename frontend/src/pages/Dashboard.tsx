@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
-import { GoalCard } from '../components/GoalCard';
-import { GoalModal } from '../components/GoalModal';
-import { useGoalStore } from '../stores/goalStore';
-import { DAY_NAMES_FULL, type GoalWithStatus } from '../types';
-import { goalsApi } from '../api/goals';
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { GoalCard } from "../components/GoalCard";
+import { GoalModal } from "../components/GoalModal";
+import { useGoalStore } from "../stores/goalStore";
+import { DAY_NAMES_FULL, type GoalWithStatus } from "../types";
+import { goalsApi } from "../api/goals";
 
 /**
  * Dashboard (Today View) - Glass Design with Drag & Drop
- * 
+ *
  * Features:
  * - Transparent header (no colored bar)
  * - Glass progress card
@@ -26,29 +27,31 @@ export function Dashboard() {
   // Fetch goals on mount
   useEffect(() => {
     fetchGoals(true); // true = today only
-    
+
     // Also check if user has any goals at all
-    goalsApi.getAll(false).then(allGoals => {
-      setHasAnyGoals(allGoals.length > 0);
-    }).catch(() => {
-      setHasAnyGoals(false);
-    });
+    goalsApi
+      .getAll(false)
+      .then((allGoals) => {
+        setHasAnyGoals(allGoals.length > 0);
+      })
+      .catch(() => {
+        setHasAnyGoals(false);
+      });
   }, [fetchGoals]);
 
   // Calculate completion stats
-  const completedCount = goals.filter(g => g.isCompletedToday).length;
+  const completedCount = goals.filter((g) => g.isCompletedToday).length;
   const totalCount = goals.length;
-  const completionPercent = totalCount > 0 
-    ? Math.round((completedCount / totalCount) * 100) 
-    : 0;
+  const completionPercent =
+    totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
   // Format today's date with year
   const today = new Date();
   const dayName = DAY_NAMES_FULL[today.getDay()];
-  const dateStr = today.toLocaleDateString('en-US', { 
-    month: 'long', 
-    day: 'numeric',
-    year: 'numeric'
+  const dateStr = today.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
   });
 
   // Handle edit goal
@@ -62,22 +65,25 @@ export function Dashboard() {
     setIsModalOpen(false);
     setEditingGoal(null);
     // Refresh hasAnyGoals after modal closes (in case a goal was created)
-    goalsApi.getAll(false).then(allGoals => {
-      setHasAnyGoals(allGoals.length > 0);
-    }).catch(() => {});
+    goalsApi
+      .getAll(false)
+      .then((allGoals) => {
+        setHasAnyGoals(allGoals.length > 0);
+      })
+      .catch(() => {});
   };
 
   // Drag and Drop handlers
   const handleDragStart = (e: React.DragEvent, goal: GoalWithStatus) => {
     setDraggedGoal(goal);
-    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.effectAllowed = "move";
     setTimeout(() => {
-      (e.target as HTMLElement).style.opacity = '0.5';
+      (e.target as HTMLElement).style.opacity = "0.5";
     }, 0);
   };
 
   const handleDragEnd = (e: React.DragEvent) => {
-    (e.target as HTMLElement).style.opacity = '1';
+    (e.target as HTMLElement).style.opacity = "1";
     setDraggedGoal(null);
     setDragOverGoalId(null);
   };
@@ -97,8 +103,8 @@ export function Dashboard() {
     e.preventDefault();
     if (!draggedGoal || draggedGoal.id === targetGoal.id) return;
 
-    const draggedIndex = goals.findIndex(g => g.id === draggedGoal.id);
-    const targetIndex = goals.findIndex(g => g.id === targetGoal.id);
+    const draggedIndex = goals.findIndex((g) => g.id === draggedGoal.id);
+    const targetIndex = goals.findIndex((g) => g.id === targetGoal.id);
 
     if (draggedIndex === -1 || targetIndex === -1) return;
 
@@ -108,7 +114,7 @@ export function Dashboard() {
     newOrder.splice(targetIndex, 0, draggedGoal);
 
     // Get all goal IDs in new order
-    const orderedIds = newOrder.map(g => g.id);
+    const orderedIds = newOrder.map((g) => g.id);
     await reorderGoals(orderedIds);
 
     setDraggedGoal(null);
@@ -126,7 +132,8 @@ export function Dashboard() {
             Create your first goal to start tracking your progress
           </p>
           <div className="empty-state-icon-text">
-            <span>HP</span><span className="dot">.</span>
+            <span>HP</span>
+            <span className="dot">.</span>
           </div>
           <button onClick={() => setIsModalOpen(true)} className="btn-glow">
             Create Goal
@@ -137,7 +144,9 @@ export function Dashboard() {
       // Has goals but none scheduled for today - minimal message
       return (
         <div className="empty-state-minimal">
-          <p className="empty-state-minimal-text">No goals scheduled for today</p>
+          <p className="empty-state-minimal-text">
+            No goals scheduled for today
+          </p>
         </div>
       );
     }
@@ -146,19 +155,33 @@ export function Dashboard() {
   return (
     <>
       {/* Page Header - Transparent */}
-      <div className="page-header">
+      <motion.div
+        className="page-header"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+      >
         <div>
           <h1 className="page-title">{dayName}</h1>
           <p className="page-subtitle">{dateStr}</p>
         </div>
         <button onClick={() => setIsModalOpen(true)} className="btn-glow">
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                  d="M12 4v16m8-8H4" />
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 4v16m8-8H4"
+            />
           </svg>
           Add Goal
         </button>
-      </div>
+      </motion.div>
 
       {/* Progress Card */}
       <div className="progress-card">
@@ -172,15 +195,15 @@ export function Dashboard() {
               <span className="label">completed</span>
             </p>
           </div>
-          
+
           {/* Circular progress */}
           <div className="circular-progress">
             <svg viewBox="0 0 72 72">
               <circle className="bg" cx="36" cy="36" r="30" />
-              <circle 
-                className="fill" 
-                cx="36" 
-                cy="36" 
+              <circle
+                className="fill"
+                cx="36"
+                cy="36"
                 r="30"
                 strokeDasharray={`${completionPercent * 1.885} 188.5`}
               />
@@ -221,21 +244,32 @@ export function Dashboard() {
           renderEmptyState()
         ) : (
           // Goals list with drag and drop
-          <div>
+          <motion.div layout>
             {goals.map((goal) => (
-              <GoalCard 
-                key={goal.id} 
-                goal={goal} 
-                onEdit={handleEdit}
-                isDragOver={dragOverGoalId === goal.id}
-                onDragStart={(e) => handleDragStart(e, goal)}
-                onDragEnd={handleDragEnd}
-                onDragOver={(e) => handleDragOver(e, goal)}
-                onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, goal)}
-              />
+              <motion.div
+                key={goal.id}
+                layout
+                initial={false}
+                transition={{
+                  layout: {
+                    duration: 0.25,
+                    ease: [0.2, 0, 0, 1],
+                  },
+                }}
+              >
+                <GoalCard
+                  goal={goal}
+                  onEdit={handleEdit}
+                  isDragOver={dragOverGoalId === goal.id}
+                  onDragStart={(e) => handleDragStart(e, goal)}
+                  onDragEnd={handleDragEnd}
+                  onDragOver={(e) => handleDragOver(e, goal)}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, goal)}
+                />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         )}
       </div>
 

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { addDays, startOfDay, differenceInDays, format } from "date-fns";
 import { DAY_NAMES_SHORT, type GoalWithStatus } from "../types";
 import { useGoalStore } from "../stores/goalStore";
@@ -44,8 +44,34 @@ export function GoalCard({
   const [isRevealed, setIsRevealed] = useState(false);
   const touchStartX = useRef(0);
 
+  // Drag state
+  const [isDragging, setIsDragging] = useState(false);
+
   // Description modal state
   const [showDescriptionModal, setShowDescriptionModal] = useState(false);
+
+  // Button visibility state - fix for flash on mount
+  const [isMounted, setIsMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Check if mobile on mount
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024); // lg breakpoint
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    // Use requestAnimationFrame to ensure DOM is ready
+    const rafId = requestAnimationFrame(() => {
+      setIsMounted(true);
+    });
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", checkMobile);
+    };
+  }, []);
 
   // Handle tap to toggle
   const handleTap = (e: React.MouseEvent) => {
@@ -193,64 +219,75 @@ export function GoalCard({
 
   return (
     <div className="relative rounded-2xl mb-3">
-      {/* Swipe actions (mobile) */}
-      <div
-        className="absolute right-0 top-0 bottom-0 flex items-center gap-2 px-3"
-        style={{ transform: `translateX(${120 - swipeOffset}px)` }}
-      >
-        <button
-          onClick={() => onEdit(goal)}
-          className="w-12 h-12 rounded-xl bg-blue-500/80 flex items-center justify-center"
-          aria-label="Edit"
+      {/* Swipe actions (mobile only - don't render on desktop) */}
+      {isMobile && (
+        <div
+          className="absolute right-0 top-0 bottom-0 flex items-center gap-2 px-3"
+          style={{
+            transform: `translateX(${120 - swipeOffset}px)`,
+            display: isMounted ? "flex" : "none",
+          }}
         >
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+          <button
+            onClick={() => onEdit(goal)}
+            className="w-12 h-12 rounded-xl bg-blue-500/80 flex items-center justify-center"
+            aria-label="Edit"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-            />
-          </svg>
-        </button>
-        <button
-          onClick={handleDelete}
-          className="w-12 h-12 rounded-xl bg-red-500/80 flex items-center justify-center"
-          aria-label="Delete"
-        >
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+              />
+            </svg>
+          </button>
+          <button
+            onClick={handleDelete}
+            className="w-12 h-12 rounded-xl bg-red-500/80 flex items-center justify-center"
+            aria-label="Delete"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-            />
-          </svg>
-        </button>
-      </div>
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+              />
+            </svg>
+          </button>
+        </div>
+      )}
 
       {/* Main card */}
       <div
         className={`goal-card ${goal.isCompletedToday ? "completed" : ""} ${
           isDraggable ? "draggable" : ""
-        } ${isDragOver ? "drag-over" : ""}`}
+        } ${isDragOver ? "drag-over" : ""} ${isDragging ? "dragging" : ""}`}
         style={{ transform: `translateX(-${swipeOffset}px)` }}
         onClick={handleTap}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         draggable={isDraggable}
-        onDragStart={onDragStart}
-        onDragEnd={onDragEnd}
+        onDragStart={(e) => {
+          setIsDragging(true);
+          onDragStart?.(e);
+        }}
+        onDragEnd={(e) => {
+          setIsDragging(false);
+          onDragEnd?.(e);
+        }}
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
@@ -339,13 +376,17 @@ export function GoalCard({
           </div>
 
           {/* Description button - only show if description exists */}
-          {goal.description && (
+          {goal.description && isMounted && (
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 setShowDescriptionModal(true);
               }}
               className="goal-description-btn"
+              style={{
+                opacity: 1,
+                transition: "opacity 0.2s ease",
+              }}
               aria-label="View description"
               title="View description"
             >
