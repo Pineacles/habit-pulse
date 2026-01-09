@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { addDays, startOfDay, differenceInDays, format } from "date-fns";
 import { DAY_NAMES_SHORT, type GoalWithStatus } from "../types";
 import { useGoalStore } from "../stores/goalStore";
@@ -6,7 +6,6 @@ import { DescriptionModal } from "./DescriptionModal";
 
 interface GoalCardProps {
   goal: GoalWithStatus;
-  onEdit: (goal: GoalWithStatus) => void;
   // Drag and drop props
   isDragOver?: boolean;
   onDragStart?: (e: React.DragEvent) => void;
@@ -22,14 +21,12 @@ interface GoalCardProps {
  * Features:
  * - Glass card with hover lift effect
  * - Tap to toggle complete
- * - Swipe left to reveal edit/delete (mobile)
  * - Glowing checkbox when checked
- * - Drag and drop to reorder
+ * - Drag and drop to reorder (desktop)
  * - Shows unit or checkmark for simple goals
  */
 export function GoalCard({
   goal,
-  onEdit,
   isDragOver = false,
   onDragStart,
   onDragEnd,
@@ -37,12 +34,7 @@ export function GoalCard({
   onDragLeave,
   onDrop,
 }: GoalCardProps) {
-  const { toggleGoal, deleteGoal } = useGoalStore();
-
-  // Swipe state
-  const [swipeOffset, setSwipeOffset] = useState(0);
-  const [isRevealed, setIsRevealed] = useState(false);
-  const touchStartX = useRef(0);
+  const { toggleGoal } = useGoalStore();
 
   // Drag state
   const [isDragging, setIsDragging] = useState(false);
@@ -50,75 +42,24 @@ export function GoalCard({
   // Description modal state
   const [showDescriptionModal, setShowDescriptionModal] = useState(false);
 
-  // Button visibility state - fix for flash on mount
-  const [isMounted, setIsMounted] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    // Check if mobile on mount
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024); // lg breakpoint
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-
-    // Use requestAnimationFrame to ensure DOM is ready
-    const rafId = requestAnimationFrame(() => {
-      setIsMounted(true);
-    });
-
-    return () => {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener("resize", checkMobile);
-    };
-  }, []);
-
-  // Handle tap to toggle
-  const handleTap = (e: React.MouseEvent) => {
-    // Don't toggle if clicking on drag handle or description button
+  // Handle tap - card click toggles completion
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Don't handle if clicking on drag handle, checkbox, or description button
     if (
       (e.target as HTMLElement).closest(".drag-handle") ||
+      (e.target as HTMLElement).closest(".goal-checkbox") ||
       (e.target as HTMLElement).closest(".goal-description-btn")
     )
       return;
 
-    if (isRevealed) {
-      setSwipeOffset(0);
-      setIsRevealed(false);
-      return;
-    }
+    // Toggle completion
     toggleGoal(goal.id);
   };
 
-  // Touch handlers for swipe
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    const diff = touchStartX.current - e.touches[0].clientX;
-    if (diff > 0) {
-      setSwipeOffset(Math.min(diff, 120));
-    } else if (isRevealed) {
-      setSwipeOffset(Math.max(120 + diff, 0));
-    }
-  };
-
-  const handleTouchEnd = () => {
-    if (swipeOffset > 60) {
-      setSwipeOffset(120);
-      setIsRevealed(true);
-    } else {
-      setSwipeOffset(0);
-      setIsRevealed(false);
-    }
-  };
-
-  // Handle delete
-  const handleDelete = async () => {
-    if (confirm("Delete this goal?")) {
-      await deleteGoal(goal.id);
-    }
+  // Handle checkbox click - toggle completion
+  const handleCheckboxClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    toggleGoal(goal.id);
   };
 
   // Calculate next occurrence date for interval schedules
@@ -219,66 +160,12 @@ export function GoalCard({
 
   return (
     <div className="relative rounded-2xl mb-3">
-      {/* Swipe actions (mobile only - don't render on desktop) */}
-      {isMobile && (
-        <div
-          className="absolute right-0 top-0 bottom-0 flex items-center gap-2 px-3"
-          style={{
-            transform: `translateX(${120 - swipeOffset}px)`,
-            display: isMounted ? "flex" : "none",
-          }}
-        >
-          <button
-            onClick={() => onEdit(goal)}
-            className="w-12 h-12 rounded-xl bg-blue-500/80 flex items-center justify-center"
-            aria-label="Edit"
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-              />
-            </svg>
-          </button>
-          <button
-            onClick={handleDelete}
-            className="w-12 h-12 rounded-xl bg-red-500/80 flex items-center justify-center"
-            aria-label="Delete"
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-              />
-            </svg>
-          </button>
-        </div>
-      )}
-
       {/* Main card */}
       <div
         className={`goal-card ${goal.isCompletedToday ? "completed" : ""} ${
           isDraggable ? "draggable" : ""
         } ${isDragOver ? "drag-over" : ""} ${isDragging ? "dragging" : ""}`}
-        style={{ transform: `translateX(-${swipeOffset}px)` }}
-        onClick={handleTap}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
+        onClick={handleCardClick}
         draggable={isDraggable}
         onDragStart={(e) => {
           setIsDragging(true);
@@ -317,6 +204,7 @@ export function GoalCard({
             className={`goal-checkbox ${
               goal.isCompletedToday ? "checked" : ""
             }`}
+            onClick={handleCheckboxClick}
           >
             {goal.isCompletedToday && (
               <svg
@@ -375,36 +263,32 @@ export function GoalCard({
             )}
           </div>
 
-          {/* Description button - only show if description exists */}
-          {goal.description && isMounted && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowDescriptionModal(true);
-              }}
-              className="goal-description-btn"
-              style={{
-                opacity: 1,
-                transition: "opacity 0.2s ease",
-              }}
-              aria-label="View description"
-              title="View description"
+          {/* Info button - opens description modal */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowDescriptionModal(true);
+            }}
+            className="goal-description-btn"
+            aria-label={
+              goal.description ? "View description" : "View goal details"
+            }
+            title={goal.description ? "View description" : "View goal details"}
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </button>
-          )}
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </button>
         </div>
       </div>
 

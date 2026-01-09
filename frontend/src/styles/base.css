@@ -29,6 +29,22 @@ body {
 }
 
 /* ==========================================
+   MOBILE TAP HIGHLIGHT
+   Remove blue tap highlight on mobile devices
+   ========================================== */
+
+button,
+a,
+input,
+textarea,
+select,
+[role="button"],
+[tabindex] {
+  -webkit-tap-highlight-color: transparent;
+  tap-highlight-color: transparent;
+}
+
+/* ==========================================
    FOCUS STATES
    ========================================== */
 

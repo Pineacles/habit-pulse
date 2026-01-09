@@ -54,12 +54,6 @@ export function Dashboard() {
     year: "numeric",
   });
 
-  // Handle edit goal
-  const handleEdit = (goal: GoalWithStatus) => {
-    setEditingGoal(goal);
-    setIsModalOpen(true);
-  };
-
   // Handle modal close
   const handleModalClose = () => {
     setIsModalOpen(false);
@@ -161,57 +155,118 @@ export function Dashboard() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
       >
-        <div>
-          <h1 className="page-title">{dayName}</h1>
-          <p className="page-subtitle">{dateStr}</p>
-        </div>
-        <button onClick={() => setIsModalOpen(true)} className="btn-glow">
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
-          Add Goal
-        </button>
-      </motion.div>
-
-      {/* Progress Card */}
-      <div className="progress-card">
-        <div className="progress-stats">
-          <div>
-            <p className="progress-text-small">Today's Progress</p>
-            <p className="progress-text-large">
-              <span>{completedCount}</span>
-              <span className="separator">/</span>
-              <span>{totalCount}</span>
-              <span className="label">completed</span>
-            </p>
+        {/* Mobile: Split layout - Title left, Progress right on same row */}
+        <div className="page-header-mobile-top">
+          <div className="page-header-title-section">
+            <h1 className="page-title">{dayName}</h1>
+            <p className="page-subtitle">{dateStr}</p>
           </div>
 
-          {/* Circular progress */}
-          <div className="circular-progress">
-            <svg viewBox="0 0 72 72">
-              <circle className="bg" cx="36" cy="36" r="30" />
-              <circle
-                className="fill"
-                cx="36"
-                cy="36"
-                r="30"
-                strokeDasharray={`${completionPercent * 1.885} 188.5`}
+          {/* Mobile: Progress on the right */}
+          {totalCount > 0 && (
+            <div className="page-header-progress-mobile">
+              <div className="progress-inline-text">
+                <span className="progress-inline-label">Today's Progress</span>
+                <span className="progress-inline-value">
+                  {completedCount} / {totalCount} completed
+                </span>
+              </div>
+              <div className="circular-progress-inline">
+                <svg viewBox="0 0 72 72">
+                  <circle className="bg" cx="36" cy="36" r="30" />
+                  <circle
+                    className="fill"
+                    cx="36"
+                    cy="36"
+                    r="30"
+                    strokeDasharray={`${completionPercent * 1.885} 188.5`}
+                  />
+                </svg>
+                <span className="percent">{completionPercent}%</span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Mobile: Add Goal button removed from header - now FAB */}
+
+        {/* Desktop: Standard layout - Title left, Button right */}
+        <div className="page-header-desktop">
+          <div>
+            <h1 className="page-title">{dayName}</h1>
+            <p className="page-subtitle">{dateStr}</p>
+          </div>
+          <button onClick={() => setIsModalOpen(true)} className="btn-glow">
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
               />
             </svg>
-            <span className="percent">{completionPercent}%</span>
+            Add Goal
+          </button>
+        </div>
+      </motion.div>
+
+      {/* Mobile: Floating Action Button (FAB) */}
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className={`fab-add-goal ${isModalOpen ? "fab-hidden" : ""}`}
+        aria-label="Add Goal"
+      >
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 4v16m8-8H4"
+          />
+        </svg>
+      </button>
+
+      {/* Desktop: Progress Card - Only visible on desktop */}
+      {totalCount > 0 && (
+        <div className="progress-card progress-card-desktop">
+          <div className="progress-stats">
+            <div>
+              <p className="progress-text-small">Today's Progress</p>
+              <p className="progress-text-large">
+                <span>{completedCount}</span>
+                <span className="separator">/</span>
+                <span>{totalCount}</span>
+                <span className="label">completed</span>
+              </p>
+            </div>
+
+            {/* Circular progress */}
+            <div className="circular-progress">
+              <svg viewBox="0 0 72 72">
+                <circle className="bg" cx="36" cy="36" r="30" />
+                <circle
+                  className="fill"
+                  cx="36"
+                  cy="36"
+                  r="30"
+                  strokeDasharray={`${completionPercent * 1.885} 188.5`}
+                />
+              </svg>
+              <span className="percent">{completionPercent}%</span>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Error message */}
       {error && (
@@ -245,21 +300,25 @@ export function Dashboard() {
         ) : (
           // Goals list with drag and drop
           <motion.div layout>
-            {goals.map((goal) => (
+            {goals.map((goal, index) => (
               <motion.div
                 key={goal.id}
                 layout
-                initial={false}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
                 transition={{
+                  opacity: { duration: 0.3, ease: [0.2, 0, 0, 1] },
+                  y: { duration: 0.3, ease: [0.2, 0, 0, 1] },
                   layout: {
                     duration: 0.25,
                     ease: [0.2, 0, 0, 1],
                   },
+                  delay: index * 0.05,
                 }}
               >
                 <GoalCard
                   goal={goal}
-                  onEdit={handleEdit}
                   isDragOver={dragOverGoalId === goal.id}
                   onDragStart={(e) => handleDragStart(e, goal)}
                   onDragEnd={handleDragEnd}

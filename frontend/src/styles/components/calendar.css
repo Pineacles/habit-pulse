@@ -25,10 +25,12 @@
   --rdp-background-color: var(--accent-glow);
   margin: 0;
   width: 100%;
+  padding: 4px 6px 10px;
 }
 
 .rdp-month {
   width: 100%;
+  margin-bottom: 12px;
 }
 
 /* Header Row - Weekday labels */
@@ -253,9 +255,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   position: relative;
-  height: 40px;
+  height: 44px;
+  padding: 0 4px;
 }
 
 .rdp-caption_label {
@@ -276,22 +279,64 @@
   justify-content: space-between;
   width: 100%;
   z-index: 2;
+  position: relative;
 }
 
 .rdp-nav_button {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.6);
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  transition: all 0.15s ease;
 }
 
 .rdp-nav_button:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.3);
   color: white;
+}
+
+.rdp-nav_button:active {
+  background: var(--accent-electric, #FF4D00);
+  border-color: var(--accent-electric, #FF4D00);
+  color: white;
+}
+
+.rdp-nav_button svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2;
+}
+
+/* Theme variants for nav buttons */
+[data-theme="teal"] .rdp-nav_button:active {
+  background: #14B8A6;
+  border-color: #14B8A6;
+}
+
+[data-theme="purple"] .rdp-nav_button:active {
+  background: #A855F7;
+  border-color: #A855F7;
+}
+
+[data-theme="blue"] .rdp-nav_button:active {
+  background: #3B82F6;
+  border-color: #3B82F6;
+}
+
+[data-theme="rose"] .rdp-nav_button:active {
+  background: #F43F5E;
+  border-color: #F43F5E;
+}
+
+[data-theme="emerald"] .rdp-nav_button:active {
+  background: #10B981;
+  border-color: #10B981;
 }

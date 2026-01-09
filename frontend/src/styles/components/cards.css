@@ -40,6 +40,7 @@
 
 /* Fallback for browsers without backdrop-filter support */
 @supports not (backdrop-filter: blur(1px)) {
+
   .glass,
   .glass-solid {
     background: rgba(20, 20, 25, 0.95);
@@ -51,22 +52,27 @@
    ========================================== */
 
 .goal-card {
-  /* Glass panel styling */
-  background: rgba(20, 25, 35, 0.5);
-  backdrop-filter: blur(20px) saturate(120%);
-  -webkit-backdrop-filter: blur(20px) saturate(120%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  /* Glass panel styling - enhanced for better readability */
+  background: rgba(20, 25, 35, 0.65);
+  backdrop-filter: blur(24px) saturate(120%);
+  -webkit-backdrop-filter: blur(24px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 18px;
-  padding: 24px;
-  margin: 0 4px 16px 4px;
-
+  padding: 16px;
+  margin: 0 0 12px 0;
   /* Etched crystal depth effect */
   box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
-
+    0 4px 24px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
   transition: all 0.2s ease;
   cursor: pointer;
+}
+
+@media (min-width: 640px) {
+  .goal-card {
+    padding: 24px;
+    margin: 0 4px 16px 4px;
+  }
 }
 
 .goal-card:hover {
@@ -128,23 +134,40 @@
 .goal-card-inner {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .goal-card-inner {
+    gap: 18px;
+  }
 }
 
 .goal-info {
   flex: 1;
   min-width: 0;
+  overflow: hidden;
 }
 
 .goal-name {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 500;
   color: white;
-  margin: 0 0 6px 0;
+  margin: 0 0 4px 0;
+  line-height: 1.3;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+@media (min-width: 640px) {
+  .goal-name {
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
 }
 
 .goal-name.completed {
@@ -154,10 +177,22 @@
 
 .goal-schedule {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  letter-spacing: 0.03em;
-  color: rgba(255, 255, 255, 0.45);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.65);
   text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  line-height: 1.4;
+}
+
+@media (min-width: 640px) {
+  .goal-schedule {
+    font-size: 11px;
+    gap: 6px;
+  }
 }
 
 .goal-target {
@@ -202,11 +237,47 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
+}
+
+/* AllGoals page specific - ensure text gets 60-70% width */
+.goal-info-allgoals {
+  flex: 1;
+  min-width: 0;
+  max-width: 70%;
+}
+
+@media (max-width: 1023px) {
+  .goal-info-allgoals {
+    max-width: 65%;
+  }
+}
+
+/* Desktop actions - show all buttons */
+.goal-actions-desktop {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .goal-actions-desktop {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+/* Mobile: Hide desktop actions, show kebab */
+@media (max-width: 1023px) {
+  .goal-actions-desktop {
+    display: none;
+  }
 }
 
 .goal-action-btn {
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.06);
   background: rgba(255, 255, 255, 0.03);
@@ -216,6 +287,12 @@
   align-items: center;
   justify-content: center;
   transition: all 0.15s ease-out;
+  flex-shrink: 0;
+}
+
+.goal-action-btn-primary {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .goal-action-btn:hover {
@@ -240,10 +317,221 @@
   cursor: not-allowed;
 }
 
+/* ==========================================
+   KEBAB MENU - Mobile Secondary Actions
+   ========================================== */
+
+.kebab-menu-container {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.kebab-menu-btn {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease-out;
+}
+
+.kebab-menu-btn:hover,
+.kebab-menu-btn[aria-expanded="true"] {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: white;
+}
+
+.kebab-menu-btn:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+/* Hide kebab menu on desktop */
+@media (min-width: 1024px) {
+  .kebab-menu-container {
+    display: none;
+  }
+}
+
+/* Backdrop for mobile bottom sheet */
+.kebab-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 8, 15, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 199;
+}
+
+@media (min-width: 1024px) {
+  .kebab-menu-backdrop {
+    display: none;
+  }
+}
+
+/* Mobile: Bottom sheet action menu */
+.kebab-menu-dropdown {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-height: 50vh;
+  background: rgba(20, 25, 35, 0.98);
+  backdrop-filter: blur(32px) saturate(130%);
+  -webkit-backdrop-filter: blur(32px) saturate(130%);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px 24px 0 0;
+  box-shadow:
+    0 -8px 32px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  padding: 8px;
+  padding-bottom: calc(8px + var(--safe-area-bottom, 0px));
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  /* Let framer-motion handle the animation on mobile */
+  transform: translateY(100%);
+}
+
+/* Desktop: Traditional dropdown */
+@media (min-width: 1024px) {
+  .kebab-menu-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    bottom: auto;
+    left: auto;
+    right: 0;
+    width: auto;
+    min-width: 180px;
+    max-height: none;
+    border-top: none;
+    border-radius: 12px;
+    padding: 4px;
+    padding-bottom: 4px;
+    transform: none !important;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+}
+
+.kebab-menu-item {
+  width: 100%;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.9);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: all 0.15s ease;
+  text-align: left;
+  min-height: 56px;
+}
+
+@media (min-width: 1024px) {
+  .kebab-menu-item {
+    padding: 12px 16px;
+    font-size: 14px;
+    min-height: 44px;
+    gap: 12px;
+  }
+}
+
+.kebab-menu-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+}
+
+.kebab-menu-item svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.kebab-menu-item:hover svg {
+  color: white;
+}
+
+.kebab-menu-item-danger {
+  color: rgba(239, 68, 68, 0.9);
+}
+
+.kebab-menu-item-danger:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #EF4444;
+}
+
+.kebab-menu-item-danger svg {
+  color: rgba(239, 68, 68, 0.8);
+}
+
+.kebab-menu-item-danger:hover svg {
+  color: #EF4444;
+}
+
+/* Priority badge alignment */
+.priority-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+  flex-shrink: 0;
+}
+
+/* Drag handle alignment */
+.drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: grab;
+  flex-shrink: 0;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+/* Ensure vertical alignment of all elements */
+.goal-card-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 /* Description Button */
 .goal-description-btn {
   width: 36px;
   height: 36px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.06);
   background: rgba(255, 255, 255, 0.03);
@@ -272,18 +560,17 @@
   cursor: not-allowed;
 }
 
+
 /* Card Progress Fill Indicator */
 .card-progress {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(
-    to top,
-    rgba(255, 77, 0, 0.2),
-    rgba(255, 77, 0, 0.08) 50%,
-    transparent
-  );
+  background: linear-gradient(to top,
+      rgba(255, 77, 0, 0.2),
+      rgba(255, 77, 0, 0.08) 50%,
+      transparent);
   transition: height 0.4s ease;
   border-radius: 0 0 20px 20px;
   pointer-events: none;

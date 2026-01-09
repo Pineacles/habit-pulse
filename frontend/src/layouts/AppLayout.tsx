@@ -30,11 +30,11 @@ export function AppLayout() {
         <div className="dashboard-content">
           <motion.div
             key={location.pathname}
-            initial={{ opacity: 0 }}
+            initial={false}
             animate={{ opacity: 1 }}
             transition={{
-              duration: 0.2,
-              ease: "easeInOut",
+              duration: 0.15,
+              ease: "easeOut",
             }}
             style={{ minHeight: "100%", width: "100%" }}
           >

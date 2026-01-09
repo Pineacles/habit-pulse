@@ -10,12 +10,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px;
+  padding: 0;
 
   /* Deep blur backdrop */
   background: rgba(5, 8, 15, 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+}
+
+@media (min-width: 640px) {
+  .modal-backdrop {
+    padding: 16px;
+  }
 }
 
 .modal-panel {
@@ -30,8 +36,8 @@
   backdrop-filter: blur(32px) saturate(130%);
   -webkit-backdrop-filter: blur(32px) saturate(130%);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
-  padding: 32px;
+  border-radius: 0;
+  padding: 24px;
 
   /* Etched crystal depth effect */
   box-shadow:
@@ -40,19 +46,39 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
+@media (min-width: 640px) {
+  .modal-panel {
+    border-radius: 24px;
+    padding: 32px;
+    max-height: 90vh;
+  }
+}
+
 .modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 28px;
+  margin-bottom: 20px;
+}
+
+@media (min-width: 640px) {
+  .modal-header {
+    margin-bottom: 28px;
+  }
 }
 
 .modal-title {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
   color: white;
   letter-spacing: -0.02em;
+}
+
+@media (min-width: 640px) {
+  .modal-title {
+    font-size: 22px;
+  }
 }
 
 .modal-close {
@@ -105,6 +131,7 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 14px 16px;
+  min-height: 44px;
   color: white;
   font-family: 'Space Grotesk', sans-serif;
   font-size: 16px;
@@ -334,12 +361,7 @@
 }
 
 .digital-input-container.compact {
-  max-width: 110px;
-}
-
-.digital-input-container.compact .digital-input {
-  font-size: 20px;
-  padding: 8px 4px;
+  max-width: none;
 }
 
 .digital-input-container.compact .digital-btn {
@@ -387,17 +409,20 @@
 
 .digital-input {
   flex: 1;
-  background: transparent;
-  border: none;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
   color: white;
   font-family: 'JetBrains Mono', monospace;
   font-size: 28px;
   font-weight: 600;
   text-align: center;
-  padding: 12px 8px;
+  padding: 12px 8px !important;
   min-width: 0;
+  min-height: auto !important;
   appearance: textfield;
   -moz-appearance: textfield;
+  box-shadow: none !important;
 }
 
 .digital-input::-webkit-outer-spin-button,
@@ -569,18 +594,333 @@
 .calendar-drawer {
   background: var(--glass-surface, rgba(20, 20, 25, 0.6));
   backdrop-filter: blur(var(--glass-blur, 24px));
-  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-height: 90vh;
+  border-radius: 24px 24px 0 0;
+  z-index: 60;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Override framer-motion width animation on mobile */
+  width: 100% !important;
+}
+
+.calendar-drawer[data-open="true"] {
+  transform: translateY(0) !important;
+}
+
+@media (min-width: 640px) {
+  .calendar-drawer {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    width: 320px !important;
+    max-height: none;
+    border-radius: 0;
+    border-top: none;
+    border-left: 1px solid rgba(255, 255, 255, 0.06);
+    z-index: auto;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .calendar-drawer[data-open="true"] {
+    transform: none !important;
+  }
+
+  /* Global overrides for calendar drawer navigation - must be very specific */
+  .calendar-drawer-inner .rdp .rdp-nav button,
+  .calendar-drawer-inner .rdp .rdp-caption button,
+  .calendar-drawer-inner .rdp button.rdp-nav_button,
+  .calendar-drawer-inner .rdp .rdp-button_reset.rdp-nav_button {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    border-radius: 10px !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .calendar-drawer-inner .rdp .rdp-nav button:hover,
+  .calendar-drawer-inner .rdp .rdp-caption button:hover,
+  .calendar-drawer-inner .rdp button.rdp-nav_button:hover,
+  .calendar-drawer-inner .rdp .rdp-button_reset.rdp-nav_button:hover {
+    background: rgba(255, 255, 255, 0.18) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+  }
+
+  .calendar-drawer-inner .rdp .rdp-nav button:active,
+  .calendar-drawer-inner .rdp .rdp-caption button:active,
+  .calendar-drawer-inner .rdp button.rdp-nav_button:active,
+  .calendar-drawer-inner .rdp .rdp-button_reset.rdp-nav_button:active {
+    background: var(--accent-electric, #FF4D00) !important;
+    border-color: var(--accent-electric, #FF4D00) !important;
+    color: white !important;
+  }
+
+  .calendar-drawer-inner .rdp .rdp-caption {
+    margin-bottom: 20px !important;
+    height: 44px !important;
+    padding: 0 4px !important;
+    position: relative !important;
+  }
+
+  .calendar-drawer-inner .rdp .rdp-caption_label {
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    text-align: center !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+    margin: 0 !important;
+  }
+
+  .calendar-drawer-inner .rdp .rdp-nav {
+    position: relative !important;
+    z-index: 2 !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: space-between !important;
+  }
+
+  /* Even more aggressive - target any button in calendar drawer nav */
+  .calendar-drawer button[aria-label*="previous"],
+  .calendar-drawer button[aria-label*="next"],
+  .calendar-drawer button[aria-label*="Previous"],
+  .calendar-drawer button[aria-label*="Next"] {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    border-radius: 10px !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .calendar-drawer button[aria-label*="previous"]:hover,
+  .calendar-drawer button[aria-label*="next"]:hover,
+  .calendar-drawer button[aria-label*="Previous"]:hover,
+  .calendar-drawer button[aria-label*="Next"]:hover {
+    background: rgba(255, 255, 255, 0.18) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+  }
+
+  .calendar-drawer button[aria-label*="previous"]:active,
+  .calendar-drawer button[aria-label*="next"]:active,
+  .calendar-drawer button[aria-label*="Previous"]:active,
+  .calendar-drawer button[aria-label*="Next"]:active {
+    background: var(--accent-electric, #FF4D00) !important;
+    border-color: var(--accent-electric, #FF4D00) !important;
+    color: white !important;
+  }
+}
+
+.calendar-drawer-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 8px;
+}
+
+.calendar-drawer-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -0.02em;
 }
 
 .calendar-drawer-inner {
-  padding: 20px;
-  width: 320px;
+  padding: 0 20px 20px 20px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  max-height: calc(90vh - 80px);
+  overflow-y: auto;
+  padding-bottom: calc(20px + var(--safe-area-bottom));
+}
+
+@media (min-width: 640px) {
+  .calendar-drawer-inner {
+    padding: 20px;
+    width: 320px;
+    max-height: none;
+    padding-bottom: 20px;
+  }
+
+  .calendar-drawer-header {
+    display: none;
+  }
+
+  /* Ensure calendar navigation buttons are properly themed in drawer */
+  .calendar-drawer .rdp-nav_button,
+  .calendar-drawer .rdp-button_reset.rdp-nav_button,
+  .calendar-drawer button.rdp-nav_button,
+  .calendar-drawer .rdp-nav button,
+  .calendar-drawer .rdp-nav .rdp-button_reset,
+  .calendar-drawer .rdp-caption button,
+  .calendar-drawer .rdp-month_caption button {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    border-radius: 10px !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .calendar-drawer .rdp-nav_button:hover,
+  .calendar-drawer .rdp-button_reset.rdp-nav_button:hover,
+  .calendar-drawer button.rdp-nav_button:hover,
+  .calendar-drawer .rdp-nav button:hover,
+  .calendar-drawer .rdp-nav .rdp-button_reset:hover,
+  .calendar-drawer .rdp-caption button:hover,
+  .calendar-drawer .rdp-month_caption button:hover {
+    background: rgba(255, 255, 255, 0.18) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+  }
+
+  .calendar-drawer .rdp-nav_button:active,
+  .calendar-drawer .rdp-button_reset.rdp-nav_button:active,
+  .calendar-drawer button.rdp-nav_button:active,
+  .calendar-drawer .rdp-nav button:active,
+  .calendar-drawer .rdp-nav .rdp-button_reset:active,
+  .calendar-drawer .rdp-caption button:active,
+  .calendar-drawer .rdp-month_caption button:active {
+    background: var(--accent-electric, #FF4D00) !important;
+    border-color: var(--accent-electric, #FF4D00) !important;
+    color: white !important;
+  }
+
+  .calendar-drawer .rdp-nav_button svg,
+  .calendar-drawer .rdp-button_reset.rdp-nav_button svg,
+  .calendar-drawer button.rdp-nav_button svg,
+  .calendar-drawer .rdp-nav button svg,
+  .calendar-drawer .rdp-nav .rdp-button_reset svg,
+  .calendar-drawer .rdp-caption button svg,
+  .calendar-drawer .rdp-month_caption button svg {
+    width: 20px !important;
+    height: 20px !important;
+    stroke-width: 2 !important;
+    color: inherit !important;
+  }
+
+  /* Ensure month label doesn't overlap with days */
+  .calendar-drawer .rdp-caption,
+  .calendar-drawer .rdp-month_caption {
+    margin-bottom: 20px !important;
+    height: 44px !important;
+    padding: 0 4px !important;
+    position: relative !important;
+  }
+
+  .calendar-drawer .rdp-caption_label,
+  .calendar-drawer .rdp-month_caption_label {
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    text-align: center !important;
+    pointer-events: none !important;
+    z-index: 1 !important;
+    margin: 0 !important;
+  }
+
+  .calendar-drawer .rdp-nav,
+  .calendar-drawer .rdp-month_nav {
+    position: relative !important;
+    z-index: 2 !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: space-between !important;
+  }
+
+  /* Ensure calendar has proper spacing in drawer */
+  .calendar-drawer .rdp {
+    padding: 0;
+    margin: 0;
+  }
+
+  .calendar-drawer .rdp-month {
+    margin-bottom: 0;
+  }
+
+  /* Theme variants for calendar drawer nav buttons */
+  [data-theme="teal"] .calendar-drawer .rdp-nav_button:active,
+  [data-theme="teal"] .calendar-drawer .rdp-button_reset.rdp-nav_button:active,
+  [data-theme="teal"] .calendar-drawer button.rdp-nav_button:active {
+    background: #14B8A6 !important;
+    border-color: #14B8A6 !important;
+  }
+
+  [data-theme="purple"] .calendar-drawer .rdp-nav_button:active,
+  [data-theme="purple"] .calendar-drawer .rdp-button_reset.rdp-nav_button:active,
+  [data-theme="purple"] .calendar-drawer button.rdp-nav_button:active {
+    background: #A855F7 !important;
+    border-color: #A855F7 !important;
+  }
+
+  [data-theme="blue"] .calendar-drawer .rdp-nav_button:active,
+  [data-theme="blue"] .calendar-drawer .rdp-button_reset.rdp-nav_button:active,
+  [data-theme="blue"] .calendar-drawer button.rdp-nav_button:active {
+    background: #3B82F6 !important;
+    border-color: #3B82F6 !important;
+  }
+
+  [data-theme="rose"] .calendar-drawer .rdp-nav_button:active,
+  [data-theme="rose"] .calendar-drawer .rdp-button_reset.rdp-nav_button:active,
+  [data-theme="rose"] .calendar-drawer button.rdp-nav_button:active {
+    background: #F43F5E !important;
+    border-color: #F43F5E !important;
+  }
+
+  [data-theme="emerald"] .calendar-drawer .rdp-nav_button:active,
+  [data-theme="emerald"] .calendar-drawer .rdp-button_reset.rdp-nav_button:active,
+  [data-theme="emerald"] .calendar-drawer button.rdp-nav_button:active {
+    background: #10B981 !important;
+    border-color: #10B981 !important;
+  }
+}
+
+/* Ensure description drawer always shows its header on desktop */
+.description-drawer .calendar-drawer-header {
+  display: block !important;
 }
 
 /* Start Date Button */
@@ -830,31 +1170,14 @@
    Mobile adaptations for modal layout
    ========================================== */
 
-@media (max-width: 640px) {
-  .modal-flex-container {
-    flex-direction: column;
-    width: 95%;
-    max-width: 400px;
-  }
-
-  .modal-main-card {
-    width: 100%;
-  }
-
-  .calendar-drawer {
-    border-left: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
-  }
-
-  .calendar-drawer-inner {
-    width: 100%;
-  }
-}
+/* Mobile responsive behavior is handled above with media queries */
 
 /* ==========================================
    DESCRIPTION DRAWER
    Description input sidebar
    ========================================== */
+
+/* Description drawer uses same styles as calendar drawer */
 
 .description-textarea {
   width: 100%;
@@ -972,8 +1295,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 8px;
   margin-bottom: 16px;
+  width: 100%;
+  flex-wrap: nowrap;
+  overflow: visible;
+}
+
+.interval-row .interval-text {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.interval-row .digital-input-container.compact {
+  flex: 0 0 auto;
+  margin: 0;
+  overflow: hidden;
+  min-width: fit-content;
 }
 
 .interval-label,
@@ -990,6 +1328,7 @@
   width: 60px;
   text-align: center;
 }
+
 
 .interval-start-row {
   display: flex;
@@ -1102,5 +1441,208 @@
 }
 
 [data-theme="emerald"] .collapsed-value {
+  color: #10B981;
+}
+
+/* ==========================================
+   MOBILE DESCRIPTION SECTION
+   Expandable inline description for mobile
+   ========================================== */
+
+/* Goal name row with description button */
+.goal-name-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.goal-name-row .modal-input {
+  flex: 1;
+}
+
+/* Desktop-only description button */
+.goal-name-description-btn.desktop-only {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .goal-name-description-btn.desktop-only {
+    display: flex;
+  }
+}
+
+/* Mobile description section - hidden on desktop */
+.mobile-description-section {
+  margin-top: 12px;
+}
+
+@media (min-width: 640px) {
+  .mobile-description-section {
+    display: none;
+  }
+}
+
+/* Mobile description toggle button */
+.mobile-description-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mobile-description-toggle:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.mobile-description-toggle.expanded {
+  border-color: var(--accent-electric, #FF4D00);
+  background: rgba(255, 77, 0, 0.05);
+  color: white;
+  border-radius: 10px 10px 0 0;
+  border-bottom: none;
+}
+
+.mobile-description-toggle.has-content {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.mobile-description-toggle.has-content .check-icon {
+  color: var(--accent-electric, #FF4D00);
+}
+
+.mobile-description-toggle span {
+  flex: 1;
+  text-align: left;
+}
+
+.mobile-description-toggle .chevron {
+  transition: transform 0.2s ease;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.mobile-description-toggle .chevron.rotated {
+  transform: rotate(180deg);
+}
+
+/* Mobile description content area */
+.mobile-description-content {
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--accent-electric, #FF4D00);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  padding: 12px;
+}
+
+.mobile-description-textarea {
+  width: 100%;
+  min-height: 80px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 12px;
+  color: white;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: vertical;
+  transition: all 0.15s ease;
+}
+
+.mobile-description-textarea:focus {
+  outline: none;
+  border-color: var(--accent-electric, #FF4D00);
+  box-shadow: 0 0 0 2px var(--accent-glow, rgba(255, 77, 0, 0.15));
+}
+
+.mobile-description-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.mobile-description-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.mobile-description-footer .char-count {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Theme variants for mobile description */
+[data-theme="teal"] .mobile-description-toggle.expanded,
+[data-theme="teal"] .mobile-description-content {
+  border-color: #14B8A6;
+}
+
+[data-theme="teal"] .mobile-description-toggle.expanded {
+  background: rgba(20, 184, 166, 0.05);
+}
+
+[data-theme="teal"] .mobile-description-toggle.has-content .check-icon {
+  color: #14B8A6;
+}
+
+[data-theme="purple"] .mobile-description-toggle.expanded,
+[data-theme="purple"] .mobile-description-content {
+  border-color: #A855F7;
+}
+
+[data-theme="purple"] .mobile-description-toggle.expanded {
+  background: rgba(168, 85, 247, 0.05);
+}
+
+[data-theme="purple"] .mobile-description-toggle.has-content .check-icon {
+  color: #A855F7;
+}
+
+[data-theme="blue"] .mobile-description-toggle.expanded,
+[data-theme="blue"] .mobile-description-content {
+  border-color: #3B82F6;
+}
+
+[data-theme="blue"] .mobile-description-toggle.expanded {
+  background: rgba(59, 130, 246, 0.05);
+}
+
+[data-theme="blue"] .mobile-description-toggle.has-content .check-icon {
+  color: #3B82F6;
+}
+
+[data-theme="rose"] .mobile-description-toggle.expanded,
+[data-theme="rose"] .mobile-description-content {
+  border-color: #F43F5E;
+}
+
+[data-theme="rose"] .mobile-description-toggle.expanded {
+  background: rgba(244, 63, 94, 0.05);
+}
+
+[data-theme="rose"] .mobile-description-toggle.has-content .check-icon {
+  color: #F43F5E;
+}
+
+[data-theme="emerald"] .mobile-description-toggle.expanded,
+[data-theme="emerald"] .mobile-description-content {
+  border-color: #10B981;
+}
+
+[data-theme="emerald"] .mobile-description-toggle.expanded {
+  background: rgba(16, 185, 129, 0.05);
+}
+
+[data-theme="emerald"] .mobile-description-toggle.has-content .check-icon {
   color: #10B981;
 }

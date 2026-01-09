@@ -8,7 +8,7 @@ interface DescriptionModalProps {
 }
 
 export function DescriptionModal({ isOpen, onClose, goal }: DescriptionModalProps) {
-  if (!isOpen || !goal || !goal.description) return null;
+  if (!isOpen || !goal) return null;
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
@@ -32,17 +32,30 @@ export function DescriptionModal({ isOpen, onClose, goal }: DescriptionModalProp
         </div>
 
         {/* Description */}
-        <div style={{ padding: '20px 0' }}>
-          <p style={{ 
-            color: 'rgba(255, 255, 255, 0.9)', 
-            lineHeight: '1.6',
-            fontSize: '15px',
-            whiteSpace: 'pre-wrap',
-            wordBreak: 'break-word'
-          }}>
-            {goal.description}
-          </p>
-        </div>
+        {goal.description ? (
+          <div style={{ padding: '20px 0' }}>
+            <p style={{ 
+              color: 'rgba(255, 255, 255, 0.9)', 
+              lineHeight: '1.6',
+              fontSize: '15px',
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-word'
+            }}>
+              {goal.description}
+            </p>
+          </div>
+        ) : (
+          <div style={{ padding: '20px 0' }}>
+            <p style={{ 
+              color: 'rgba(255, 255, 255, 0.6)', 
+              lineHeight: '1.6',
+              fontSize: '15px',
+              fontStyle: 'italic'
+            }}>
+              No description available for this goal.
+            </p>
+          </div>
+        )}
 
         {/* Actions */}
         <div className="modal-actions">
