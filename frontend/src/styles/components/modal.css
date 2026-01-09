@@ -856,10 +856,6 @@
    Description input sidebar
    ========================================== */
 
-.description-drawer {
-  /* Reuses calendar-drawer styles */
-}
-
 .description-textarea {
   width: 100%;
   min-height: 200px;

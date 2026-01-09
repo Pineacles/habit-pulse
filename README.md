@@ -122,6 +122,18 @@ npm install
 npm run dev
 ```
 
+## 🧪 Testing Before Committing
+
+**Always test before committing to prevent deployment failures:**
+
+```bash
+# Quick test
+cd frontend && npm run build
+cd ../src/HabitPulse.Api && dotnet build
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for full testing guidelines.
+
 ## 📡 API Endpoints
 
 | Method | Endpoint | Description |
