@@ -23,6 +23,7 @@ appsettings.Development.json
 *.swo
 .vs/
 .cursor/
+.cursorrules
 
 # OS
 .DS_Store
