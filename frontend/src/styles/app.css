@@ -1,10 +1,14 @@
+/* ==========================================
+   MAIN STYLESHEET
+   Central import file for all styles
+   ========================================== */
 
 /* Core Variables & Resets */
 @import "./tokens.css";
 @import "./base.css";
 @import "./utilities.css";
 
-/* Layout & Typography (The "Glue") */
+/* Layout & Typography */
 @import "./layout.css";
 @import "./components/typography.css";
 

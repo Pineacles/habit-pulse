@@ -15,8 +15,8 @@ html {
 }
 
 body {
-  background-color: var(--bg-deep);
-  color: var(--text-main);
+  background-color: var(--bg-deep, #050505);
+  color: var(--text-main, #FFFFFF);
   min-height: 100vh;
   overflow-x: hidden;
   line-height: 1.5;
@@ -37,7 +37,7 @@ body {
 }
 
 *:focus-visible {
-  outline: 2px solid var(--accent-electric);
+  outline: 2px solid var(--accent-electric, #FF4D00);
   outline-offset: 2px;
 }
 

@@ -6,36 +6,30 @@
   position: fixed;
   inset: 0;
   z-index: -1;
-  
-  /* Living Aurora - strong visible light behind the glass */
-  background: 
-    /* Top-left: Blue aurora - MORE VISIBLE */
-    radial-gradient(
-      1400px 900px at 15% 5%,
+
+  /* Living aurora background with visible light gradients */
+  background:
+    /* Top-left: Blue aurora gradient */
+    radial-gradient(1400px 900px at 15% 5%,
       rgba(40, 100, 180, 0.25),
-      transparent 55%
-    ),
-    /* Bottom-right: Orange warmth - MORE VISIBLE */
-    radial-gradient(
-      1200px 800px at 90% 90%,
+      transparent 55%),
+    /* Bottom-right: Orange warmth gradient */
+    radial-gradient(1200px 800px at 90% 90%,
       rgba(255, 100, 50, 0.15),
-      transparent 50%
-    ),
-    /* Center-right: Teal accent */
-    radial-gradient(
-      900px 700px at 70% 40%,
+      transparent 50%),
+    /* Center-right: Teal accent gradient */
+    radial-gradient(900px 700px at 70% 40%,
       rgba(0, 200, 200, 0.1),
-      transparent 45%
-    ),
-    /* Base color */
+      transparent 45%),
+    /* Base background color */
     #050508;
   background-attachment: fixed;
 }
 
-/* Reduced motion */
+/* Reduced Motion - Accessibility support */
 @media (prefers-reduced-motion: reduce) {
   .animated-bg {
-    background-image: 
+    background-image:
       radial-gradient(circle at 10% 20%, rgba(30, 40, 60, 0.3) 0%, transparent 40%),
       radial-gradient(circle at 90% 80%, rgba(255, 77, 0, 0.03) 0%, transparent 40%);
   }
@@ -65,15 +59,15 @@
   margin-left: auto;
   margin-right: auto;
   padding-top: 48px;
-  padding-bottom: 100px; /* Room for mobile nav */
+  padding-bottom: 100px;
+  overflow: visible;
 }
 
 @media (min-width: 1024px) {
   .main-content {
-    /* Sidebar (220px) + left gap (24px) + breathing room */
     padding-left: 268px;
   }
-  
+
   .dashboard-content {
     max-width: 960px;
     padding-top: 56px;
@@ -103,7 +97,7 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  position: relative; 
+  position: relative;
   width: 100%;
   max-width: 100%;
   padding-top: 5vh;

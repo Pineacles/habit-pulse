@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { DayPicker } from "react-day-picker";
 import { addDays, startOfDay, differenceInDays, isBefore } from "date-fns";
+import { enUS } from 'date-fns/locale';
 
 interface ScheduleCalendarProps {
   mode: "days" | "interval";
@@ -163,6 +164,7 @@ export function ScheduleCalendar({
   return (
     <div className="schedule-calendar">
       <DayPicker
+        locale={enUS}
         modifiers={modifiers}
         modifiersClassNames={modifiersClassNames}
         today={startOfDay(new Date())}

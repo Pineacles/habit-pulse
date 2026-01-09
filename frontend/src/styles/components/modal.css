@@ -1,5 +1,6 @@
-/*===========================================
-  1. BASE HOLOGRAPHIC OVERLAY
+/* ==========================================
+   MODAL BACKDROP & PANEL
+   Base holographic overlay with glass effect
    ========================================== */
 
 .modal-backdrop {
@@ -11,7 +12,7 @@
   justify-content: center;
   padding: 16px;
 
-  /* Deep blur - reality fades */
+  /* Deep blur backdrop */
   background: rgba(5, 8, 15, 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -24,7 +25,7 @@
   max-height: 90vh;
   overflow-y: auto;
 
-  /* Hologram glass - stronger than ambient panels */
+  /* Enhanced glass effect for modal prominence */
   background: rgba(20, 25, 35, 0.75);
   backdrop-filter: blur(32px) saturate(130%);
   -webkit-backdrop-filter: blur(32px) saturate(130%);
@@ -32,7 +33,7 @@
   border-radius: 24px;
   padding: 32px;
 
-  /* Etched crystal presence */
+  /* Etched crystal depth effect */
   box-shadow:
     0 24px 80px rgba(0, 0, 0, 0.7),
     0 0 0 1px rgba(255, 255, 255, 0.03),
@@ -74,6 +75,16 @@
   color: white;
 }
 
+.modal-close:focus-visible {
+  outline: 2px solid var(--accent-electric, #FF4D00);
+  outline-offset: 2px;
+}
+
+.modal-close:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .modal-label {
   display: block;
   font-family: 'JetBrains Mono', monospace;
@@ -102,8 +113,8 @@
 
 .modal-input:focus {
   outline: none;
-  border-color: var(--accent-electric);
-  box-shadow: 0 0 0 3px var(--accent-glow);
+  border-color: var(--accent-electric, #FF4D00);
+  box-shadow: 0 0 0 3px var(--accent-glow, rgba(255, 77, 0, 0.6));
 }
 
 .modal-input::placeholder {
@@ -132,16 +143,18 @@
   justify-content: center;
 }
 
-/* 2. FLEX CONTAINER ARCHITECTURE (Split View)
+/* ==========================================
+   MODAL FLEX CONTAINER
+   Split view architecture for form and calendar
    ========================================== */
 
 .modal-flex-container {
   display: flex;
   align-items: stretch;
-  background: var(--glass-surface);
-  border: var(--glass-border);
+  background: var(--glass-surface, rgba(20, 20, 25, 0.6));
+  border: var(--glass-border, 1px solid rgba(255, 255, 255, 0.08));
   border-radius: 16px;
-  backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur, 24px));
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.05) inset,
     0 25px 50px -12px rgba(0, 0, 0, 0.5);
@@ -177,7 +190,9 @@
   padding-bottom: 4px;
 }
 
-/* 3. SMART MODAL CONTROLS
+/* ==========================================
+   MODAL CONTROLS
+   Interactive form controls and toggles
    ========================================== */
 
 .smart-modal {
@@ -185,7 +200,6 @@
 }
 
 /* Goal Type Toggle */
-/* Update/Replace the .type-btn section in components/modal.css */
 
 .goal-type-toggle {
   display: flex;
@@ -193,7 +207,7 @@
   padding: 4px;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  height: 52px; /* Force a standard height */
+  height: 52px;
 }
 
 .type-btn {
@@ -201,7 +215,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px; /* Space between icon and text */
+  gap: 8px;
   background: transparent;
   border: none;
   color: rgba(255, 255, 255, 0.5);
@@ -210,10 +224,10 @@
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
-  height: 100%; /* Fill the container */
+  height: 100%;
 }
 
-/* !!! THIS IS THE MISSING PART CAUSING GIANT ICONS !!! */
+/* Icon sizing for type buttons */
 .type-btn svg {
   width: 18px;
   height: 18px;
@@ -225,10 +239,20 @@
 }
 
 .type-btn.active {
-  background: var(--accent-electric);
+  background: var(--accent-electric, #FF4D00);
   color: white;
-  box-shadow: 0 4px 16px var(--accent-glow);
+  box-shadow: 0 4px 16px var(--accent-glow, rgba(255, 77, 0, 0.6));
   font-weight: 600;
+}
+
+.type-btn:focus-visible {
+  outline: 2px solid var(--accent-electric, #FF4D00);
+  outline-offset: 2px;
+}
+
+.type-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .type-hint {
@@ -239,21 +263,57 @@
 }
 
 /* Theme variants for type-btn */
-[data-theme="teal"] .type-btn.active { background: #14B8A6; box-shadow: 0 4px 16px rgba(20, 184, 166, 0.4); }
-[data-theme="purple"] .type-btn.active { background: #A855F7; box-shadow: 0 4px 16px rgba(168, 85, 247, 0.4); }
-[data-theme="blue"] .type-btn.active { background: #3B82F6; box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4); }
-[data-theme="rose"] .type-btn.active { background: #F43F5E; box-shadow: 0 4px 16px rgba(244, 63, 94, 0.4); }
-[data-theme="emerald"] .type-btn.active { background: #10B981; box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4); }
+[data-theme="teal"] .type-btn.active {
+  background: #14B8A6;
+  box-shadow: 0 4px 16px rgba(20, 184, 166, 0.4);
+}
+
+[data-theme="purple"] .type-btn.active {
+  background: #A855F7;
+  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.4);
+}
+
+[data-theme="blue"] .type-btn.active {
+  background: #3B82F6;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
+}
+
+[data-theme="rose"] .type-btn.active {
+  background: #F43F5E;
+  box-shadow: 0 4px 16px rgba(244, 63, 94, 0.4);
+}
+
+[data-theme="emerald"] .type-btn.active {
+  background: #10B981;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+}
 
 /* Measurable Options (Slide Down) */
 .measurable-options {
   animation: slideDown 0.3s ease-out;
   margin-bottom: 24px;
+  will-change: opacity, transform;
 }
 
 @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Reduced Motion - Disable slide animation */
+@media (prefers-reduced-motion: reduce) {
+  .measurable-options {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
 }
 
 .input-row {
@@ -307,8 +367,23 @@
   color: white;
 }
 
-.digital-btn.minus { border-right: 1px solid rgba(255, 255, 255, 0.08); }
-.digital-btn.plus { border-left: 1px solid rgba(255, 255, 255, 0.08); }
+.digital-btn:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+.digital-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.digital-btn.minus {
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.digital-btn.plus {
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+}
 
 .digital-input {
   flex: 1;
@@ -356,6 +431,16 @@
   border-color: var(--accent-electric);
 }
 
+.unit-select:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+.unit-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .unit-select option {
   background: #1a1f2e;
   color: white;
@@ -393,12 +478,46 @@
   box-shadow: 0 0 12px var(--accent-glow);
 }
 
+.preset-chip:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+.preset-chip:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Theme variants for preset chips */
-[data-theme="teal"] .preset-chip.active { background: #14B8A6; border-color: #14B8A6; box-shadow: 0 0 12px rgba(20, 184, 166, 0.4); }
-[data-theme="purple"] .preset-chip.active { background: #A855F7; border-color: #A855F7; box-shadow: 0 0 12px rgba(168, 85, 247, 0.4); }
-[data-theme="blue"] .preset-chip.active { background: #3B82F6; border-color: #3B82F6; box-shadow: 0 0 12px rgba(59, 130, 246, 0.4); }
-[data-theme="rose"] .preset-chip.active { background: #F43F5E; border-color: #F43F5E; box-shadow: 0 0 12px rgba(244, 63, 94, 0.4); }
-[data-theme="emerald"] .preset-chip.active { background: #10B981; border-color: #10B981; box-shadow: 0 0 12px rgba(16, 185, 129, 0.4); }
+[data-theme="teal"] .preset-chip.active {
+  background: #14B8A6;
+  border-color: #14B8A6;
+  box-shadow: 0 0 12px rgba(20, 184, 166, 0.4);
+}
+
+[data-theme="purple"] .preset-chip.active {
+  background: #A855F7;
+  border-color: #A855F7;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
+}
+
+[data-theme="blue"] .preset-chip.active {
+  background: #3B82F6;
+  border-color: #3B82F6;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+}
+
+[data-theme="rose"] .preset-chip.active {
+  background: #F43F5E;
+  border-color: #F43F5E;
+  box-shadow: 0 0 12px rgba(244, 63, 94, 0.4);
+}
+
+[data-theme="emerald"] .preset-chip.active {
+  background: #10B981;
+  border-color: #10B981;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+}
 
 /* Frequency/Preset Buttons (Pills) */
 .preset-buttons {
@@ -432,12 +551,24 @@
   color: white;
 }
 
-/* 4. CALENDAR DRAWER & SCHEDULING
+.preset-btn:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+.preset-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ==========================================
+   CALENDAR DRAWER & SCHEDULING
+   Date selection and scheduling interface
    ========================================== */
 
 .calendar-drawer {
-  background: var(--glass-surface);
-  backdrop-filter: blur(var(--glass-blur));
+  background: var(--glass-surface, rgba(20, 20, 25, 0.6));
+  backdrop-filter: blur(var(--glass-blur, 24px));
   border-left: 1px solid rgba(255, 255, 255, 0.06);
   overflow: hidden;
   display: flex;
@@ -479,6 +610,16 @@
   background: rgba(255, 77, 0, 0.08);
 }
 
+.start-date-btn:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+.start-date-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .start-date-label {
   color: rgba(255, 255, 255, 0.5);
   font-size: 13px;
@@ -511,19 +652,52 @@
   background: var(--accent-electric);
   border-radius: 50%;
   animation: pulse 1.5s ease-in-out infinite;
+  will-change: opacity, transform;
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.8); }
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+}
+
+/* Reduced Motion - Disable pulse animation */
+@media (prefers-reduced-motion: reduce) {
+  .pulse-dot {
+    animation: none;
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* Theme variants for pulse-dot */
-[data-theme="teal"] .pulse-dot { background: #14B8A6; }
-[data-theme="purple"] .pulse-dot { background: #A855F7; }
-[data-theme="blue"] .pulse-dot { background: #3B82F6; }
-[data-theme="rose"] .pulse-dot { background: #F43F5E; }
-[data-theme="emerald"] .pulse-dot { background: #10B981; }
+[data-theme="teal"] .pulse-dot {
+  background: #14B8A6;
+}
+
+[data-theme="purple"] .pulse-dot {
+  background: #A855F7;
+}
+
+[data-theme="blue"] .pulse-dot {
+  background: #3B82F6;
+}
+
+[data-theme="rose"] .pulse-dot {
+  background: #F43F5E;
+}
+
+[data-theme="emerald"] .pulse-dot {
+  background: #10B981;
+}
 
 /* Calendar Quick Actions */
 .calendar-quick-actions {
@@ -566,6 +740,16 @@
   box-shadow: none;
 }
 
+.calendar-action-btn:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+.calendar-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Day Selector (Tactile Toggles) */
 .day-selector {
   display: flex;
@@ -600,14 +784,50 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
-/* Theme variants for day-btn */
-[data-theme="teal"] .day-btn.active { background: linear-gradient(180deg, #14B8A6 0%, #0D9488 100%); border-color: #14B8A6; box-shadow: 0 0 16px rgba(20, 184, 166, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15); }
-[data-theme="purple"] .day-btn.active { background: linear-gradient(180deg, #A855F7 0%, #7E22CE 100%); border-color: #A855F7; box-shadow: 0 0 16px rgba(168, 85, 247, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15); }
-[data-theme="blue"] .day-btn.active { background: linear-gradient(180deg, #3B82F6 0%, #2563EB 100%); border-color: #3B82F6; box-shadow: 0 0 16px rgba(59, 130, 246, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15); }
-[data-theme="rose"] .day-btn.active { background: linear-gradient(180deg, #F43F5E 0%, #BE123C 100%); border-color: #F43F5E; box-shadow: 0 0 16px rgba(244, 63, 94, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15); }
-[data-theme="emerald"] .day-btn.active { background: linear-gradient(180deg, #10B981 0%, #047857 100%); border-color: #10B981; box-shadow: 0 0 16px rgba(16, 185, 129, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15); }
+.day-btn:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
 
-/* 5. RESPONSIVE BEHAVIOR
+.day-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Theme variants for day-btn */
+[data-theme="teal"] .day-btn.active {
+  background: linear-gradient(180deg, #14B8A6 0%, #0D9488 100%);
+  border-color: #14B8A6;
+  box-shadow: 0 0 16px rgba(20, 184, 166, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="purple"] .day-btn.active {
+  background: linear-gradient(180deg, #A855F7 0%, #7E22CE 100%);
+  border-color: #A855F7;
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="blue"] .day-btn.active {
+  background: linear-gradient(180deg, #3B82F6 0%, #2563EB 100%);
+  border-color: #3B82F6;
+  box-shadow: 0 0 16px rgba(59, 130, 246, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="rose"] .day-btn.active {
+  background: linear-gradient(180deg, #F43F5E 0%, #BE123C 100%);
+  border-color: #F43F5E;
+  box-shadow: 0 0 16px rgba(244, 63, 94, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="emerald"] .day-btn.active {
+  background: linear-gradient(180deg, #10B981 0%, #047857 100%);
+  border-color: #10B981;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* ==========================================
+   RESPONSIVE BEHAVIOR
+   Mobile adaptations for modal layout
    ========================================== */
 
 @media (max-width: 640px) {
@@ -635,14 +855,14 @@
    GOAL CREATION LAYOUT HELPERS
    ========================================== */
 
-/* 1. Target Row - Forces side-by-side layout for Amount + Unit */
+/* Target Row - Side-by-side layout for Amount + Unit */
 .target-row {
   display: flex;
   gap: 12px;
   align-items: stretch;
 }
 
-/* 2. Interval/Schedule Controls Container */
+/* Interval/Schedule Controls Container */
 .interval-controls {
   display: flex;
   flex-direction: column;
@@ -651,7 +871,7 @@
 
 /* ==========================================
    INTERVAL SCHEDULING STYLES
-   (The missing grey box for custom schedules)
+   Custom schedule configuration interface
    ========================================== */
 
 .custom-schedule-section {
@@ -710,11 +930,25 @@
 }
 
 /* Theme variants for interval preview text */
-[data-theme="teal"] .interval-preview strong { color: #14B8A6; }
-[data-theme="purple"] .interval-preview strong { color: #A855F7; }
-[data-theme="blue"] .interval-preview strong { color: #3B82F6; }
-[data-theme="rose"] .interval-preview strong { color: #F43F5E; }
-[data-theme="emerald"] .interval-preview strong { color: #10B981; }
+[data-theme="teal"] .interval-preview strong {
+  color: #14B8A6;
+}
+
+[data-theme="purple"] .interval-preview strong {
+  color: #A855F7;
+}
+
+[data-theme="blue"] .interval-preview strong {
+  color: #3B82F6;
+}
+
+[data-theme="rose"] .interval-preview strong {
+  color: #F43F5E;
+}
+
+[data-theme="emerald"] .interval-preview strong {
+  color: #10B981;
+}
 
 /* ==========================================
    COLLAPSED ROWS (Clickable List Items)
@@ -768,8 +1002,22 @@
 }
 
 /* Theme variants for collapsed value */
-[data-theme="teal"] .collapsed-value { color: #14B8A6; }
-[data-theme="purple"] .collapsed-value { color: #A855F7; }
-[data-theme="blue"] .collapsed-value { color: #3B82F6; }
-[data-theme="rose"] .collapsed-value { color: #F43F5E; }
-[data-theme="emerald"] .collapsed-value { color: #10B981; }
+[data-theme="teal"] .collapsed-value {
+  color: #14B8A6;
+}
+
+[data-theme="purple"] .collapsed-value {
+  color: #A855F7;
+}
+
+[data-theme="blue"] .collapsed-value {
+  color: #3B82F6;
+}
+
+[data-theme="rose"] .collapsed-value {
+  color: #F43F5E;
+}
+
+[data-theme="emerald"] .collapsed-value {
+  color: #10B981;
+}

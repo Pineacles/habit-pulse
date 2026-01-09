@@ -14,6 +14,25 @@
   letter-spacing: 0.02em;
   cursor: pointer;
   transition: transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+/* Reduced Motion - Disable transform transitions */
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: box-shadow 0.2s ease;
+  }
+  
+  .btn-primary:active:not(:disabled) {
+    transform: none;
+  }
+  
+  .btn-glow:hover {
+    transform: none;
+  }
+  
+  .btn-glow:active {
+    transform: none;
+  }
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -28,16 +47,16 @@
 }
 
 .btn-primary {
-  background: linear-gradient(180deg, var(--accent-electric) 0%, var(--accent-dim) 100%);
+  background: linear-gradient(180deg, var(--accent-electric, #FF4D00) 0%, var(--accent-dim, #CC3D00) 100%);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.3),
-    0 10px 20px -10px var(--accent-glow);
+    0 10px 20px -10px var(--accent-glow, rgba(255, 77, 0, 0.6));
 }
 
 .btn-primary:hover:not(:disabled) {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    0 15px 30px -10px var(--accent-glow);
+    0 15px 30px -10px var(--accent-glow, rgba(255, 77, 0, 0.6));
 }
 
 .btn-primary:active:not(:disabled) {
@@ -61,7 +80,17 @@
   color: white;
 }
 
-/* Button spinner */
+.btn-ghost:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+.btn-ghost:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Loading Spinner */
 .btn-spinner {
   width: 20px;
   height: 20px;
@@ -69,18 +98,28 @@
   border-top-color: white;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
+  will-change: transform;
 }
 
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
+/* Reduced Motion - Disable spinner animation */
+@media (prefers-reduced-motion: reduce) {
+  .btn-spinner {
+    animation: none;
+    border-top-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
 /* ==========================================
-   PRIMARY BUTTON - Theme-Aware Electric Glow
+   GLOW BUTTON
+   Theme-aware electric glow button variant
    ========================================== */
 
 .btn-glow {
-  background: linear-gradient(180deg, var(--accent-electric) 0%, var(--accent-dim) 100%);
+  background: linear-gradient(180deg, var(--accent-electric, #FF4D00) 0%, var(--accent-dim, #CC3D00) 100%);
   color: white;
   padding: 12px 24px;
   border-radius: 12px;
@@ -93,11 +132,11 @@
   align-items: center;
   gap: 8px;
 
-  /* Electric glow - uses theme color */
+  /* Electric glow effect using theme color */
   border: 1px solid rgba(255, 255, 255, 0.25);
   box-shadow:
-    0 0 24px var(--accent-glow),
-    0 4px 16px var(--accent-glow),
+    0 0 24px var(--accent-glow, rgba(255, 77, 0, 0.6)),
+    0 4px 16px var(--accent-glow, rgba(255, 77, 0, 0.6)),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 
   transition: all 0.15s ease-out;
@@ -105,8 +144,8 @@
 
 .btn-glow:hover {
   box-shadow:
-    0 0 32px var(--accent-glow),
-    0 6px 24px var(--accent-glow),
+    0 0 32px var(--accent-glow, rgba(255, 77, 0, 0.6)),
+    0 6px 24px var(--accent-glow, rgba(255, 77, 0, 0.6)),
     inset 0 1px 0 rgba(255, 255, 255, 0.25);
   transform: translateY(-1px);
 }
@@ -114,12 +153,23 @@
 .btn-glow:active {
   transform: translateY(0);
   box-shadow:
-    0 0 20px var(--accent-glow),
-    0 2px 8px var(--accent-glow),
+    0 0 20px var(--accent-glow, rgba(255, 77, 0, 0.6)),
+    0 2px 8px var(--accent-glow, rgba(255, 77, 0, 0.6)),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
-/* Theme-specific button glow variants */
+.btn-glow:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+.btn-glow:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Theme-specific glow button variants */
 [data-theme="teal"] .btn-glow {
   background: linear-gradient(180deg, #14B8A6 0%, #0D9488 100%);
   box-shadow: 0 0 24px rgba(20, 184, 166, 0.5), 0 4px 16px rgba(20, 184, 166, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -127,6 +177,10 @@
 
 [data-theme="teal"] .btn-glow:hover {
   box-shadow: 0 0 32px rgba(20, 184, 166, 0.6), 0 6px 24px rgba(20, 184, 166, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+[data-theme="teal"] .btn-glow:active {
+  box-shadow: 0 0 20px rgba(20, 184, 166, 0.5), 0 2px 8px rgba(20, 184, 166, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 [data-theme="purple"] .btn-glow {
@@ -138,6 +192,10 @@
   box-shadow: 0 0 32px rgba(168, 85, 247, 0.6), 0 6px 24px rgba(168, 85, 247, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
+[data-theme="purple"] .btn-glow:active {
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.5), 0 2px 8px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
 [data-theme="blue"] .btn-glow {
   background: linear-gradient(180deg, #3B82F6 0%, #2563EB 100%);
   box-shadow: 0 0 24px rgba(59, 130, 246, 0.5), 0 4px 16px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -145,6 +203,10 @@
 
 [data-theme="blue"] .btn-glow:hover {
   box-shadow: 0 0 32px rgba(59, 130, 246, 0.6), 0 6px 24px rgba(59, 130, 246, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+[data-theme="blue"] .btn-glow:active {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5), 0 2px 8px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 [data-theme="rose"] .btn-glow {
@@ -156,6 +218,10 @@
   box-shadow: 0 0 32px rgba(244, 63, 94, 0.6), 0 6px 24px rgba(244, 63, 94, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
+[data-theme="rose"] .btn-glow:active {
+  box-shadow: 0 0 20px rgba(244, 63, 94, 0.5), 0 2px 8px rgba(244, 63, 94, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
 [data-theme="emerald"] .btn-glow {
   background: linear-gradient(180deg, #10B981 0%, #047857 100%);
   box-shadow: 0 0 24px rgba(16, 185, 129, 0.5), 0 4px 16px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -165,11 +231,15 @@
   box-shadow: 0 0 32px rgba(16, 185, 129, 0.6), 0 6px 24px rgba(16, 185, 129, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
+[data-theme="emerald"] .btn-glow:active {
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.5), 0 2px 8px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
 /* ==========================================
    INTERACTIVE TOGGLES & ACTIONS
    ========================================== */
 
-/* Goal Action Buttons (Icons) */
+/* Goal Action Buttons */
 .goal-action-btn {
   width: 38px;
   height: 38px;
@@ -196,6 +266,16 @@
   color: #EF4444;
 }
 
+.goal-action-btn:focus-visible {
+  outline: 2px solid var(--accent-electric, #FF4D00);
+  outline-offset: 2px;
+}
+
+.goal-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Modal Close Button */
 .modal-close {
   width: 36px;
@@ -217,7 +297,17 @@
   color: white;
 }
 
-/* Preset Buttons (Pill Switches) */
+.modal-close:focus-visible {
+  outline: 2px solid var(--accent-electric, #FF4D00);
+  outline-offset: 2px;
+}
+
+.modal-close:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Preset Buttons */
 .preset-btn {
   padding: 8px 14px;
   border-radius: 8px;
@@ -241,6 +331,16 @@
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.2);
   color: white;
+}
+
+.preset-btn:focus-visible {
+  outline: 2px solid var(--accent-electric, #FF4D00);
+  outline-offset: 2px;
+}
+
+.preset-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Frequency Buttons */
@@ -270,6 +370,16 @@
   color: white;
 }
 
+.freq-btn:focus-visible {
+  outline: 2px solid var(--accent-electric, #FF4D00);
+  outline-offset: 2px;
+}
+
+.freq-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Segmented Control Buttons */
 .segment-btn {
   flex: 1;
@@ -294,13 +404,13 @@
 }
 
 .segment-btn.active {
-  background: var(--accent-electric);
+  background: var(--accent-electric, #FF4D00);
   color: white;
   font-weight: 600;
-  box-shadow: 0 0 16px var(--accent-glow);
+  box-shadow: 0 0 16px var(--accent-glow, rgba(255, 77, 0, 0.6));
 }
 
-/* Theme variants for segmented control */
+/* Theme-specific segmented control variants */
 [data-theme="teal"] .segment-btn.active {
   background: #14B8A6;
   box-shadow: 0 0 16px rgba(20, 184, 166, 0.5);
@@ -326,7 +436,17 @@
   box-shadow: 0 0 16px rgba(16, 185, 129, 0.5);
 }
 
-/* Signout / Destructive Button */
+.segment-btn:focus-visible {
+  outline: 2px solid var(--accent-electric, #FF4D00);
+  outline-offset: 2px;
+}
+
+.segment-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Signout Button */
 .signout-btn {
   width: 100%;
   display: flex;
@@ -348,4 +468,14 @@
 .signout-btn:hover {
   background: rgba(239, 68, 68, 0.15);
   border-color: rgba(239, 68, 68, 0.35);
+}
+
+.signout-btn:focus-visible {
+  outline: 2px solid #EF4444;
+  outline-offset: 2px;
+}
+
+.signout-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
