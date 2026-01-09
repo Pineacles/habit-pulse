@@ -240,6 +240,38 @@
   cursor: not-allowed;
 }
 
+/* Description Button */
+.goal-description-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.goal-description-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: white;
+}
+
+.goal-description-btn:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+.goal-description-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
 /* Card Progress Fill Indicator */
 .card-progress {
   position: absolute;
