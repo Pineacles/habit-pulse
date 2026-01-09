@@ -12,11 +12,21 @@ textarea,
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 10px;
   padding: 14px 16px;
+  min-height: 44px;
   color: white;
   font-family: "Space Grotesk", sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   transition: all 0.15s ease-out;
   outline: none;
+}
+
+@media (min-width: 640px) {
+
+  input,
+  textarea,
+  .modal-input {
+    font-size: 15px;
+  }
 }
 
 input::placeholder,
@@ -161,11 +171,9 @@ textarea.input-error:focus {
 }
 
 .checkbox.checked {
-  background: linear-gradient(
-    180deg,
-    var(--accent-electric) 0%,
-    var(--accent-dim) 100%
-  );
+  background: linear-gradient(180deg,
+      var(--accent-electric) 0%,
+      var(--accent-dim) 100%);
   border-color: transparent;
   box-shadow: 0 4px 12px -4px var(--accent-glow), 0 0 16px var(--accent-glow);
   transform: scale(1.05);
@@ -177,6 +185,7 @@ textarea.input-error:focus {
     transform: scale(1.2);
     box-shadow: 0 0 24px var(--accent-glow);
   }
+
   100% {
     transform: scale(1.05);
     box-shadow: 0 4px 12px -4px var(--accent-glow), 0 0 16px var(--accent-glow);
@@ -205,11 +214,16 @@ textarea.input-error:focus {
 }
 
 .digital-input-container.compact {
-  max-width: 110px;
+  max-width: none;
+  width: auto;
+  flex: 0 0 auto;
+  overflow: hidden;
 }
 
 .digital-btn {
   width: 44px;
+  min-width: 44px;
+  min-height: 44px;
   background: rgba(255, 255, 255, 0.05);
   border: none;
   color: rgba(255, 255, 255, 0.6);
@@ -217,10 +231,15 @@ textarea.input-error:focus {
   font-weight: 300;
   cursor: pointer;
   transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .digital-input-container.compact .digital-btn {
   width: 36px;
+  min-width: 36px;
+  flex-shrink: 0;
 }
 
 .digital-btn:hover {
@@ -252,7 +271,7 @@ textarea.input-error:focus {
 }
 
 .digital-input {
-  flex: 1;
+  flex: 0 1 auto;
   background: transparent;
   border: none;
   color: white;
@@ -261,14 +280,24 @@ textarea.input-error:focus {
   font-weight: 600;
   text-align: center;
   padding: 12px 8px;
-  min-width: 0;
+  min-width: 50px;
+  width: auto;
   appearance: textfield;
   -moz-appearance: textfield;
 }
 
 .digital-input-container.compact .digital-input {
   font-size: 20px;
-  padding: 8px 4px;
+  padding: 8px 8px;
+  min-width: 40px;
+  width: auto;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.digital-input::-webkit-outer-spin-button,
+.digital-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .digital-input:focus {
@@ -412,6 +441,7 @@ textarea.input-error:focus {
   padding: 4px;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  min-height: 44px;
 }
 
 .segmented-control {
@@ -429,12 +459,21 @@ textarea.input-error:focus {
   background: transparent;
   border: none;
   color: rgba(255, 255, 255, 0.5);
-  padding: 12px 16px;
+  padding: 12px 12px;
+  min-height: 44px;
   font-family: "Space Grotesk", sans-serif;
   font-size: 14px;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+@media (min-width: 640px) {
+
+  .type-btn,
+  .segment-btn {
+    padding: 12px 16px;
+  }
 }
 
 .segment-btn {
@@ -501,12 +540,22 @@ textarea.input-error:focus {
 }
 
 .freq-chip {
-  padding: 8px 12px;
+  padding: 10px 14px;
+  min-height: 44px;
   border-radius: 8px;
   font-family: "Space Grotesk", sans-serif;
   font-size: 12px;
   white-space: nowrap;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+@media (min-width: 640px) {
+  .freq-chip {
+    padding: 8px 12px;
+    min-height: auto;
+  }
 }
 
 .preset-chip:hover,
@@ -543,8 +592,10 @@ textarea.input-error:focus {
 
 /* Day Pills */
 .day-pill {
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -557,6 +608,15 @@ textarea.input-error:focus {
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+@media (min-width: 640px) {
+  .day-pill {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    min-height: 38px;
+  }
 }
 
 .day-pill:hover {

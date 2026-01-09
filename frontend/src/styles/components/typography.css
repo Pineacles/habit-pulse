@@ -5,18 +5,79 @@
 
 .page-header {
   background: transparent;
-  padding: 0 0 32px 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 40px;
+  padding: 0 0 24px 0;
+  margin-bottom: 24px;
   position: relative;
+}
+
+/* Mobile: Split layout at top - Title left, Progress right */
+.page-header-mobile-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.page-header-title-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Mobile: Add Goal button on separate row */
+.page-header-mobile-button {
+  display: block;
+  margin-bottom: 0;
+}
+
+@media (min-width: 1024px) {
+  .page-header-mobile-button {
+    display: none;
+  }
+}
+
+/* Desktop: Standard layout */
+.page-header-desktop {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .page-header {
+    margin-bottom: 40px;
+    padding-bottom: 32px;
+  }
+  
+  .page-header-mobile-top {
+    display: none;
+  }
+  
+  .page-header-desktop {
+    display: block;
+  }
+  
+  .page-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0;
+  }
+}
+
+/* Hide desktop button on mobile */
+@media (max-width: 1023px) {
+  .page-header-desktop {
+    display: none !important;
+  }
 }
 
 /* Hero date - large anchor text */
 .page-title {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 56px;
+  font-size: 40px;
   font-weight: 700;
   letter-spacing: -0.04em;
   line-height: 1.1;
@@ -29,6 +90,24 @@
   background-clip: text;
 }
 
+.page-title-count {
+  font-size: 0.6em;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--accent-electric);
+  -webkit-text-fill-color: var(--accent-electric);
+  background: none;
+  -webkit-background-clip: unset;
+  background-clip: unset;
+  margin-left: 8px;
+}
+
+@media (min-width: 640px) {
+  .page-title {
+    font-size: 56px;
+  }
+}
+
 @media (min-width: 768px) {
   .page-title {
     font-size: 72px;
@@ -38,17 +117,139 @@
 /* Date subtitle - theme accent color, larger */
 .page-subtitle {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 15px;
+  font-size: 13px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--accent-electric);
-  margin-top: 12px;
+  margin-top: 8px;
   opacity: 0.95;
+}
+
+@media (min-width: 640px) {
+  .page-subtitle {
+    font-size: 15px;
+    margin-top: 12px;
+  }
 }
 
 /* Button alignment in header */
 .page-header .btn-glow {
-  margin-top: 8px;
+  margin-top: 0;
+  align-self: flex-start;
+  flex-shrink: 0;
+}
+
+@media (min-width: 640px) {
+  .page-header .btn-glow {
+    margin-top: 8px;
+    align-self: auto;
+  }
+}
+
+/* Mobile: Progress inline with header - positioned on right */
+.page-header-progress-mobile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(20, 25, 35, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  flex-shrink: 0;
+  min-width: 120px;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Hide on desktop - only show on mobile */
+@media (min-width: 1024px) {
+  .page-header-progress-mobile {
+    display: none;
+  }
+}
+
+.progress-inline-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.progress-inline-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  text-align: center;
+}
+
+.progress-inline-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-main, #FFFFFF);
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
+.circular-progress-inline {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+}
+
+.circular-progress-inline svg {
+  width: 56px;
+  height: 56px;
+  transform: rotate(-90deg);
+}
+
+.circular-progress-inline .bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 5;
+}
+
+.circular-progress-inline .fill {
+  fill: none;
+  stroke: var(--accent-electric, #FF4D00);
+  stroke-width: 5;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.5s ease-out;
+  filter: drop-shadow(0 0 8px var(--accent-glow, rgba(255, 77, 0, 0.6)));
+}
+
+.circular-progress-inline .percent {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-main, #FFFFFF);
+}
+
+/* Mobile header button styling */
+.btn-glow-mobile-header {
+  width: auto;
+  padding: 12px 20px;
+  font-size: 14px;
+  align-self: flex-start;
+}
+
+@media (min-width: 1024px) {
+  .btn-glow-mobile-header {
+    display: none;
+  }
 }
 
 /* ==========================================

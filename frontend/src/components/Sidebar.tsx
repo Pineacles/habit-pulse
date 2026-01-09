@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore';
+import '../styles/components/navigation.css';
 
 /**
  * Floating Sidebar - Glass Panel Design

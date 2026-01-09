@@ -45,14 +45,32 @@
 
   position: relative;
   overflow: hidden;
+  display: none;
+}
+
+/* Desktop: Show progress card */
+@media (min-width: 1024px) {
+  .progress-card.progress-card-desktop {
+    display: block;
+  }
 }
 
 .progress-stats {
   display: flex;
+  flex-direction: column;
+  gap: 20px;
   align-items: center;
   justify-content: space-between;
   position: relative;
   z-index: 2;
+}
+
+@media (min-width: 640px) {
+  .progress-stats {
+    flex-direction: row;
+    gap: 0;
+    align-items: center;
+  }
 }
 
 /* ==========================================

@@ -79,17 +79,18 @@
 /* Strength indicator for mobile (inside card) */
 
 .password-strength-mobile {
-  margin-top: 8px;
+  margin-top: 12px;
   font-family: "JetBrains Mono", monospace;
-  font-size: 11px;
+  font-size: 12px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  padding: 8px 0;
 }
 
 .password-strength-mobile .strength-bar {
   flex: 1;
-  height: 3px;
+  height: 4px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   overflow: hidden;
@@ -118,9 +119,10 @@
 }
 
 .password-strength-mobile .strength-label {
-  min-width: 50px;
-
+  min-width: 60px;
   text-align: right;
+  font-weight: 600;
+  font-size: 13px;
 }
 
 .password-strength-mobile .strength-label.weak {
