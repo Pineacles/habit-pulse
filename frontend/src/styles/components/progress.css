@@ -20,8 +20,8 @@
   z-index: 0;
 }
 
-/* Theme adaptation for Card Progress is handled via
-   variable redefinition in root or specific overrides if needed */
+/* Theme adaptation for card progress is handled via
+   CSS variable redefinition in root or specific overrides */
 
 /* ==========================================
    PROGRESS CARD CONTAINER
@@ -75,7 +75,7 @@
   font-size: 32px;
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: var(--text-main);
+  color: var(--text-main, #FFFFFF);
   line-height: 1.1;
 }
 
@@ -104,35 +104,43 @@
   height: 72px;
 }
 
-/* Rotates the SVG so the progress starts from the top */
+/* Rotate SVG so progress starts from top */
 .circular-progress svg {
   width: 72px;
   height: 72px;
   transform: rotate(-90deg);
 }
 
-/* The background track of the circle */
+/* Background Track */
 .circular-progress .bg {
   fill: none;
   stroke: rgba(255, 255, 255, 0.08);
   stroke-width: 5;
 }
 
-/* The active progress fill */
+/* Active Progress Fill */
 .circular-progress .fill {
   fill: none;
-  stroke: var(--accent-electric);
+  stroke: var(--accent-electric, #FF4D00);
   stroke-width: 5;
-  stroke-linecap: round; /* Rounded ends for cleaner look */
-
-  /* Animation for the stroke filling up */
+  stroke-linecap: round;
   transition: stroke-dasharray 0.5s ease-out;
-
-  /* Neon glow effect */
-  filter: drop-shadow(0 0 8px var(--accent-glow));
+  filter: drop-shadow(0 0 8px var(--accent-glow, rgba(255, 77, 0, 0.6)));
+  will-change: stroke-dasharray;
 }
 
-/* The percentage text centered inside the circle */
+/* Reduced Motion - Disable progress animation */
+@media (prefers-reduced-motion: reduce) {
+  .circular-progress .fill {
+    transition: none;
+  }
+  
+  .card-progress {
+    transition: none;
+  }
+}
+
+/* Percentage Text - Centered inside circle */
 .circular-progress .percent {
   position: absolute;
   inset: 0;
@@ -143,5 +151,5 @@
   font-size: 15px;
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: var(--text-main);
+  color: var(--text-main, #FFFFFF);
 }

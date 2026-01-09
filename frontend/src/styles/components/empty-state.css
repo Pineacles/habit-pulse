@@ -1,9 +1,9 @@
 /* ==========================================
-   COMPONENT: EMPTY STATE
-   Style: Invitation Panel / Glass Hologram
+   EMPTY STATE COMPONENT
+   Invitation panel with glass hologram styling
    ========================================== */
 
-/* Main Container - The "Floating Island" */
+/* Main Container - Floating Island */
 .empty-state {
   position: relative;
   display: flex;
@@ -17,11 +17,11 @@
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 
-  /* Etched Crystal Borders */
+  /* Etched crystal borders */
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 20px;
 
-  /* Depth and inner light */
+  /* Depth and inner light effect */
   box-shadow:
     0 4px 24px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
@@ -29,9 +29,20 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Optional hover effect for interactive empty states */
+/* Interactive Empty State - Hover effect */
 .empty-state.interactive:hover {
   transform: translateY(-2px);
+}
+
+/* Reduced Motion - Disable transform transitions */
+@media (prefers-reduced-motion: reduce) {
+  .empty-state {
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .empty-state.interactive:hover {
+    transform: none;
+  }
   box-shadow:
     0 12px 40px rgba(0, 0, 0, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
@@ -62,18 +73,26 @@
   line-height: 1;
 }
 
-/* The Accent Dot - Responds to global theme variables */
+/* Accent Dot - Responds to global theme variables */
 .empty-state-icon-text .dot {
-  color: var(--accent-electric);
-  text-shadow: 0 0 20px var(--accent-glow);
+  color: var(--accent-electric, #FF4D00);
+  text-shadow: 0 0 20px var(--accent-glow, rgba(255, 77, 0, 0.6));
   display: inline-block;
   animation: pulse-glow 3s infinite ease-in-out;
+  will-change: opacity, transform;
 }
 
 @keyframes pulse-glow {
   0%,
   100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.7; transform: scale(0.9); }
+}
+
+/* Reduced Motion - Disable pulse animation */
+@media (prefers-reduced-motion: reduce) {
+  .empty-state-icon-text .dot {
+    animation: none;
+  }
 }
 
 /* ==========================================
@@ -84,7 +103,7 @@
   font-family: 'Space Grotesk', sans-serif;
   font-size: 20px;
   font-weight: 600;
-  color: var(--text-main);
+  color: var(--text-main, #FFFFFF);
   margin-bottom: 8px;
   letter-spacing: -0.01em;
 }
@@ -98,7 +117,7 @@
   max-width: 400px;
 }
 
-/* Action Area (Buttons) */
+/* Action Area - Button container */
 .empty-state-actions {
   margin-top: 32px;
   display: flex;
@@ -108,8 +127,8 @@
 }
 
 /* ==========================================
-   VARIANT: MINIMAL
-   Usage: Small widgets or side panels
+   MINIMAL VARIANT
+   Compact version for small widgets or side panels
    ========================================== */
 
 .empty-state-minimal {

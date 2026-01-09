@@ -1,5 +1,6 @@
 /* ==========================================
-   BASE INPUTS - "Cockpit Slots"
+   BASE INPUTS
+   Form input fields with glass morphism styling
    ========================================== */
 
 input,
@@ -173,10 +174,11 @@ textarea.input-error:focus {
 }
 
 /* ==========================================
-   SPECIALIZED INPUTS (Instrument Style)
+   SPECIALIZED INPUTS
+   Custom input components with instrument-style design
    ========================================== */
 
-/* Digital Slot Input (Number Spinner) */
+/* Digital Input - Number spinner with increment/decrement buttons */
 .digital-input-container {
   flex: 2;
   display: flex;
@@ -214,6 +216,16 @@ textarea.input-error:focus {
 .digital-btn:active {
   background: var(--accent-electric);
   color: white;
+}
+
+.digital-btn:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+.digital-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .digital-btn.minus {
@@ -254,7 +266,7 @@ textarea.input-error:focus {
   margin: 0;
 }
 
-/* Select / Dropdown */
+/* Unit Select Dropdown */
 .unit-select {
   flex: 1;
   min-width: 110px;
@@ -277,6 +289,16 @@ textarea.input-error:focus {
 .unit-select:focus {
   outline: none;
   border-color: var(--accent-electric);
+}
+
+.unit-select:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+.unit-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .unit-select option {
@@ -304,6 +326,16 @@ textarea.input-error:focus {
   outline: none;
   border-color: var(--accent-electric);
   box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.date-input:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+.date-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .date-input::-webkit-calendar-picker-indicator {
@@ -341,6 +373,16 @@ textarea.input-error:focus {
   border-color: var(--accent-electric);
   border-width: 2px;
   background: rgba(255, 77, 0, 0.08);
+}
+
+.start-date-btn:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+.start-date-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* ==========================================
@@ -402,6 +444,18 @@ textarea.input-error:focus {
   font-weight: 600;
 }
 
+.type-btn:focus-visible,
+.segment-btn:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+.type-btn:disabled,
+.segment-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 /* Preset Chips */
 .value-presets,
 .frequency-chips {
@@ -455,6 +509,18 @@ textarea.input-error:focus {
   box-shadow: 0 0 12px var(--accent-glow);
 }
 
+.preset-chip:focus-visible,
+.freq-chip:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+.preset-chip:disabled,
+.freq-chip:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 .freq-chip.active {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.2);
@@ -489,6 +555,16 @@ textarea.input-error:focus {
   color: white;
   border-color: var(--accent-electric);
   box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.day-pill:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+.day-pill:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* ==========================================
@@ -571,7 +647,8 @@ textarea.input-error:focus {
 }
 
 /* ==========================================
-   SCHEDULE GRID (The missing horizontal layout)
+   SCHEDULE GRID
+   Horizontal layout for schedule day selection
    ========================================== */
 
 .schedule-grid {

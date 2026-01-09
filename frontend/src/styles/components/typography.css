@@ -1,7 +1,6 @@
-/* components/typography.css */
-
 /* ==========================================
-   PAGE HEADERS - Hero Date Treatment
+   PAGE HEADERS
+   Hero date treatment with large typography
    ========================================== */
 
 .page-header {
@@ -14,7 +13,7 @@
   position: relative;
 }
 
-/* Hero date - massive anchor */
+/* Hero date - large anchor text */
 .page-title {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 56px;
@@ -22,9 +21,9 @@
   letter-spacing: -0.04em;
   line-height: 1.1;
   margin: 0;
-  
+
   /* Subtle gradient text */
-  background: linear-gradient(to right, #ffffff 60%, rgba(255,255,255,0.5));
+  background: linear-gradient(to right, #ffffff 60%, rgba(255, 255, 255, 0.5));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

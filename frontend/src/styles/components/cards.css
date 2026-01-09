@@ -9,7 +9,7 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px;
 
-  /* Edge lighting - etched crystal */
+  /* Etched crystal edge lighting */
   box-shadow:
     0 8px 40px rgba(0, 0, 0, 0.6),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
@@ -22,13 +22,13 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px;
 
-  /* Edge lighting */
+  /* Etched crystal edge lighting */
   box-shadow:
     0 8px 40px rgba(0, 0, 0, 0.6),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
-/* Card with form layout */
+/* Glass Card with Form Layout */
 .glass-form {
   width: 100%;
   max-width: 420px;
@@ -38,7 +38,7 @@
   gap: 24px;
 }
 
-/* Fallback for browsers without backdrop-filter */
+/* Fallback for browsers without backdrop-filter support */
 @supports not (backdrop-filter: blur(1px)) {
   .glass,
   .glass-solid {
@@ -51,16 +51,16 @@
    ========================================== */
 
 .goal-card {
-  /* Glass panel - matches progress card visibility */
+  /* Glass panel styling */
   background: rgba(20, 25, 35, 0.5);
   backdrop-filter: blur(20px) saturate(120%);
   -webkit-backdrop-filter: blur(20px) saturate(120%);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 18px;
   padding: 24px;
-  margin-bottom: 16px;
+  margin: 0 4px 16px 4px;
 
-  /* Etched crystal edge */
+  /* Etched crystal depth effect */
   box-shadow:
     0 4px 24px rgba(0, 0, 0, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
@@ -71,7 +71,7 @@
 
 .goal-card:hover {
   background: rgba(20, 25, 35, 0.65);
-  /* Uses theme color */
+  /* Theme color border on hover */
   border-color: var(--accent-electric);
   transform: translateX(4px);
   box-shadow:
@@ -80,7 +80,12 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-/* Theme-specific goal card hover */
+.goal-card:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+/* Theme-specific goal card hover states */
 [data-theme="teal"] .goal-card:hover {
   border-color: #14B8A6;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 24px rgba(20, 184, 166, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
@@ -106,7 +111,7 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 24px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-/* Completed state - green light activation */
+/* Completed State - Green light activation */
 .goal-card.completed {
   border-color: rgba(0, 255, 148, 0.25);
   box-shadow:
@@ -119,7 +124,7 @@
   border-color: rgba(0, 255, 148, 0.4);
 }
 
-/* Goal Card Internals */
+/* Goal Card Internal Layout */
 .goal-card-inner {
   display: flex;
   align-items: center;
@@ -192,7 +197,7 @@
   justify-content: center;
 }
 
-/* Goal card actions */
+/* Goal Card Actions */
 .goal-actions {
   display: flex;
   align-items: center;
@@ -225,7 +230,17 @@
   color: #EF4444;
 }
 
-/* Card Progress Fill */
+.goal-action-btn:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+.goal-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Card Progress Fill Indicator */
 .card-progress {
   position: absolute;
   bottom: 0;
@@ -274,7 +289,7 @@
   cursor: grabbing;
 }
 
-/* Drag over state - shows drop target */
+/* Drag Over State - Visual drop target indicator */
 .goal-card.drag-over {
   border-color: var(--accent-electric) !important;
   background: rgba(255, 77, 0, 0.08);
@@ -284,7 +299,7 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-/* Theme-specific drag over */
+/* Theme-specific drag over states */
 [data-theme="teal"] .goal-card.drag-over {
   background: rgba(20, 184, 166, 0.08);
   box-shadow: 0 0 24px rgba(20, 184, 166, 0.4), 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
@@ -315,7 +330,7 @@
    ========================================== */
 
 .progress-card {
-  /* Primary floating island */
+  /* Floating island glass panel */
   background: rgba(20, 25, 35, 0.55);
   backdrop-filter: blur(24px) saturate(120%);
   -webkit-backdrop-filter: blur(24px) saturate(120%);

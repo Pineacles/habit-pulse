@@ -1,6 +1,6 @@
 /* ==========================================
-   CRYSTALLINE STRATUM: SETTINGS COMPONENT
-   File: components/settings.css
+   SETTINGS COMPONENT
+   User preferences and account management
    ========================================== */
 
 /* ==========================================
@@ -90,7 +90,17 @@
   border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* The colored orb */
+.color-option:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+.color-option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Color Preview Circle */
 .color-circle {
   width: 48px;
   height: 48px;
@@ -110,7 +120,7 @@
   color: rgba(255, 255, 255, 0.55);
 }
 
-/* The "Selected" Checkmark */
+/* Selected State Checkmark */
 .color-check {
   position: absolute;
   top: 8px;
@@ -124,7 +134,6 @@
   justify-content: center;
   color: black;
 
-  /* Icon size override */
   font-size: 12px;
 }
 
@@ -204,6 +213,16 @@
 .signout-btn:hover {
   background: rgba(239, 68, 68, 0.15);
   border-color: rgba(239, 68, 68, 0.35);
+}
+
+.signout-btn:focus-visible {
+  outline: 2px solid #EF4444;
+  outline-offset: 2px;
+}
+
+.signout-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* ==========================================

@@ -124,7 +124,7 @@ export function GoalCard({
   const targetDisplay = formatTarget();
 
   return (
-    <div className="relative overflow-hidden rounded-2xl mb-3">
+    <div className="relative rounded-2xl mb-3">
       {/* Swipe actions (mobile) */}
       <div 
         className="absolute right-0 top-0 bottom-0 flex items-center gap-2 px-3"
