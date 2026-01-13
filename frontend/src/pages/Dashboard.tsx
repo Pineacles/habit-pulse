@@ -276,7 +276,7 @@ export function Dashboard() {
       )}
 
       {/* Goals Section */}
-      <div>
+      <div className="dashboard-goals">
         <h2 className="section-header">Today's Goals</h2>
 
         {isLoading && goals.length === 0 ? (

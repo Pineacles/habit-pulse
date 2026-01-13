@@ -237,6 +237,7 @@ export function AllGoals() {
         </svg>
       </button>
 
+      <div className="allgoals-page">
       {isLoading && goals.length === 0 ? (
         // Loading
         <div className="space-y-3">
@@ -669,6 +670,7 @@ export function AllGoals() {
           )}
         </>
       )}
+      </div>
 
       {/* Goal modal */}
       <GoalModal
