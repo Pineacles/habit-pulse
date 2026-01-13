@@ -3,13 +3,7 @@ import { useAuthStore } from '../stores/authStore';
 import '../styles/components/navigation.css';
 
 /**
- * Floating Sidebar - Glass Panel Design
- * 
- * Features:
- * - Floats with margin from edges
- * - Glass effect with backdrop blur
- * - Glow tab active states (orange wash + icon glow)
- * - User profile at bottom
+ * Sidebar - Desktop navigation with user profile.
  */
 export function Sidebar() {
   const { user, logout } = useAuthStore();

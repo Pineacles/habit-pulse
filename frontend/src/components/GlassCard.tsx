@@ -9,12 +9,7 @@ interface GlassCardProps {
 }
 
 /**
- * GlassCard
- *
- * The core visual element - a frosted glass panel with blur effect.
- *
- * - Default: High transparency (for desktop, see background through it)
- * - Solid: More opaque (for mobile, better readability outdoors)
+ * GlassCard - Frosted glass panel component with optional solid variant.
  */
 export function GlassCard({
   children,

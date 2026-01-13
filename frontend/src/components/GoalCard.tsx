@@ -1,8 +1,12 @@
 import { useState } from "react";
-import { addDays, startOfDay, differenceInDays, format } from "date-fns";
-import { DAY_NAMES_SHORT, type GoalWithStatus } from "../types";
+import { type GoalWithStatus } from "../types";
 import { useGoalStore } from "../stores/goalStore";
 import { DescriptionModal } from "./DescriptionModal";
+import {
+  formatSchedule,
+  formatTarget,
+  UNIT_LABELS,
+} from "../utils/goalHelpers";
 
 interface GoalCardProps {
   goal: GoalWithStatus;
@@ -16,14 +20,7 @@ interface GoalCardProps {
 }
 
 /**
- * GoalCard - Glass Bento Design with Drag & Drop
- *
- * Features:
- * - Glass card with hover lift effect
- * - Tap to toggle complete
- * - Glowing checkbox when checked
- * - Drag and drop to reorder (desktop)
- * - Shows unit or checkmark for simple goals
+ * GoalCard - Individual goal item with completion toggle and drag-drop reordering.
  */
 export function GoalCard({
   goal,
@@ -35,16 +32,11 @@ export function GoalCard({
   onDrop,
 }: GoalCardProps) {
   const { toggleGoal } = useGoalStore();
-
-  // Drag state
   const [isDragging, setIsDragging] = useState(false);
-
-  // Description modal state
   const [showDescriptionModal, setShowDescriptionModal] = useState(false);
 
-  // Handle tap - card click toggles completion
   const handleCardClick = (e: React.MouseEvent) => {
-    // Don't handle if clicking on drag handle, checkbox, or description button
+    // Ignore clicks on interactive elements
     if (
       (e.target as HTMLElement).closest(".drag-handle") ||
       (e.target as HTMLElement).closest(".goal-checkbox") ||
@@ -56,107 +48,13 @@ export function GoalCard({
     toggleGoal(goal.id);
   };
 
-  // Handle checkbox click - toggle completion
   const handleCheckboxClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     toggleGoal(goal.id);
   };
 
-  // Calculate next occurrence date for interval schedules
-  const getNextOccurrence = (
-    intervalDays: number,
-    intervalStartDate: string
-  ): Date | null => {
-    try {
-      // Parse the start date (ISO format "2025-01-13" from backend)
-      const [year, month, day] = intervalStartDate.split("-").map(Number);
-      const startDate = new Date(year, month - 1, day);
-
-      const today = startOfDay(new Date());
-      const start = startOfDay(startDate);
-
-      // If start is in the future, that's the next occurrence
-      if (start >= today) {
-        return start;
-      }
-
-      // Calculate how many intervals have passed
-      const daysSinceStart = differenceInDays(today, start);
-      const cyclesPassed = Math.floor(daysSinceStart / intervalDays);
-
-      // Calculate the next occurrence
-      let nextOccurrence = addDays(start, cyclesPassed * intervalDays);
-
-      // If we landed on today or before, add one more interval
-      if (nextOccurrence < today) {
-        nextOccurrence = addDays(nextOccurrence, intervalDays);
-      }
-
-      return nextOccurrence;
-    } catch (e) {
-      console.error("Error calculating next occurrence:", e);
-      return null;
-    }
-  };
-
-  // Format schedule days
-  const formatSchedule = () => {
-    // Check for interval schedule first
-    if (goal.intervalDays && goal.intervalStartDate) {
-      const nextOccurrence = getNextOccurrence(
-        goal.intervalDays,
-        goal.intervalStartDate
-      );
-      if (nextOccurrence) {
-        const formattedDate = format(nextOccurrence, "MMM d");
-        const today = startOfDay(new Date());
-        const isToday =
-          startOfDay(nextOccurrence).getTime() === today.getTime();
-        return `Every ${goal.intervalDays} days${
-          isToday ? " (Today)" : ` (Next: ${formattedDate})`
-        }`;
-      }
-      return `Every ${goal.intervalDays} days`;
-    }
-
-    if (goal.scheduleDays.length === 7) return "Every day";
-    if (
-      goal.scheduleDays.length === 5 &&
-      !goal.scheduleDays.includes(0) &&
-      !goal.scheduleDays.includes(6)
-    ) {
-      return "Weekdays";
-    }
-    if (
-      goal.scheduleDays.length === 2 &&
-      goal.scheduleDays.includes(0) &&
-      goal.scheduleDays.includes(6)
-    ) {
-      return "Weekends";
-    }
-    return goal.scheduleDays.map((d) => DAY_NAMES_SHORT[d]).join(", ");
-  };
-
-  // Format target display
-  const formatTarget = () => {
-    if (!goal.isMeasurable) {
-      return null; // Simple goal - no target display
-    }
-
-    const unitLabels: Record<string, string> = {
-      minutes: "min",
-      pages: "pg",
-      reps: "reps",
-      liters: "L",
-      km: "km",
-      items: "items",
-    };
-
-    return `${goal.targetValue}${unitLabels[goal.unit] || goal.unit}`;
-  };
-
   const isDraggable = !!onDragStart;
-  const targetDisplay = formatTarget();
+  const targetDisplay = formatTarget(goal);
 
   return (
     <div className="relative rounded-2xl mb-3">
@@ -232,7 +130,7 @@ export function GoalCard({
             >
               {goal.name}
             </h3>
-            <p className="goal-schedule">{formatSchedule()}</p>
+            <p className="goal-schedule">{formatSchedule(goal)}</p>
           </div>
 
           {/* Target display - only show for measurable goals */}
@@ -240,7 +138,7 @@ export function GoalCard({
             <div className="goal-target">
               <span className="goal-target-value">{goal.targetValue}</span>
               <span className="goal-target-unit">
-                {goal.unit === "minutes" ? "min" : goal.unit}
+                {UNIT_LABELS[goal.unit] || goal.unit}
               </span>
             </div>
           )}

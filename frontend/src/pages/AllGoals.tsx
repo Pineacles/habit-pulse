@@ -1,19 +1,14 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { addDays, startOfDay, differenceInDays, format } from 'date-fns';
 import { GoalModal } from '../components/GoalModal';
 import { DescriptionModal } from '../components/DescriptionModal';
 import { useGoalStore } from '../stores/goalStore';
-import { DAY_NAMES_SHORT, type GoalWithStatus } from '../types';
+import { type GoalWithStatus } from '../types';
+import { formatSchedule, formatTargetWithLabel } from '../utils/goalHelpers';
 
 /**
- * AllGoals Page - Glass Design with Drag & Drop Reorder
- * 
- * Features:
- * - Transparent header with Add Goal button
- * - Glass goal cards with hover effects
- * - Drag and drop to reorder priorities
- * - Shows target value+unit or "Simple" badge
+ * AllGoals - View and manage all goals with drag-drop priority reordering.
+ * Separates active and inactive goals.
  */
 export function AllGoals() {
   const { goals, isLoading, fetchGoals, deleteGoal, updateGoal, reorderGoals } = useGoalStore();
@@ -24,12 +19,11 @@ export function AllGoals() {
   const [descriptionModalGoal, setDescriptionModalGoal] = useState<GoalWithStatus | null>(null);
   const [openKebabMenuId, setOpenKebabMenuId] = useState<string | null>(null);
 
-  // Fetch ALL goals (not just today's)
   useEffect(() => {
-    fetchGoals(false);
+    fetchGoals(false); // All goals, not just today's
   }, [fetchGoals]);
 
-  // Close kebab menu when clicking outside
+  // Dismiss kebab menu on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (openKebabMenuId && !(e.target as HTMLElement).closest('.kebab-menu-container')) {
@@ -40,106 +34,30 @@ export function AllGoals() {
     return () => document.removeEventListener('click', handleClickOutside);
   }, [openKebabMenuId]);
 
-  // Handle edit
   const handleEdit = (goal: GoalWithStatus) => {
     setEditingGoal(goal);
     setIsModalOpen(true);
   };
 
-  // Handle delete
   const handleDelete = async (goal: GoalWithStatus) => {
     if (confirm(`Delete "${goal.name}"? This cannot be undone.`)) {
       await deleteGoal(goal.id);
     }
   };
 
-  // Toggle active status
   const handleToggleActive = async (goal: GoalWithStatus) => {
     await updateGoal(goal.id, { isActive: !goal.isActive });
   };
 
-  // Handle modal close
   const handleModalClose = () => {
     setIsModalOpen(false);
     setEditingGoal(null);
-  };
-
-  // Calculate next occurrence date for interval schedules
-  const getNextOccurrence = (intervalDays: number, intervalStartDate: string): Date | null => {
-    try {
-      // Parse the start date (ISO format "2025-01-13" from backend)
-      const [year, month, day] = intervalStartDate.split('-').map(Number);
-      const startDate = new Date(year, month - 1, day);
-      
-      const today = startOfDay(new Date());
-      const start = startOfDay(startDate);
-      
-      // If start is in the future, that's the next occurrence
-      if (start >= today) {
-        return start;
-      }
-      
-      // Calculate how many intervals have passed
-      const daysSinceStart = differenceInDays(today, start);
-      const cyclesPassed = Math.floor(daysSinceStart / intervalDays);
-      
-      // Calculate the next occurrence
-      let nextOccurrence = addDays(start, cyclesPassed * intervalDays);
-      
-      // If we landed on today or before, add one more interval
-      if (nextOccurrence < today) {
-        nextOccurrence = addDays(nextOccurrence, intervalDays);
-      }
-      
-      return nextOccurrence;
-    } catch (e) {
-      console.error('Error calculating next occurrence:', e);
-      return null;
-    }
-  };
-
-  // Format schedule
-  const formatSchedule = (goal: GoalWithStatus) => {
-    // Check for interval schedule first
-    if (goal.intervalDays && goal.intervalStartDate) {
-      const nextOccurrence = getNextOccurrence(goal.intervalDays, goal.intervalStartDate);
-      if (nextOccurrence) {
-        const formattedDate = format(nextOccurrence, 'MMM d');
-        const today = startOfDay(new Date());
-        const isToday = startOfDay(nextOccurrence).getTime() === today.getTime();
-        return `Every ${goal.intervalDays} days${isToday ? ' (Today)' : ` (Next: ${formattedDate})`}`;
-      }
-      return `Every ${goal.intervalDays} days`;
-    }
-    
-    const days = goal.scheduleDays;
-    if (days.length === 7) return 'Every day';
-    if (days.length === 5 && !days.includes(0) && !days.includes(6)) return 'Weekdays';
-    if (days.length === 2 && days.includes(0) && days.includes(6)) return 'Weekends';
-    return days.map(d => DAY_NAMES_SHORT[d]).join(', ');
-  };
-
-  // Format target display
-  const formatTarget = (goal: GoalWithStatus) => {
-    if (!goal.isMeasurable) {
-      return 'Simple';
-    }
-    const unitLabels: Record<string, string> = {
-      minutes: 'min',
-      pages: 'pg',
-      reps: 'reps',
-      liters: 'L',
-      km: 'km',
-      items: 'items',
-    };
-    return `${goal.targetValue}${unitLabels[goal.unit] || goal.unit}`;
   };
 
   // Drag and Drop handlers
   const handleDragStart = (e: React.DragEvent, goal: GoalWithStatus) => {
     setDraggedGoal(goal);
     e.dataTransfer.effectAllowed = 'move';
-    // Add a slight delay to show the drag visual
     setTimeout(() => {
       (e.target as HTMLElement).style.opacity = '0.5';
     }, 0);
@@ -174,12 +92,10 @@ export function AllGoals() {
 
     if (draggedIndex === -1 || targetIndex === -1) return;
 
-    // Create new order
     const newOrder = [...goalList];
     newOrder.splice(draggedIndex, 1);
     newOrder.splice(targetIndex, 0, draggedGoal);
 
-    // Get all goal IDs in new order
     const orderedIds = newOrder.map(g => g.id);
     await reorderGoals(orderedIds);
 
@@ -187,7 +103,7 @@ export function AllGoals() {
     setDragOverGoalId(null);
   };
 
-  // Separate active and inactive goals (already sorted by sortOrder from backend)
+  // Goals are already sorted by sortOrder from backend
   const activeGoals = goals.filter(g => g.isActive);
   const inactiveGoals = goals.filter(g => !g.isActive);
 
@@ -322,7 +238,7 @@ export function AllGoals() {
                       <div className="goal-info goal-info-allgoals">
                         <h3 className="goal-name">{goal.name}</h3>
                         <div className="goal-schedule">
-                          <span className="font-mono">{formatTarget(goal)}</span>
+                          <span className="font-mono">{formatTargetWithLabel(goal)}</span>
                           <span className="mx-2">•</span>
                           <span>{formatSchedule(goal)}</span>
                         </div>
@@ -527,7 +443,7 @@ export function AllGoals() {
                           {goal.name}
                         </h3>
                         <div className="goal-schedule">
-                          <span className="font-mono">{formatTarget(goal)}</span>
+                          <span className="font-mono">{formatTargetWithLabel(goal)}</span>
                           <span className="mx-2">•</span>
                           <span>{formatSchedule(goal)}</span>
                         </div>

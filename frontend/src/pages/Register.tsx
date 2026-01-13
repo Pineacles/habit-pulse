@@ -6,8 +6,7 @@ import { PasswordStrengthChecker, PasswordSatellitePanel } from '../components/P
 import { useAuthStore } from '../stores/authStore';
 
 /**
- * Register Page - Crystalline Stratum Design
- * With satellite panel for password requirements
+ * Register - User registration with inline password strength validation.
  */
 export function Register() {
   const navigate = useNavigate();
