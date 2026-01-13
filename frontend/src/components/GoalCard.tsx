@@ -235,33 +235,15 @@ export function GoalCard({
             <p className="goal-schedule">{formatSchedule()}</p>
           </div>
 
-          {/* Target display - either value+unit or checkmark icon for simple */}
-          <div className="goal-target">
-            {targetDisplay ? (
-              <>
-                <span className="goal-target-value">{goal.targetValue}</span>
-                <span className="goal-target-unit">
-                  {goal.unit === "minutes" ? "min" : goal.unit}
-                </span>
-              </>
-            ) : (
-              <span className="goal-simple-badge">
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
+          {/* Target display - only show for measurable goals */}
+          {targetDisplay && (
+            <div className="goal-target">
+              <span className="goal-target-value">{goal.targetValue}</span>
+              <span className="goal-target-unit">
+                {goal.unit === "minutes" ? "min" : goal.unit}
               </span>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Info button - opens description modal */}
           <button
