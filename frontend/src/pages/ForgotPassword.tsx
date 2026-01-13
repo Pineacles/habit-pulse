@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FormField } from '../components/FormField';
 
 /**
- * ForgotPassword Page - Crystalline Stratum Design
+ * ForgotPassword - Password reset request form.
  */
 export function ForgotPassword() {
   const [username, setUsername] = useState('');

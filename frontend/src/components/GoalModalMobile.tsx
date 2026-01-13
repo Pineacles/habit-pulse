@@ -19,14 +19,7 @@ interface GoalModalMobileProps {
 type ScheduleType = "daily" | "weekdays" | "weekends" | "custom" | "interval";
 
 /**
- * Mobile-first Goal Modal
- *
- * Features:
- * - Full-screen takeover
- * - Large touch targets
- * - Single scrollable form
- * - Bottom-anchored actions
- * - Clean, minimal design
+ * GoalModalMobile - Full-screen modal for creating/editing goals on mobile.
  */
 export function GoalModalMobile({
   isOpen,

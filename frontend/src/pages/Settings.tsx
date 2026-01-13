@@ -3,12 +3,7 @@ import { useAuthStore } from '../stores/authStore';
 import { useThemeStore, THEME_OPTIONS } from '../stores/themeStore';
 
 /**
- * Settings Page - Island Card Design
- * 
- * Features:
- * - Grouped settings in glass island cards
- * - Theme color picker with glow effect
- * - Clean account section
+ * Settings - User preferences including theme selection and account info.
  */
 export function Settings() {
   const { user, logout } = useAuthStore();

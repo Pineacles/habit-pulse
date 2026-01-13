@@ -7,14 +7,8 @@ import { DAY_NAMES_FULL, type GoalWithStatus } from "../types";
 import { goalsApi } from "../api/goals";
 
 /**
- * Dashboard (Today View) - Glass Design with Drag & Drop
- *
- * Features:
- * - Transparent header (no colored bar)
- * - Glass progress card
- * - Glass goal cards with drag-drop reorder
- * - Glowing add button
- * - Two empty states: no goals ever vs no goals today
+ * Dashboard - Today's goals view with progress tracking and drag-drop reordering.
+ * Shows different empty states for new users vs users with no goals scheduled today.
  */
 export function Dashboard() {
   const { goals, isLoading, error, fetchGoals, reorderGoals } = useGoalStore();
@@ -24,11 +18,10 @@ export function Dashboard() {
   const [dragOverGoalId, setDragOverGoalId] = useState<string | null>(null);
   const [hasAnyGoals, setHasAnyGoals] = useState<boolean | null>(null);
 
-  // Fetch goals on mount
   useEffect(() => {
-    fetchGoals(true); // true = today only
+    fetchGoals(true); // Today only
 
-    // Also check if user has any goals at all
+    // Check if user has any goals at all (for empty state differentiation)
     goalsApi
       .getAll(false)
       .then((allGoals) => {
@@ -39,13 +32,11 @@ export function Dashboard() {
       });
   }, [fetchGoals]);
 
-  // Calculate completion stats
   const completedCount = goals.filter((g) => g.isCompletedToday).length;
   const totalCount = goals.length;
   const completionPercent =
     totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
-  // Format today's date with year
   const today = new Date();
   const dayName = DAY_NAMES_FULL[today.getDay()];
   const dateStr = today.toLocaleDateString("en-US", {
@@ -54,11 +45,10 @@ export function Dashboard() {
     year: "numeric",
   });
 
-  // Handle modal close
   const handleModalClose = () => {
     setIsModalOpen(false);
     setEditingGoal(null);
-    // Refresh hasAnyGoals after modal closes (in case a goal was created)
+    // Refresh hasAnyGoals in case a goal was created
     goalsApi
       .getAll(false)
       .then((allGoals) => {
@@ -102,12 +92,10 @@ export function Dashboard() {
 
     if (draggedIndex === -1 || targetIndex === -1) return;
 
-    // Create new order
     const newOrder = [...goals];
     newOrder.splice(draggedIndex, 1);
     newOrder.splice(targetIndex, 0, draggedGoal);
 
-    // Get all goal IDs in new order
     const orderedIds = newOrder.map((g) => g.id);
     await reorderGoals(orderedIds);
 
@@ -115,7 +103,6 @@ export function Dashboard() {
     setDragOverGoalId(null);
   };
 
-  // Render segmented progress bar component
   const renderSegmentedProgressBar = () => {
     if (totalCount === 0) return null;
 
@@ -141,10 +128,9 @@ export function Dashboard() {
     );
   };
 
-  // Render empty state based on whether user has any goals
   const renderEmptyState = () => {
     if (hasAnyGoals === false) {
-      // No goals at all - show full empty state with branding
+      // New user - show full onboarding empty state
       return (
         <div className="empty-state">
           <h3 className="empty-state-title">No goals yet</h3>

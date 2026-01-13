@@ -5,8 +5,7 @@ import { PasswordInput } from '../components/PasswordInput';
 import { useAuthStore } from '../stores/authStore';
 
 /**
- * Login Page - Crystalline Stratum Design
- * With shake animation on repeated errors (key-based re-render)
+ * Login - Authentication form with shake animation on repeated errors.
  */
 export function Login() {
   const navigate = useNavigate();

@@ -24,25 +24,16 @@ type CustomMode = "specific-days" | "interval";
 const spring = { type: "spring", stiffness: 400, damping: 30 };
 
 export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
-  // Use mobile modal on small screens - check immediately on mount
+  // All hooks must be called before any conditional returns (React Rules of Hooks)
+  const { createGoal, updateGoal } = useGoalStore();
+
+  // Check if mobile on mount
   const [isMobile, setIsMobile] = useState(() => {
     if (typeof window !== "undefined") {
       return window.innerWidth < 640;
     }
     return false;
   });
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 640);
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  // Render mobile version on mobile
-  if (isMobile) {
-    return <GoalModalMobile isOpen={isOpen} onClose={onClose} goal={goal} />;
-  }
-  const { createGoal, updateGoal } = useGoalStore();
 
   // Form state
   const [name, setName] = useState("");
@@ -73,7 +64,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
     "target" | "interval" | "description" | null
   >(null);
 
-  // Calendar drawer state - ONLY opened by explicit icon click
+  // Calendar drawer state
   const [showCalendar, setShowCalendar] = useState(false);
 
   // Description drawer state
@@ -82,15 +73,14 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
-  const isEditing = !!goal;
-  const isIntervalMode =
-    frequencyType === "custom" && customMode === "interval";
+  // Responsive: listen for window resize
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
-  // Calendar only shows when explicitly opened AND we're in interval mode
-  const shouldShowCalendar =
-    showCalendar && isIntervalMode && activeEdit === "interval";
-
-  // Populate form when editing
+  // Populate form when editing or creating
   useEffect(() => {
     if (goal) {
       setName(goal.name);
@@ -141,11 +131,23 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
       setActiveEdit(null);
     }
     setError("");
-    setShowCalendar(false); // Always start with calendar closed
-    setShowDescription(false); // Always start with description closed
+    setShowCalendar(false);
+    setShowDescription(false);
   }, [goal, isOpen]);
 
-  // Handle measurable toggle - closes calendar/description when switching to target
+  // Render mobile version on mobile devices
+  if (isMobile) {
+    return <GoalModalMobile isOpen={isOpen} onClose={onClose} goal={goal} />;
+  }
+
+  const isEditing = !!goal;
+  const isIntervalMode =
+    frequencyType === "custom" && customMode === "interval";
+
+  const shouldShowCalendar =
+    showCalendar && isIntervalMode && activeEdit === "interval";
+
+  // Handle measurable toggle
   const handleMeasurableChange = (measurable: boolean) => {
     setIsMeasurable(measurable);
     if (measurable) {

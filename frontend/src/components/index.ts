@@ -1,5 +1,6 @@
 export { AnimatedBackground } from './AnimatedBackground';
 export { BottomNav } from './BottomNav';
+export { DescriptionModal } from './DescriptionModal';
 export { FormField } from './FormField';
 export { GlassCard } from './GlassCard';
 export { GoalCard } from './GoalCard';

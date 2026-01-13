@@ -5,14 +5,7 @@ import { BottomNav } from "../components/BottomNav";
 import { AnimatedBackground } from "../components/AnimatedBackground";
 
 /**
- * AppLayout - Floating Island Design
- *
- * Features:
- * - Aurora animated background (visible everywhere)
- * - Floating glass sidebar (desktop)
- * - Centered content column with max-width
- * - Mobile bottom nav
- * - Smooth page transitions
+ * AppLayout - Main application shell with sidebar (desktop) and bottom nav (mobile).
  */
 export function AppLayout() {
   const location = useLocation();

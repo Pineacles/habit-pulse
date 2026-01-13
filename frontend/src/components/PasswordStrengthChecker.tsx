@@ -26,7 +26,7 @@ export function PasswordStrengthChecker({ password }: PasswordStrengthCheckerPro
     if (/[a-z]/.test(password)) score += 5;
     if (/[A-Z]/.test(password)) score += 10;
     if (/[0-9]/.test(password)) score += 10;
-    if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(password)) score += 10;
+    if (/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~]/.test(password)) score += 10;
     
     return Math.min(score, 100);
   }, [password]);
@@ -83,7 +83,7 @@ export function PasswordSatellitePanel({ password }: { password: string }) {
     { key: 'lowercase', label: 'Lowercase letter', test: (p: string) => /[a-z]/.test(p) },
     { key: 'uppercase', label: 'Uppercase letter', test: (p: string) => /[A-Z]/.test(p) },
     { key: 'number', label: 'One number', test: (p: string) => /[0-9]/.test(p) },
-    { key: 'special', label: 'Special character', test: (p: string) => /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]/.test(p) },
+    { key: 'special', label: 'Special character', test: (p: string) => /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~]/.test(p) },
   ];
 
   const results = requirements.map((req) => ({
