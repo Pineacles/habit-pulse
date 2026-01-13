@@ -115,6 +115,32 @@ export function Dashboard() {
     setDragOverGoalId(null);
   };
 
+  // Render segmented progress bar component
+  const renderSegmentedProgressBar = () => {
+    if (totalCount === 0) return null;
+
+    return (
+      <div className="segmented-progress-bar">
+        <div
+          className="segmented-progress-fill"
+          style={{ width: `${completionPercent}%` }}
+        />
+        {/* Segment dividers - one between each goal (not at start or end) */}
+        {goals.map((_, i) => {
+          if (i === 0 || i === totalCount) return null; // Skip first (0%) and last (100%)
+          const dividerPosition = (i / totalCount) * 100;
+          return (
+            <div
+              key={i}
+              className="segment-divider"
+              style={{ left: `${dividerPosition}%` }}
+            />
+          );
+        })}
+      </div>
+    );
+  };
+
   // Render empty state based on whether user has any goals
   const renderEmptyState = () => {
     if (hasAnyGoals === false) {
@@ -155,47 +181,21 @@ export function Dashboard() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
       >
-        {/* Mobile: Split layout - Title left, Progress right on same row */}
+        {/* Mobile: Title and date only in header */}
         <div className="page-header-mobile-top">
           <div className="page-header-title-section">
             <h1 className="page-title">{dayName}</h1>
             <p className="page-subtitle">{dateStr}</p>
           </div>
-
-          {/* Mobile: Progress on the right */}
-          {totalCount > 0 && (
-            <div className="page-header-progress-mobile">
-              <div className="progress-inline-text">
-                <span className="progress-inline-label">Today's Progress</span>
-                <span className="progress-inline-value">
-                  {completedCount} / {totalCount} completed
-                </span>
-              </div>
-              <div className="circular-progress-inline">
-                <svg viewBox="0 0 72 72">
-                  <circle className="bg" cx="36" cy="36" r="30" />
-                  <circle
-                    className="fill"
-                    cx="36"
-                    cy="36"
-                    r="30"
-                    strokeDasharray={`${completionPercent * 1.885} 188.5`}
-                  />
-                </svg>
-                <span className="percent">{completionPercent}%</span>
-              </div>
-            </div>
-          )}
         </div>
 
-        {/* Mobile: Add Goal button removed from header - now FAB */}
-
-        {/* Desktop: Standard layout - Title left, Button right */}
+        {/* Desktop: Title (matches AllGoals structure) */}
+        <div className="page-header-desktop-title">
+          <h1 className="page-title">{dayName}</h1>
+          <p className="page-subtitle">{dateStr}</p>
+        </div>
+        {/* Desktop: Add Goal button */}
         <div className="page-header-desktop">
-          <div>
-            <h1 className="page-title">{dayName}</h1>
-            <p className="page-subtitle">{dateStr}</p>
-          </div>
           <button onClick={() => setIsModalOpen(true)} className="btn-glow">
             <svg
               className="w-5 h-5"
@@ -250,21 +250,19 @@ export function Dashboard() {
               </p>
             </div>
 
-            {/* Circular progress */}
-            <div className="circular-progress">
-              <svg viewBox="0 0 72 72">
-                <circle className="bg" cx="36" cy="36" r="30" />
-                <circle
-                  className="fill"
-                  cx="36"
-                  cy="36"
-                  r="30"
-                  strokeDasharray={`${completionPercent * 1.885} 188.5`}
-                />
-              </svg>
-              <span className="percent">{completionPercent}%</span>
-            </div>
+            {/* Segmented progress bar */}
+            {renderSegmentedProgressBar()}
           </div>
+        </div>
+      )}
+
+      {/* Mobile: Progress bar below date, above Today's Goals */}
+      {totalCount > 0 && (
+        <div className="progress-bar-mobile">
+          <div className="progress-bar-mobile-counter">
+            {completedCount} / {totalCount} completed
+          </div>
+          {renderSegmentedProgressBar()}
         </div>
       )}
 

@@ -59,17 +59,16 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   position: relative;
   z-index: 2;
 }
 
+/* Desktop: Keep column layout so progress bar spans full width */
 @media (min-width: 640px) {
   .progress-stats {
-    flex-direction: row;
-    gap: 0;
-    align-items: center;
+    gap: 24px;
   }
 }
 
@@ -170,4 +169,95 @@
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--text-main, #FFFFFF);
+}
+
+/* ==========================================
+   SEGMENTED PROGRESS BAR
+   ========================================== */
+
+.segmented-progress-bar {
+  position: relative;
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.segmented-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--accent-electric, #FF4D00);
+  border-radius: 4px;
+  transition: width 0.4s ease-out;
+  filter: drop-shadow(0 0 6px var(--accent-glow, rgba(255, 77, 0, 0.6)));
+  will-change: width;
+}
+
+.segment-divider {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.15);
+  z-index: 1;
+}
+
+/* Desktop: Progress bar in card - larger height, full width */
+.progress-card .segmented-progress-bar {
+  height: 10px;
+  width: 100%;
+}
+
+.progress-card .segmented-progress-fill {
+  border-radius: 5px;
+}
+
+.progress-card .segment-divider {
+  width: 1.5px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Mobile: Progress bar container - cardless */
+.progress-bar-mobile {
+  margin-top: -8px;
+  margin-bottom: 24px;
+  padding: 0;
+}
+
+.progress-bar-mobile-counter {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-main, #FFFFFF);
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+/* Desktop only: Show progress bar in card */
+@media (min-width: 1024px) {
+  .progress-bar-mobile {
+    display: none;
+  }
+
+  .progress-stats {
+    gap: 24px;
+  }
+}
+
+/* Mobile only: Hide desktop progress card */
+@media (max-width: 1023px) {
+  .progress-card {
+    display: none !important;
+  }
+}
+
+/* Reduced Motion - Disable progress animation */
+@media (prefers-reduced-motion: reduce) {
+  .segmented-progress-fill {
+    transition: none;
+  }
 }

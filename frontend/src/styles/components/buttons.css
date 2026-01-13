@@ -308,6 +308,134 @@
   }
 }
 
+/* ==========================================
+   DESKTOP ADD GOAL BUTTON - Fixed Right Side
+   ========================================== */
+
+.btn-add-goal-desktop {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .btn-add-goal-desktop {
+    position: fixed;
+    top: 32px;
+    right: 32px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    min-height: 44px;
+    border-radius: 12px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    background: linear-gradient(180deg, var(--accent-electric, #FF4D00) 0%, var(--accent-dim, #CC3D00) 100%);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow:
+      0 0 24px var(--accent-glow, rgba(255, 77, 0, 0.6)),
+      0 4px 16px var(--accent-glow, rgba(255, 77, 0, 0.6)),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition: all 0.15s ease-out, box-shadow 0.3s ease, transform 0.15s ease;
+    will-change: box-shadow, transform;
+  }
+
+  .btn-add-goal-desktop:hover {
+    box-shadow:
+      0 0 32px var(--accent-glow, rgba(255, 77, 0, 0.6)),
+      0 6px 24px var(--accent-glow, rgba(255, 77, 0, 0.6)),
+      inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px) scale(1.02);
+  }
+
+  .btn-add-goal-desktop:active {
+    transform: translateY(0) scale(0.95);
+    box-shadow:
+      0 0 20px var(--accent-glow, rgba(255, 77, 0, 0.6)),
+      0 2px 8px var(--accent-glow, rgba(255, 77, 0, 0.6)),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
+
+  .btn-add-goal-desktop:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 2px;
+  }
+
+  .btn-add-goal-desktop.btn-hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.8);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+}
+
+/* Theme-specific desktop button variants */
+@media (min-width: 1024px) {
+  [data-theme="teal"] .btn-add-goal-desktop {
+    background: linear-gradient(180deg, #14B8A6 0%, #0D9488 100%);
+    box-shadow: 0 0 24px rgba(20, 184, 166, 0.5), 0 4px 16px rgba(20, 184, 166, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  [data-theme="teal"] .btn-add-goal-desktop:hover {
+    box-shadow: 0 0 32px rgba(20, 184, 166, 0.6), 0 6px 24px rgba(20, 184, 166, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+
+  [data-theme="purple"] .btn-add-goal-desktop {
+    background: linear-gradient(180deg, #A855F7 0%, #7E22CE 100%);
+    box-shadow: 0 0 24px rgba(168, 85, 247, 0.5), 0 4px 16px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  [data-theme="purple"] .btn-add-goal-desktop:hover {
+    box-shadow: 0 0 32px rgba(168, 85, 247, 0.6), 0 6px 24px rgba(168, 85, 247, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+
+  [data-theme="blue"] .btn-add-goal-desktop {
+    background: linear-gradient(180deg, #3B82F6 0%, #2563EB 100%);
+    box-shadow: 0 0 24px rgba(59, 130, 246, 0.5), 0 4px 16px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  [data-theme="blue"] .btn-add-goal-desktop:hover {
+    box-shadow: 0 0 32px rgba(59, 130, 246, 0.6), 0 6px 24px rgba(59, 130, 246, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+
+  [data-theme="rose"] .btn-add-goal-desktop {
+    background: linear-gradient(180deg, #F43F5E 0%, #BE123C 100%);
+    box-shadow: 0 0 24px rgba(244, 63, 94, 0.5), 0 4px 16px rgba(244, 63, 94, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  [data-theme="rose"] .btn-add-goal-desktop:hover {
+    box-shadow: 0 0 32px rgba(244, 63, 94, 0.6), 0 6px 24px rgba(244, 63, 94, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+
+  [data-theme="emerald"] .btn-add-goal-desktop {
+    background: linear-gradient(180deg, #10B981 0%, #047857 100%);
+    box-shadow: 0 0 24px rgba(16, 185, 129, 0.5), 0 4px 16px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  [data-theme="emerald"] .btn-add-goal-desktop:hover {
+    box-shadow: 0 0 32px rgba(16, 185, 129, 0.6), 0 6px 24px rgba(16, 185, 129, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+}
+
+/* Reduced Motion - Disable desktop button animations */
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  .btn-add-goal-desktop {
+    transition: box-shadow 0.2s ease;
+  }
+  
+  .btn-add-goal-desktop:hover {
+    transform: none;
+  }
+  
+  .btn-add-goal-desktop:active {
+    transform: none;
+  }
+}
+
 /* Theme-specific FAB variants */
 [data-theme="teal"] .fab-add-goal {
   background: linear-gradient(180deg, #14B8A6 0%, #0D9488 100%);
