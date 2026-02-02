@@ -10,7 +10,6 @@ import {
 
 interface GoalCardProps {
   goal: GoalWithStatus;
-  // Drag and drop props
   isDragOver?: boolean;
   onDragStart?: (e: React.DragEvent) => void;
   onDragEnd?: (e: React.DragEvent) => void;
@@ -36,15 +35,13 @@ export function GoalCard({
   const [showDescriptionModal, setShowDescriptionModal] = useState(false);
 
   const handleCardClick = (e: React.MouseEvent) => {
-    // Ignore clicks on interactive elements
     if (
       (e.target as HTMLElement).closest(".drag-handle") ||
       (e.target as HTMLElement).closest(".goal-checkbox") ||
       (e.target as HTMLElement).closest(".goal-description-btn")
-    )
+      )
       return;
 
-    // Toggle completion
     toggleGoal(goal.id);
   };
 
@@ -58,7 +55,6 @@ export function GoalCard({
 
   return (
     <div className="relative rounded-2xl mb-3">
-      {/* Main card */}
       <div
         className={`goal-card ${goal.isCompletedToday ? "completed" : ""} ${
           isDraggable ? "draggable" : ""
@@ -78,7 +74,6 @@ export function GoalCard({
         onDrop={onDrop}
       >
         <div className="goal-card-inner">
-          {/* Drag handle (desktop only) */}
           {isDraggable && (
             <div className="drag-handle hidden lg:flex" title="Drag to reorder">
               <svg
@@ -97,7 +92,6 @@ export function GoalCard({
             </div>
           )}
 
-          {/* Checkbox */}
           <div
             className={`goal-checkbox ${
               goal.isCompletedToday ? "checked" : ""
@@ -121,7 +115,6 @@ export function GoalCard({
             )}
           </div>
 
-          {/* Goal info */}
           <div className="goal-info">
             <h3
               className={`goal-name ${
@@ -133,7 +126,6 @@ export function GoalCard({
             <p className="goal-schedule">{formatSchedule(goal)}</p>
           </div>
 
-          {/* Target display - only show for measurable goals */}
           {targetDisplay && (
             <div className="goal-target">
               <span className="goal-target-value">{goal.targetValue}</span>
@@ -143,7 +135,6 @@ export function GoalCard({
             </div>
           )}
 
-          {/* Info button - opens description modal */}
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -172,7 +163,6 @@ export function GoalCard({
         </div>
       </div>
 
-      {/* Description Modal */}
       <DescriptionModal
         isOpen={showDescriptionModal}
         onClose={() => setShowDescriptionModal(false)}

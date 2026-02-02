@@ -1,8 +1,3 @@
-/* ==========================================
-   MODAL BACKDROP & PANEL
-   Base holographic overlay with glass effect
-   ========================================== */
-
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -170,10 +165,6 @@
   justify-content: center;
 }
 
-/* ==========================================
-   MODAL FLEX CONTAINER
-   Split view architecture for form and calendar
-   ========================================== */
 
 .modal-flex-container {
   display: flex;
@@ -217,10 +208,6 @@
   padding-bottom: 4px;
 }
 
-/* ==========================================
-   MODAL CONTROLS
-   Interactive form controls and toggles
-   ========================================== */
 
 .smart-modal {
   max-width: 480px;
@@ -586,10 +573,6 @@
   cursor: not-allowed;
 }
 
-/* ==========================================
-   CALENDAR DRAWER & SCHEDULING
-   Date selection and scheduling interface
-   ========================================== */
 
 .calendar-drawer {
   background: var(--glass-surface, rgba(20, 20, 25, 0.6));
@@ -1165,17 +1148,9 @@
   box-shadow: 0 0 16px rgba(16, 185, 129, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
-/* ==========================================
-   RESPONSIVE BEHAVIOR
-   Mobile adaptations for modal layout
-   ========================================== */
 
 /* Mobile responsive behavior is handled above with media queries */
 
-/* ==========================================
-   DESCRIPTION DRAWER
-   Description input sidebar
-   ========================================== */
 
 /* Description drawer uses same styles as calendar drawer */
 
@@ -1204,10 +1179,6 @@
   color: rgba(255, 255, 255, 0.3);
 }
 
-/* ==========================================
-   GOAL NAME DESCRIPTION BUTTON
-   Inline button next to goal name input
-   ========================================== */
 
 .goal-name-description-btn {
   width: 44px;
@@ -1257,9 +1228,6 @@
   border: 2px solid rgba(20, 25, 35, 0.8);
 }
 
-/* ==========================================
-   GOAL CREATION LAYOUT HELPERS
-   ========================================== */
 
 /* Target Row - Side-by-side layout for Amount + Unit */
 .target-row {
@@ -1275,10 +1243,6 @@
   gap: 12px;
 }
 
-/* ==========================================
-   INTERVAL SCHEDULING STYLES
-   Custom schedule configuration interface
-   ========================================== */
 
 .custom-schedule-section {
   margin-top: 12px;
@@ -1372,9 +1336,6 @@
   color: #10B981;
 }
 
-/* ==========================================
-   COLLAPSED ROWS (Clickable List Items)
-   ========================================== */
 
 .collapsed-row {
   display: flex;
@@ -1444,10 +1405,6 @@
   color: #10B981;
 }
 
-/* ==========================================
-   MOBILE DESCRIPTION SECTION
-   Expandable inline description for mobile
-   ========================================== */
 
 /* Goal name row with description button */
 .goal-name-row {

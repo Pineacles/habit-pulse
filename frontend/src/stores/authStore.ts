@@ -3,13 +3,11 @@ import { authApi } from '../api/auth';
 import type { User, LoginRequest, RegisterRequest } from '../types';
 
 interface AuthState {
-  // State
   user: User | null;
   token: string | null;
   isLoading: boolean;
   isAuthenticated: boolean;
 
-  // Actions
   login: (data: LoginRequest) => Promise<void>;
   register: (data: RegisterRequest) => Promise<void>;
   logout: () => void;
@@ -17,13 +15,11 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
-  // Initial state
   user: null,
   token: localStorage.getItem('token'),
   isLoading: true,
   isAuthenticated: false,
 
-  // Login action
   login: async (data: LoginRequest) => {
     const response = await authApi.login(data);
     
@@ -40,14 +36,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     });
   },
 
-  // Register action
   register: async (data: RegisterRequest) => {
     await authApi.register(data);
     // After registering, login automatically
     await get().login(data);
   },
 
-  // Logout action
   logout: () => {
     localStorage.removeItem('token');
     set({

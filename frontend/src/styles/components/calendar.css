@@ -1,7 +1,3 @@
-/* ==========================================
-   CALENDAR ROOT CONTAINER
-   Base container for schedule calendar component
-   ========================================== */
 
 .schedule-calendar {
   background: transparent;
@@ -14,10 +10,6 @@
   width: 100%;
 }
 
-/* ==========================================
-   REACT DAY PICKER STYLING
-   Grid layout enforcement and base styling
-   ========================================== */
 
 .rdp {
   --rdp-cell-size: 40px;
@@ -85,10 +77,6 @@
   justify-content: center;
 }
 
-/* ==========================================
-   DAY BUTTON STYLING
-   Supports React Day Picker v8 and v9 classnames
-   ========================================== */
 
 .rdp-day,
 .rdp-day_button,
@@ -117,10 +105,6 @@
   color: white;
 }
 
-/* ==========================================
-   HIGHLIGHTED STATE
-   Days with scheduled events
-   ========================================== */
 
 /* When modifier class is on the button element */
 .schedule-day-highlighted {
@@ -143,10 +127,6 @@
   box-shadow: 0 0 15px var(--accent-glow) !important;
 }
 
-/* ==========================================
-   SELECTED STATE
-   Days selected via aria-selected attribute
-   ========================================== */
 
 /* Works with any button classname */
 .rdp-day[aria-selected="true"],
@@ -159,9 +139,6 @@
   box-shadow: 0 0 15px var(--accent-glow) !important;
 }
 
-/* ==========================================
-   TODAY & DISABLED STATES
-   ========================================== */
 
 /* Today State - Supports v8 class and v9 data attribute */
 .schedule-day-today,
@@ -206,10 +183,6 @@
   pointer-events: none;
 }
 
-/* ==========================================
-   CALENDAR LEGEND
-   Visual indicators for calendar states
-   ========================================== */
 
 .calendar-legend {
   display: flex;
@@ -247,9 +220,6 @@
   background: transparent;
 }
 
-/* ==========================================
-   HEADER NAVIGATION
-   ========================================== */
 
 .rdp-caption {
   display: flex;

@@ -38,7 +38,6 @@ export function FormField({
       
       {children}
       
-      {/* Error message with aria-live for screen readers */}
       {error && (
         <div 
           id={errorId}
@@ -62,7 +61,6 @@ export function FormField({
         </div>
       )}
       
-      {/* Hint text */}
       {hint && !error && (
         <p id={hintId} className="form-field-hint">
           {hint}

@@ -1,7 +1,3 @@
-/* ==========================================
-   GLASS PANELS - Base Card Styles
-   ========================================== */
-
 .glass {
   background: rgba(20, 25, 35, 0.55);
   backdrop-filter: blur(24px) saturate(120%);
@@ -47,9 +43,6 @@
   }
 }
 
-/* ==========================================
-   GOAL CARDS - Interactive Glass Capsules
-   ========================================== */
 
 .goal-card {
   /* Glass panel styling - enhanced for better readability */
@@ -331,9 +324,6 @@
   cursor: not-allowed;
 }
 
-/* ==========================================
-   KEBAB MENU - Mobile Secondary Actions
-   ========================================== */
 
 .kebab-menu-container {
   position: relative;
@@ -612,9 +602,6 @@
   pointer-events: none;
 }
 
-/* ==========================================
-   DRAG AND DROP CARDS
-   ========================================== */
 
 .goal-card.draggable {
   cursor: grab;
@@ -680,9 +667,6 @@
   box-shadow: 0 0 24px rgba(16, 185, 129, 0.4), 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-/* ==========================================
-   PROGRESS CARD - Instrument Readout Panel
-   ========================================== */
 
 .progress-card {
   /* Floating island glass panel */
@@ -776,9 +760,6 @@
   letter-spacing: -0.02em;
 }
 
-/* ==========================================
-   SETTINGS CARDS - Island Cards
-   ========================================== */
 
 .settings-card {
   background: rgba(255, 255, 255, 0.025);

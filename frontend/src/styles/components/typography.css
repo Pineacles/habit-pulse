@@ -1,7 +1,3 @@
-/* ==========================================
-   PAGE HEADERS
-   Hero date treatment with large typography
-   ========================================== */
 
 .page-header {
   background: transparent;
@@ -182,9 +178,6 @@
   }
 }
 
-/* ==========================================
-   BRANDING - Typographic Minimalism
-   ========================================== */
 
 .brand-header {
   text-align: center;

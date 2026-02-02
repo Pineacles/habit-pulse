@@ -54,7 +54,6 @@ export function PasswordInput({
         tabIndex={0}
       >
         {isVisible ? (
-          // Eye-off icon (hide)
           <svg 
             className="w-5 h-5" 
             fill="none" 
@@ -70,7 +69,6 @@ export function PasswordInput({
             />
           </svg>
         ) : (
-          // Eye icon (show)
           <svg 
             className="w-5 h-5" 
             fill="none" 

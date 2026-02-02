@@ -11,7 +11,6 @@ interface PasswordStrengthCheckerProps {
  * Mobile: Inline strength bar
  */
 export function PasswordStrengthChecker({ password }: PasswordStrengthCheckerProps) {
-  // Calculate strength score (0-100)
   const strengthScore = useMemo(() => {
     if (password.length === 0) return 0;
     
@@ -31,7 +30,6 @@ export function PasswordStrengthChecker({ password }: PasswordStrengthCheckerPro
     return Math.min(score, 100);
   }, [password]);
 
-  // Determine strength level
   const strengthLevel = useMemo(() => {
     if (strengthScore < 30) return 'weak';
     if (strengthScore < 50) return 'fair';
@@ -46,17 +44,12 @@ export function PasswordStrengthChecker({ password }: PasswordStrengthCheckerPro
     strong: 'Strong',
   };
 
-  // Don't render if no password entered
   if (password.length === 0) {
     return null;
   }
 
   return (
     <>
-      {/* Desktop: Satellite Panel (rendered in parent via portal or layout) */}
-      {/* This component just provides the data - see SatellitePanel below */}
-      
-      {/* Mobile: Inline strength bar */}
       <div className="password-strength-mobile">
         <div className="strength-bar">
           <div 
