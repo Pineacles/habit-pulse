@@ -45,12 +45,10 @@ export function Sidebar() {
 
   return (
     <aside className="floating-sidebar hidden lg:flex">
-      {/* Brand - text only with orange dot */}
       <div className="sidebar-brand">
         <span className="brand-text">Habit Pulse<span className="brand-dot">.</span></span>
       </div>
 
-      {/* Navigation */}
       <nav className="flex-1">
         {navItems.map((item) => (
           <NavLink
@@ -65,7 +63,6 @@ export function Sidebar() {
         ))}
       </nav>
 
-      {/* User profile */}
       <div className="sidebar-user">
         <div className="sidebar-user-info">
           <div className="sidebar-avatar">

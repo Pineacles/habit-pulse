@@ -7,6 +7,5 @@ public class Completion
     public DateOnly CompletedOn { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    // Navigation property
     public Goal Goal { get; set; } = null!;
 }

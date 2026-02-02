@@ -30,7 +30,6 @@ public class AuthService
     {
         // ===== BACKEND VALIDATION (Defense against direct API attacks) =====
         
-        // Validate username
         if (string.IsNullOrWhiteSpace(request.Username))
             return (false, "Username is required");
             
@@ -43,7 +42,6 @@ public class AuthService
         if (!UsernameRegex.IsMatch(request.Username))
             return (false, "Username can only contain letters, numbers, and underscores");
 
-        // Validate email
         if (string.IsNullOrWhiteSpace(request.Email))
             return (false, "Email is required");
             
@@ -69,17 +67,14 @@ public class AuthService
         var normalizedUsername = request.Username.Trim().ToLowerInvariant();
         var normalizedEmail = request.Email.Trim().ToLowerInvariant();
 
-        // Check if username exists (case-insensitive - already lowercase)
         var usernameExists = await _context.Users.AnyAsync(u => u.Username == normalizedUsername);
         if (usernameExists)
             return (false, "Username already taken");
 
-        // Check if email exists (case-insensitive - already lowercase)
         var emailExists = await _context.Users.AnyAsync(u => u.Email == normalizedEmail);
         if (emailExists)
             return (false, "Email already registered");
 
-        // Create user with normalized data
         var user = new User
         {
             Username = normalizedUsername,

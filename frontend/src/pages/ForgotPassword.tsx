@@ -14,7 +14,6 @@ export function ForgotPassword() {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     setIsLoading(false);

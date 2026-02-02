@@ -8,6 +8,5 @@ public class User
     public string PasswordHash { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    // Navigation property
     public ICollection<Goal> Goals { get; set; } = new List<Goal>();
 }

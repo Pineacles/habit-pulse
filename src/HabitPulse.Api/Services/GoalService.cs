@@ -14,7 +14,6 @@ public class GoalService
         _context = context;
     }
 
-    // Helper method to check if a goal is scheduled for a specific date
     private static bool IsGoalScheduledForDate(Goal goal, DateOnly date)
     {
         // If interval-based scheduling
@@ -187,7 +186,6 @@ public class GoalService
 
     public async Task<ToggleResponse> ToggleCompletionAsync(Guid userId, Guid goalId)
     {
-        // Verify goal belongs to user
         var goal = await _context.Goals
             .FirstOrDefaultAsync(g => g.Id == goalId && g.UserId == userId);
 
@@ -201,14 +199,12 @@ public class GoalService
 
         if (existingCompletion != null)
         {
-            // Remove completion (toggle off)
             _context.Completions.Remove(existingCompletion);
             await _context.SaveChangesAsync();
             return new ToggleResponse(false);
         }
         else
         {
-            // Add completion (toggle on)
             var completion = new Completion
             {
                 GoalId = goalId,
@@ -222,12 +218,10 @@ public class GoalService
 
     public async Task ReorderGoalsAsync(Guid userId, Guid[] goalIds)
     {
-        // Get all goals for user
         var goals = await _context.Goals
             .Where(g => g.UserId == userId && goalIds.Contains(g.Id))
             .ToListAsync();
 
-        // Update sort order based on position in array
         for (int i = 0; i < goalIds.Length; i++)
         {
             var goal = goals.FirstOrDefault(g => g.Id == goalIds[i]);

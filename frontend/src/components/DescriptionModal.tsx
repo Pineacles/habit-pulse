@@ -21,7 +21,6 @@ export function DescriptionModal({ isOpen, onClose, goal }: DescriptionModalProp
         onClick={(e) => e.stopPropagation()}
         style={{ maxWidth: '500px' }}
       >
-        {/* Header */}
         <div className="modal-header">
           <h2 className="modal-title">{goal.name}</h2>
           <button type="button" onClick={onClose} className="modal-close">
@@ -31,7 +30,6 @@ export function DescriptionModal({ isOpen, onClose, goal }: DescriptionModalProp
           </button>
         </div>
 
-        {/* Description */}
         {goal.description ? (
           <div style={{ padding: '20px 0' }}>
             <p style={{ 
@@ -57,7 +55,6 @@ export function DescriptionModal({ isOpen, onClose, goal }: DescriptionModalProp
           </div>
         )}
 
-        {/* Actions */}
         <div className="modal-actions">
           <button type="button" onClick={onClose} className="btn-glow" style={{ width: '100%' }}>
             Close

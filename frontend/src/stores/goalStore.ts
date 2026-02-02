@@ -3,13 +3,11 @@ import { goalsApi } from '../api/goals';
 import type { GoalWithStatus, CreateGoalRequest, UpdateGoalRequest } from '../types';
 
 interface GoalState {
-  // State
   goals: GoalWithStatus[];
   isLoading: boolean;
   error: string | null;
-  viewMode: 'today' | 'all'; // Track current view mode
+  viewMode: 'today' | 'all';
 
-  // Actions
   fetchGoals: (todayOnly?: boolean) => Promise<void>;
   createGoal: (data: CreateGoalRequest) => Promise<void>;
   updateGoal: (id: string, data: UpdateGoalRequest) => Promise<void>;
@@ -20,13 +18,11 @@ interface GoalState {
 }
 
 export const useGoalStore = create<GoalState>((set, get) => ({
-  // Initial state
   goals: [],
   isLoading: false,
   error: null,
   viewMode: 'today',
 
-  // Fetch all goals
   fetchGoals: async (todayOnly = true) => {
     set({ isLoading: true, error: null, viewMode: todayOnly ? 'today' : 'all' });
     try {
@@ -40,7 +36,6 @@ export const useGoalStore = create<GoalState>((set, get) => ({
     }
   },
 
-  // Create a new goal
   createGoal: async (data: CreateGoalRequest) => {
     set({ isLoading: true, error: null });
     try {
@@ -57,7 +52,6 @@ export const useGoalStore = create<GoalState>((set, get) => ({
     }
   },
 
-  // Update an existing goal
   updateGoal: async (id: string, data: UpdateGoalRequest) => {
     // Optimistic update for isActive toggle
     if (data.isActive !== undefined) {
@@ -85,7 +79,6 @@ export const useGoalStore = create<GoalState>((set, get) => ({
     }
   },
 
-  // Delete a goal
   deleteGoal: async (id: string) => {
     // Optimistic update - remove immediately
     const previousGoals = get().goals;
@@ -107,7 +100,6 @@ export const useGoalStore = create<GoalState>((set, get) => ({
     }
   },
 
-  // Toggle goal completion
   toggleGoal: async (id: string) => {
     // Optimistic update - toggle immediately in UI
     set((state) => ({
@@ -129,7 +121,6 @@ export const useGoalStore = create<GoalState>((set, get) => ({
     }
   },
 
-  // Reorder goals by priority
   reorderGoals: async (orderedIds: string[]) => {
     // Optimistic update - reorder immediately in UI
     const currentGoals = get().goals;
@@ -153,6 +144,5 @@ export const useGoalStore = create<GoalState>((set, get) => ({
     }
   },
 
-  // Clear error
   clearError: () => set({ error: null }),
 }));

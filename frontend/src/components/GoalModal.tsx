@@ -20,14 +20,12 @@ interface GoalModalProps {
 type FrequencyType = "daily" | "weekdays" | "weekends" | "custom";
 type CustomMode = "specific-days" | "interval";
 
-// Spring animation for snappy feel
 const spring = { type: "spring", stiffness: 400, damping: 30 };
 
 export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
   // All hooks must be called before any conditional returns (React Rules of Hooks)
   const { createGoal, updateGoal } = useGoalStore();
 
-  // Check if mobile on mount
   const [isMobile, setIsMobile] = useState(() => {
     if (typeof window !== "undefined") {
       return window.innerWidth < 640;
@@ -35,7 +33,6 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
     return false;
   });
 
-  // Form state
   const [name, setName] = useState("");
   const [isMeasurable, setIsMeasurable] = useState(false);
   const [targetValue, setTargetValue] = useState(30);
@@ -45,7 +42,6 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
     0, 1, 2, 3, 4, 5, 6,
   ]);
 
-  // Interval scheduling state
   const [customMode, setCustomMode] = useState<CustomMode>("specific-days");
   const [intervalDays, setIntervalDays] = useState(2);
   const [intervalStartDate, setIntervalStartDate] = useState(() => {
@@ -56,18 +52,13 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
     return `${year}-${month}-${day}`;
   });
 
-  // Description state
   const [description, setDescription] = useState<string>("");
 
-  // Active editing section
   const [activeEdit, setActiveEdit] = useState<
-    "target" | "interval" | "description" | null
+    "target" | "interval" | "description" |     null
   >(null);
 
-  // Calendar drawer state
   const [showCalendar, setShowCalendar] = useState(false);
-
-  // Description drawer state
   const [showDescription, setShowDescription] = useState(false);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -80,7 +71,6 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Populate form when editing or creating
   useEffect(() => {
     if (goal) {
       setName(goal.name);
@@ -147,7 +137,6 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
   const shouldShowCalendar =
     showCalendar && isIntervalMode && activeEdit === "interval";
 
-  // Handle measurable toggle
   const handleMeasurableChange = (measurable: boolean) => {
     setIsMeasurable(measurable);
     if (measurable) {
@@ -159,7 +148,6 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
     }
   };
 
-  // Handle frequency type change
   const handleFrequencyChange = (type: FrequencyType) => {
     setFrequencyType(type);
     setShowCalendar(false); // Close calendar on any frequency change
@@ -182,21 +170,18 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
     }
   };
 
-  // Handle custom mode change - NO automatic calendar open
   const handleCustomModeChange = (mode: CustomMode) => {
     setCustomMode(mode);
     setShowCalendar(false); // Close calendar when switching modes
     setShowDescription(false); // Close description when switching modes
     if (mode === "interval") {
       setActiveEdit("interval");
-      // Calendar stays closed - only opens via icon click
     } else {
       if (isMeasurable) setActiveEdit("target");
       else setActiveEdit(null);
     }
   };
 
-  // Toggle a day
   const toggleDay = (day: number) => {
     setFrequencyType("custom");
     setCustomMode("specific-days");
@@ -211,7 +196,6 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
     }
   };
 
-  // Adjust values
   const adjustValue = (delta: number) => {
     setTargetValue((prev) => Math.max(1, Math.min(999, prev + delta)));
   };
@@ -220,54 +204,42 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
     setIntervalDays((prev) => Math.max(1, Math.min(365, prev + delta)));
   };
 
-  // Handle calendar date selection - use local date formatting
   const handleDateSelect = (date: Date | undefined) => {
     if (date) {
-      // Format as YYYY-MM-DD using local date parts (not UTC)
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, "0");
       const day = String(date.getDate()).padStart(2, "0");
       setIntervalStartDate(`${year}-${month}-${day}`);
-      setShowCalendar(false); // Close after selection
+      setShowCalendar(false);
     }
   };
 
-  // Open calendar - ONLY way to open it
   const openCalendar = () => {
     if (showCalendar && activeEdit === "interval") {
-      // If already open, close it but preserve the previous activeEdit state
       setShowCalendar(false);
-      // Restore previous activeEdit (target or description) instead of null
       if (isMeasurable) {
         setActiveEdit("target");
       } else {
         setActiveEdit(null);
       }
     } else {
-      // Close description first, then open calendar
-      // Set activeEdit to null first to ensure description fully closes
       if (showDescription) {
         setShowDescription(false);
         setActiveEdit(null);
-        // Wait for description exit animation to complete before opening calendar
         setTimeout(() => {
           setActiveEdit("interval");
           setShowCalendar(true);
-        }, 300); // Increased delay to match animation duration
+        }, 300);
       } else {
-        // Description not open, can open calendar immediately
         setActiveEdit("interval");
         setShowCalendar(true);
       }
     }
   };
 
-  // Open/close description sidebar (toggles)
   const openDescription = () => {
     if (showDescription && activeEdit === "description") {
-      // If already open, close it but preserve the previous activeEdit state
       setShowDescription(false);
-      // Restore previous activeEdit (target or interval) instead of null
       if (isMeasurable) {
         setActiveEdit("target");
       } else if (isIntervalMode) {
@@ -276,25 +248,20 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
         setActiveEdit(null);
       }
     } else {
-      // Close calendar first, then open description
-      // Set activeEdit to null first to ensure calendar fully closes
       if (showCalendar) {
         setShowCalendar(false);
         setActiveEdit(null);
-        // Wait for calendar exit animation to complete before opening description
         setTimeout(() => {
           setActiveEdit("description");
           setShowDescription(true);
-        }, 300); // Increased delay to match animation duration
+        }, 300);
       } else {
-        // Calendar not open, can open description immediately
         setActiveEdit("description");
         setShowDescription(true);
       }
     }
   };
 
-  // Set to today
   const setToday = () => {
     const today = new Date();
     const year = today.getFullYear();
@@ -304,25 +271,21 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
     setShowCalendar(false);
   };
 
-  // Parse date string to local Date object
   const parseLocalDate = (dateStr: string): Date => {
     const [year, month, day] = dateStr.split("-").map(Number);
     return new Date(year, month - 1, day);
   };
 
-  // Format date for display
   const formatDisplayDate = (dateStr: string) => {
     const date = parseLocalDate(dateStr);
     return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   };
 
-  // Get unit label
   const getUnitLabel = () => {
     const opt = UNIT_OPTIONS.find((o) => o.value === unit);
     return opt?.label || unit;
   };
 
-  // Submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -373,12 +336,10 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
 
   if (!isOpen) return null;
 
-  // Don't render desktop modal on mobile (shouldn't happen, but safety check)
   if (isMobile) {
     return null;
   }
 
-  // Determine what to show
   const showTargetExpanded = isMeasurable && activeEdit === "target";
   const showTargetCollapsed =
     isMeasurable &&
@@ -394,17 +355,14 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      {/* Flex container with layout */}
       <motion.div
         layout
         transition={spring}
         className="modal-flex-container"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Main Form Card */}
         <motion.div layout="position" className="modal-main-card">
           <form onSubmit={handleSubmit} className="modal-form">
-            {/* Header */}
             <div className="modal-header">
               <h2 className="modal-title">
                 {isEditing ? "Edit Goal" : "New Goal"}
@@ -427,10 +385,8 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
               </button>
             </div>
 
-            {/* Error */}
             {error && <div className="modal-error">{error}</div>}
 
-            {/* Goal Name */}
             <div className="modal-section">
               <label className="modal-label">Goal Name</label>
               <div className="goal-name-row">
@@ -572,7 +528,6 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
               </div>
             </div>
 
-            {/* Goal Type Toggle */}
             <div className="modal-section">
               <label className="modal-label">Goal Type</label>
               <div className="goal-type-toggle">
@@ -621,7 +576,6 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
               </div>
             </div>
 
-            {/* Target Section - Expanded */}
             <AnimatePresence mode="popLayout">
               {showTargetExpanded && (
                 <motion.div
@@ -692,7 +646,6 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
               )}
             </AnimatePresence>
 
-            {/* Target Section - Collapsed */}
             <AnimatePresence mode="popLayout">
               {showTargetCollapsed && (
                 <motion.div
@@ -712,11 +665,9 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
               )}
             </AnimatePresence>
 
-            {/* Schedule Section */}
             <div className="modal-section">
               <label className="modal-label">Schedule</label>
 
-              {/* Frequency chips - nowrap, scrollable */}
               <div className="frequency-chips">
                 {(["daily", "weekdays", "weekends", "custom"] as const).map(
                   (type) => (
@@ -737,10 +688,8 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
                 )}
               </div>
 
-              {/* Custom options */}
               {frequencyType === "custom" && (
                 <div className="custom-schedule-section">
-                  {/* Mode Toggle */}
                   <div className="segmented-control">
                     <button
                       type="button"
@@ -762,7 +711,6 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
                     </button>
                   </div>
 
-                  {/* Specific Days */}
                   {customMode === "specific-days" && (
                     <div className="schedule-grid">
                       {DAY_NAMES.map((day, index) => (
@@ -780,7 +728,6 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
                     </div>
                   )}
 
-                  {/* Interval - Expanded */}
                   <AnimatePresence mode="popLayout">
                     {customMode === "interval" && showIntervalExpanded && (
                       <motion.div
@@ -865,7 +812,6 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
                     )}
                   </AnimatePresence>
 
-                  {/* Interval - Collapsed */}
                   <AnimatePresence mode="popLayout">
                     {customMode === "interval" && showIntervalCollapsed && (
                       <motion.div
@@ -887,7 +833,6 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
                 </div>
               )}
 
-              {/* Day pills - only show for weekdays/weekends (not for 'Every Day' or 'Custom') */}
               {(frequencyType === "weekdays" ||
                 frequencyType === "weekends") && (
                 <div className="schedule-grid">
@@ -907,7 +852,6 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
               )}
             </div>
 
-            {/* Actions */}
             <div className="modal-actions">
               <button
                 type="button"
@@ -961,7 +905,6 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
                   showOutsideDays={false}
                 />
 
-                {/* Quick Actions */}
                 <div className="calendar-quick-actions">
                   <button
                     type="button"
@@ -983,7 +926,6 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
           )}
         </AnimatePresence>
 
-        {/* Description Drawer */}
         <AnimatePresence mode="popLayout">
           {showDescription && activeEdit === "description" && (
             <motion.div
@@ -1006,7 +948,6 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
                   </span>
                 </div>
 
-                {/* Textarea */}
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
@@ -1017,7 +958,6 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
                   autoFocus
                 />
 
-                {/* Character count */}
                 <div
                   style={{
                     fontSize: "12px",
@@ -1028,7 +968,6 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
                   {description.length}/500
                 </div>
 
-                {/* Quick Actions */}
                 <div className="calendar-quick-actions">
                   <button
                     type="button"

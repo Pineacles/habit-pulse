@@ -12,13 +12,10 @@ export function AppLayout() {
 
   return (
     <div className="min-h-screen">
-      {/* Animated aurora background - visible behind glass */}
       <AnimatedBackground />
 
-      {/* Floating Sidebar (desktop only) */}
       <Sidebar />
 
-      {/* Main content area */}
       <main className="main-content min-h-screen">
         <div className="dashboard-content">
           <motion.div
@@ -36,7 +33,6 @@ export function AppLayout() {
         </div>
       </main>
 
-      {/* Mobile bottom nav */}
       <BottomNav />
     </div>
   );

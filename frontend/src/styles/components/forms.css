@@ -1,7 +1,3 @@
-/* ==========================================
-   BASE INPUTS
-   Form input fields with glass morphism styling
-   ========================================== */
 
 input,
 textarea,
@@ -95,9 +91,6 @@ textarea.input-error:focus {
   outline-offset: 2px;
 }
 
-/* ==========================================
-   FORM FIELD WRAPPERS
-   ========================================== */
 
 .form-field {
   margin-bottom: 0;
@@ -146,9 +139,6 @@ textarea.input-error:focus {
   margin-bottom: 12px;
 }
 
-/* ==========================================
-   CHECKBOXES
-   ========================================== */
 
 .checkbox {
   width: 24px;
@@ -197,10 +187,6 @@ textarea.input-error:focus {
   outline-offset: 2px;
 }
 
-/* ==========================================
-   SPECIALIZED INPUTS
-   Custom input components with instrument-style design
-   ========================================== */
 
 /* Digital Input - Number spinner with increment/decrement buttons */
 .digital-input-container {
@@ -429,9 +415,6 @@ textarea.input-error:focus {
   cursor: not-allowed;
 }
 
-/* ==========================================
-   SEGMENTED CONTROLS & CHIPS
-   ========================================== */
 
 /* Goal Type Toggle / Segmented Control */
 .goal-type-toggle,
@@ -642,9 +625,6 @@ textarea.input-error:focus {
   cursor: not-allowed;
 }
 
-/* ==========================================
-   THEME VARIANTS (Active States)
-   ========================================== */
 
 /* Teal */
 [data-theme="teal"] .type-btn.active,
@@ -721,10 +701,6 @@ textarea.input-error:focus {
   background: rgba(16, 185, 129, 0.08);
 }
 
-/* ==========================================
-   SCHEDULE GRID
-   Horizontal layout for schedule day selection
-   ========================================== */
 
 .schedule-grid {
   display: flex;

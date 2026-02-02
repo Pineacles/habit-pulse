@@ -20,10 +20,9 @@ export function AllGoals() {
   const [openKebabMenuId, setOpenKebabMenuId] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchGoals(false); // All goals, not just today's
+    fetchGoals(false);
   }, [fetchGoals]);
 
-  // Dismiss kebab menu on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (openKebabMenuId && !(e.target as HTMLElement).closest('.kebab-menu-container')) {
@@ -54,7 +53,6 @@ export function AllGoals() {
     setEditingGoal(null);
   };
 
-  // Drag and Drop handlers
   const handleDragStart = (e: React.DragEvent, goal: GoalWithStatus) => {
     setDraggedGoal(goal);
     e.dataTransfer.effectAllowed = 'move';
@@ -85,7 +83,6 @@ export function AllGoals() {
     if (!draggedGoal || draggedGoal.id === targetGoal.id) return;
     if (draggedGoal.isActive !== targetGoal.isActive) return;
 
-    // Get the list of goals (active or inactive)
     const goalList = draggedGoal.isActive ? activeGoals : inactiveGoals;
     const draggedIndex = goalList.findIndex(g => g.id === draggedGoal.id);
     const targetIndex = goalList.findIndex(g => g.id === targetGoal.id);
@@ -103,7 +100,6 @@ export function AllGoals() {
     setDragOverGoalId(null);
   };
 
-  // Goals are already sorted by sortOrder from backend
   const activeGoals = goals.filter(g => g.isActive);
   const inactiveGoals = goals.filter(g => !g.isActive);
 

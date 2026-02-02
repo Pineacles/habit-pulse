@@ -19,7 +19,7 @@ export function Dashboard() {
   const [hasAnyGoals, setHasAnyGoals] = useState<boolean | null>(null);
 
   useEffect(() => {
-    fetchGoals(true); // Today only
+    fetchGoals(true);
 
     // Check if user has any goals at all (for empty state differentiation)
     goalsApi
@@ -57,7 +57,6 @@ export function Dashboard() {
       .catch(() => {});
   };
 
-  // Drag and Drop handlers
   const handleDragStart = (e: React.DragEvent, goal: GoalWithStatus) => {
     setDraggedGoal(goal);
     e.dataTransfer.effectAllowed = "move";

@@ -1,7 +1,3 @@
-/* ==========================================
-   MAIN STYLESHEET
-   Central import file for all styles
-   ========================================== */
 
 /* Core Variables & Resets */
 @import "./tokens.css";

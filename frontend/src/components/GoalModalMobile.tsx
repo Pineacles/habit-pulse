@@ -28,7 +28,6 @@ export function GoalModalMobile({
 }: GoalModalMobileProps) {
   const { createGoal, updateGoal } = useGoalStore();
 
-  // Form state
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [isMeasurable, setIsMeasurable] = useState(false);
@@ -47,14 +46,12 @@ export function GoalModalMobile({
     )}-${String(today.getDate()).padStart(2, "0")}`;
   });
 
-  // UI state
   const [showCalendar, setShowCalendar] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
 
   const isEditing = !!goal;
 
-  // Populate form when editing
   useEffect(() => {
     if (goal) {
       setName(goal.name);
@@ -86,7 +83,6 @@ export function GoalModalMobile({
         setScheduleType("custom");
       }
     } else {
-      // Reset for new goal
       setName("");
       setDescription("");
       setIsMeasurable(false);
@@ -101,7 +97,6 @@ export function GoalModalMobile({
     setShowCalendar(false);
   }, [goal, isOpen]);
 
-  // Handle schedule type change
   const handleScheduleChange = (type: ScheduleType) => {
     setScheduleType(type);
     setShowCalendar(false);
@@ -117,7 +112,6 @@ export function GoalModalMobile({
         break;
       case "custom":
       case "interval":
-        // Keep current days
         break;
     }
   };
@@ -133,7 +127,6 @@ export function GoalModalMobile({
     }
   };
 
-  // Adjust values
   const adjustValue = (delta: number) => {
     setTargetValue((prev) => Math.max(1, Math.min(999, prev + delta)));
   };
@@ -142,7 +135,6 @@ export function GoalModalMobile({
     setIntervalDays((prev) => Math.max(1, Math.min(365, prev + delta)));
   };
 
-  // Handle calendar date selection
   const handleDateSelect = (date: Date | undefined) => {
     if (date) {
       const year = date.getFullYear();
@@ -153,13 +145,11 @@ export function GoalModalMobile({
     }
   };
 
-  // Parse date string to local Date object
   const parseLocalDate = (dateStr: string): Date => {
     const [year, month, day] = dateStr.split("-").map(Number);
     return new Date(year, month - 1, day);
   };
 
-  // Format date for display
   const formatDisplayDate = (dateStr: string) => {
     const date = parseLocalDate(dateStr);
     return date.toLocaleDateString("en-US", {
@@ -169,7 +159,6 @@ export function GoalModalMobile({
     });
   };
 
-  // Submit
   const handleSubmit = async () => {
     if (!name.trim()) {
       setError("Please enter a goal name");

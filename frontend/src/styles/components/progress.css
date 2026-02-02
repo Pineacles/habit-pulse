@@ -1,7 +1,3 @@
-/* ==========================================
-   CARD PROGRESS FILL
-   (Ambient gradient fill at bottom of cards)
-   ========================================== */
 
 .card-progress {
   position: absolute;
@@ -23,10 +19,6 @@
 /* Theme adaptation for card progress is handled via
    CSS variable redefinition in root or specific overrides */
 
-/* ==========================================
-   PROGRESS CARD CONTAINER
-   (Floating Island Layout)
-   ========================================== */
 
 .progress-card {
   /* Primary floating island */
@@ -72,9 +64,6 @@
   }
 }
 
-/* ==========================================
-   INSTRUMENT READOUT TYPOGRAPHY
-   ========================================== */
 
 /* Label - Terminal grade, uppercase */
 .progress-text-small {
@@ -111,9 +100,6 @@
   margin-left: 12px;
 }
 
-/* ==========================================
-   CIRCULAR PROGRESS - GLOWING GAUGE
-   ========================================== */
 
 .circular-progress {
   position: relative;
@@ -171,9 +157,6 @@
   color: var(--text-main, #FFFFFF);
 }
 
-/* ==========================================
-   SEGMENTED PROGRESS BAR
-   ========================================== */
 
 .segmented-progress-bar {
   position: relative;

@@ -33,7 +33,6 @@ export function Register() {
   const validateForm = (): boolean => {
     const errors: typeof fieldErrors = {};
 
-    // Username validation
     if (username.length < 3) {
       errors.username = 'Must be at least 3 characters';
     } else if (username.length > 30) {
@@ -42,7 +41,6 @@ export function Register() {
       errors.username = 'Only letters, numbers, and underscores allowed';
     }
 
-    // Email validation
     if (!email.trim()) {
       errors.email = 'Email is required';
     } else if (!emailRegex.test(email)) {
@@ -54,7 +52,6 @@ export function Register() {
       errors.password = 'Must be at least 8 characters';
     }
 
-    // Confirm password
     if (password !== confirmPassword) {
       errors.confirmPassword = 'Passwords don\'t match';
     }
@@ -73,7 +70,6 @@ export function Register() {
     setIsLoading(true);
 
     try {
-      // Send lowercase username and email
       await register({ 
         username: username.trim().toLowerCase(), 
         email: email.trim().toLowerCase(),
@@ -85,7 +81,6 @@ export function Register() {
         const axiosError = err as { response?: { data?: { error?: string }, status?: number } };
         const errorMessage = axiosError.response?.data?.error || '';
         
-        // Handle specific backend errors
         if (errorMessage.includes('Username already taken')) {
           setFieldErrors({ username: 'This username is already taken' });
         } else if (errorMessage.includes('Email already registered')) {

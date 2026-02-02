@@ -22,18 +22,15 @@ import { Settings } from './pages/Settings';
 function App() {
   const { checkAuth, isAuthenticated, isLoading } = useAuthStore();
 
-  // Check authentication on app load
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
 
   return (
     <BrowserRouter>
-      {/* Background for auth pages */}
       {!isAuthenticated && <AnimatedBackground />}
 
       <Routes>
-        {/* Public routes */}
         <Route 
           path="/login" 
           element={
@@ -59,7 +56,6 @@ function App() {
           } 
         />
 
-        {/* Protected routes */}
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
             <Route path="/" element={<Dashboard />} />
@@ -68,7 +64,6 @@ function App() {
           </Route>
         </Route>
 
-        {/* Catch all - redirect to home */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
