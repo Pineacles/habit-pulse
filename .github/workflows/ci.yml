@@ -22,19 +22,16 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       
       - name: Install frontend dependencies
-        run: |
-          cd frontend
-          npm ci
+        working-directory: frontend
+        run: npm ci
       
       - name: Run TypeScript check
-        run: |
-          cd frontend
-          npm run build
+        working-directory: frontend
+        run: npm run build
       
       - name: Run ESLint
-        run: |
-          cd frontend
-          npm run lint || true  # Don't fail on lint warnings
+        working-directory: frontend
+        run: npm run lint || true  # Don't fail on lint warnings
       
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -42,21 +39,18 @@ jobs:
           dotnet-version: '9.0.x'
       
       - name: Restore backend dependencies
-        run: |
-          cd src/HabitPulse.Api
-          dotnet restore
+        run: dotnet restore habit-pulse.sln
       
       - name: Build backend
-        run: |
-          cd src/HabitPulse.Api
-          dotnet build --no-restore
+        run: dotnet build habit-pulse.sln --no-restore
+
+      - name: Run backend tests
+        run: dotnet test habit-pulse.sln --no-build --verbosity normal
       
       - name: Test Docker builds (frontend)
-        run: |
-          cd frontend
-          docker build -t habit-pulse-frontend-test .
+        working-directory: frontend
+        run: docker build -t habit-pulse-frontend-test .
       
       - name: Test Docker builds (backend)
-        run: |
-          cd src/HabitPulse.Api
-          docker build -t habit-pulse-api-test .
+        working-directory: src/HabitPulse.Api
+        run: docker build -t habit-pulse-api-test .
