@@ -16,6 +16,7 @@
 @import "./components/navigation.css";
 @import "./components/sidebar.css";
 @import "./components/calendar.css";
+@import "./components/tracking-calendar.css";
 @import "./components/progress.css";
 @import "./components/settings.css";
 @import "./components/empty-state.css";

@@ -10,6 +10,7 @@ import { ForgotPassword } from './pages/ForgotPassword';
 import { Dashboard } from './pages/Dashboard';
 import { AllGoals } from './pages/AllGoals';
 import { Settings } from './pages/Settings';
+import { Calendar } from './pages/Calendar';
 
 /**
  * App
@@ -60,6 +61,7 @@ function App() {
           <Route element={<AppLayout />}>
             <Route path="/" element={<Dashboard />} />
             <Route path="/goals" element={<AllGoals />} />
+            <Route path="/calendar" element={<Calendar />} />
             <Route path="/settings" element={<Settings />} />
           </Route>
         </Route>

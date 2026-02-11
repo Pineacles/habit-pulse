@@ -62,3 +62,25 @@ public record GoalWithStatusResponse(
 );
 
 public record ToggleResponse(bool IsCompleted);
+
+public record CalendarDayResponse(
+    DateOnly Date,
+    int TotalScheduled,
+    int Completed
+);
+
+public record CalendarGoalItemResponse(
+    Guid Id,
+    string Name,
+    bool IsMeasurable,
+    int TargetValue,
+    string Unit
+);
+
+public record CalendarDayDetailsResponse(
+    DateOnly Date,
+    int TotalScheduled,
+    int Completed,
+    List<CalendarGoalItemResponse> Done,
+    List<CalendarGoalItemResponse> NotDone
+);

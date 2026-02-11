@@ -108,6 +108,45 @@ public static class GoalEndpoints
         .WithSummary("Toggle goal completion for today")
         .WithDescription("If completed, marks as incomplete. If incomplete, marks as completed.");
 
+        group.MapGet("/calendar", async (GoalService goalService, HttpContext context, DateOnly? startDate, DateOnly? endDate) =>
+        {
+            var userId = context.User.GetUserId();
+            if (userId == null)
+                return Results.Unauthorized();
+
+            if (startDate == null || endDate == null)
+                return Results.BadRequest(new { error = "Both startDate and endDate are required" });
+
+            if (startDate > endDate)
+                return Results.BadRequest(new { error = "startDate must be before or equal to endDate" });
+
+            var daySpan = endDate.Value.DayNumber - startDate.Value.DayNumber;
+            if (daySpan > 366)
+                return Results.BadRequest(new { error = "Date range must not exceed 366 days" });
+
+            var data = await goalService.GetCalendarDataAsync(userId.Value, startDate.Value, endDate.Value);
+            return Results.Ok(data);
+        })
+        .WithName("GetCalendarData")
+        .WithSummary("Get daily completion stats for the calendar view")
+        .WithDescription("Returns scheduled/completed counts per day. Both startDate and endDate query params are required (YYYY-MM-DD). Max range: 366 days.");
+
+        group.MapGet("/calendar/day", async (GoalService goalService, HttpContext context, DateOnly? date) =>
+        {
+            var userId = context.User.GetUserId();
+            if (userId == null)
+                return Results.Unauthorized();
+
+            if (date == null)
+                return Results.BadRequest(new { error = "date query parameter is required" });
+
+            var details = await goalService.GetCalendarDayDetailsAsync(userId.Value, date.Value);
+            return Results.Ok(details);
+        })
+        .WithName("GetCalendarDayDetails")
+        .WithSummary("Get goal-level details for a single calendar day")
+        .WithDescription("Returns done and not-done goal lists for the specified date (YYYY-MM-DD).");
+
         group.MapPost("/reorder", async (GoalService goalService, HttpContext context, ReorderGoalsRequest request) =>
         {
             var userId = context.User.GetUserId();

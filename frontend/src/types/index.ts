@@ -98,3 +98,28 @@ export const DAY_NAMES_FULL = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thur
 
 // Schedule type helper
 export type ScheduleType = 'everyday' | 'weekdays' | 'weekends' | 'custom-days' | 'custom-interval';
+
+// Calendar types
+export interface CalendarDay {
+  date: string;          // "2025-01-15" (YYYY-MM-DD)
+  totalScheduled: number;
+  completed: number;
+}
+
+export type CalendarIntensity = 'green' | 'yellow' | 'red' | 'empty' | 'future';
+
+export interface CalendarGoalItem {
+  id: string;
+  name: string;
+  isMeasurable: boolean;
+  targetValue: number;
+  unit: string;
+}
+
+export interface CalendarDayDetails {
+  date: string;
+  totalScheduled: number;
+  completed: number;
+  done: CalendarGoalItem[];
+  notDone: CalendarGoalItem[];
+}
