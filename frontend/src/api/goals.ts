@@ -4,7 +4,9 @@ import type {
   Goal, 
   CreateGoalRequest, 
   UpdateGoalRequest, 
-  ToggleResponse 
+  ToggleResponse,
+  CalendarDay,
+  CalendarDayDetails 
 } from '../types';
 
 export const goalsApi = {
@@ -42,5 +44,19 @@ export const goalsApi = {
 
   async reorder(orderedIds: string[]): Promise<void> {
     await api.post('/goals/reorder', { goalIds: orderedIds });
+  },
+
+  async getCalendar(startDate: string, endDate: string): Promise<CalendarDay[]> {
+    const response = await api.get<CalendarDay[]>('/goals/calendar', {
+      params: { startDate, endDate },
+    });
+    return response.data;
+  },
+
+  async getCalendarDayDetails(date: string): Promise<CalendarDayDetails> {
+    const response = await api.get<CalendarDayDetails>('/goals/calendar/day', {
+      params: { date },
+    });
+    return response.data;
   },
 };

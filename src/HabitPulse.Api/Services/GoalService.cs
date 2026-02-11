@@ -216,6 +216,106 @@ public class GoalService
         }
     }
 
+    /// <summary>
+    /// Returns daily completion stats for the calendar view.
+    /// Each day includes how many goals were scheduled and how many were completed.
+    /// A goal only counts on/after the date it was created (first achievable day).
+    /// </summary>
+    public async Task<List<CalendarDayResponse>> GetCalendarDataAsync(
+        Guid userId, DateOnly startDate, DateOnly endDate)
+    {
+        var goals = await _context.Goals
+            .Where(g => g.UserId == userId && g.IsActive)
+            .ToListAsync();
+
+        var completions = await _context.Completions
+            .Where(c => c.Goal.UserId == userId
+                     && c.CompletedOn >= startDate
+                     && c.CompletedOn <= endDate)
+            .ToListAsync();
+
+        // Index completions by date for fast lookup
+        var completionsByDate = completions
+            .GroupBy(c => c.CompletedOn)
+            .ToDictionary(g => g.Key, g => g.Select(c => c.GoalId).ToHashSet());
+
+        var results = new List<CalendarDayResponse>();
+
+        for (var date = startDate; date <= endDate; date = date.AddDays(1))
+        {
+            var totalScheduled = 0;
+            var completed = 0;
+
+            foreach (var goal in goals)
+            {
+                var goalBaseline = DateOnly.FromDateTime(goal.CreatedAt);
+
+                if (date < goalBaseline)
+                    continue;
+
+                if (!IsGoalScheduledForDate(goal, date))
+                    continue;
+
+                totalScheduled++;
+
+                if (completionsByDate.TryGetValue(date, out var completedGoalIds)
+                    && completedGoalIds.Contains(goal.Id))
+                {
+                    completed++;
+                }
+            }
+
+            results.Add(new CalendarDayResponse(date, totalScheduled, completed));
+        }
+
+        return results;
+    }
+
+    /// <summary>
+    /// Returns goal-level details for a single calendar day: which goals
+    /// were done and which were not done. Only includes goals that were
+    /// scheduled and existed (first-achievable-day check) on the given date.
+    /// </summary>
+    public async Task<CalendarDayDetailsResponse> GetCalendarDayDetailsAsync(
+        Guid userId, DateOnly date)
+    {
+        var goals = await _context.Goals
+            .Where(g => g.UserId == userId && g.IsActive)
+            .OrderBy(g => g.SortOrder)
+            .ThenBy(g => g.CreatedAt)
+            .ToListAsync();
+
+        var completedGoalIds = await _context.Completions
+            .Where(c => c.Goal.UserId == userId && c.CompletedOn == date)
+            .Select(c => c.GoalId)
+            .ToHashSetAsync();
+
+        var done = new List<CalendarGoalItemResponse>();
+        var notDone = new List<CalendarGoalItemResponse>();
+
+        foreach (var goal in goals)
+        {
+            var goalBaseline = DateOnly.FromDateTime(goal.CreatedAt);
+
+            if (date < goalBaseline)
+                continue;
+
+            if (!IsGoalScheduledForDate(goal, date))
+                continue;
+
+            var item = new CalendarGoalItemResponse(
+                goal.Id, goal.Name, goal.IsMeasurable, goal.TargetValue, goal.Unit);
+
+            if (completedGoalIds.Contains(goal.Id))
+                done.Add(item);
+            else
+                notDone.Add(item);
+        }
+
+        return new CalendarDayDetailsResponse(
+            date, done.Count + notDone.Count, done.Count, done, notDone);
+    }
+
     public async Task ReorderGoalsAsync(Guid userId, Guid[] goalIds)
     {
         var goals = await _context.Goals

@@ -1,0 +1,554 @@
+/* ==========================================================
+   Tracking Calendar - Full-page month grid with color-coded days
+   ========================================================== */
+
+/* Default container - centered (used by interval/date selector contexts) */
+.tracking-calendar {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* Sidebar calendar page: align container to title edge */
+.calendar-page-view .tracking-calendar {
+  margin: 0;
+}
+
+/* ---- Month Header (title + nav arrows) ---- */
+
+.tracking-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  padding: 0 4px;
+}
+
+.tracking-calendar-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-main, #FFFFFF);
+  letter-spacing: -0.02em;
+  text-align: center;
+  flex: 1;
+  pointer-events: none;
+}
+
+.tracking-calendar-nav {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.tracking-calendar-nav:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.tracking-calendar-nav:active {
+  background: var(--accent-electric);
+  border-color: var(--accent-electric);
+  color: white;
+}
+
+.tracking-calendar-nav svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2;
+}
+
+/* ---- Weekday Labels (Mon-first) ---- */
+
+.tracking-calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-bottom: 8px;
+  padding: 0 2px;
+}
+
+.tracking-calendar-weekday {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  text-align: center;
+  padding: 8px 0;
+  letter-spacing: 0.04em;
+}
+
+/* ---- Day Grid ---- */
+
+.tracking-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  padding: 0 2px;
+}
+
+/* Individual day cell - square via aspect-ratio */
+.tracking-calendar-day {
+  aspect-ratio: 1;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  position: relative;
+  cursor: default;
+  border: none;
+  padding: 0;
+  /* Readable base background for all day cells */
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Clickable day cells */
+.tracking-calendar-day--clickable {
+  cursor: pointer;
+}
+
+.tracking-calendar-day--clickable:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+/* Day number label inside cell */
+.tracking-calendar-day-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  z-index: 1;
+  line-height: 1;
+}
+
+/* Compact completion count under day number (e.g. "1/5") */
+.tracking-calendar-day-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1;
+  z-index: 1;
+  letter-spacing: 0.02em;
+}
+
+/* ---- Day States ---- */
+
+/* Empty: no goals scheduled */
+.tracking-calendar-day--empty {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.tracking-calendar-day--empty .tracking-calendar-day-number {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+/* Outside-month placeholders (leading/trailing) */
+.tracking-calendar-day--outside {
+  background: transparent;
+}
+
+.tracking-calendar-day--outside .tracking-calendar-day-number {
+  color: rgba(255, 255, 255, 0.08);
+}
+
+/* Green: >= 80% completion */
+.tracking-calendar-day--green {
+  background: rgba(0, 220, 130, 0.2);
+  border: 1px solid rgba(0, 220, 130, 0.3);
+}
+
+.tracking-calendar-day--green .tracking-calendar-day-number {
+  color: rgba(0, 255, 148, 0.95);
+  font-weight: 600;
+}
+
+.tracking-calendar-day--green .tracking-calendar-day-count {
+  color: rgba(0, 255, 148, 0.6);
+}
+
+/* Yellow: >= 30% and < 80% completion */
+.tracking-calendar-day--yellow {
+  background: rgba(255, 200, 0, 0.15);
+  border: 1px solid rgba(255, 200, 0, 0.25);
+}
+
+.tracking-calendar-day--yellow .tracking-calendar-day-number {
+  color: rgba(255, 210, 50, 0.95);
+  font-weight: 600;
+}
+
+.tracking-calendar-day--yellow .tracking-calendar-day-count {
+  color: rgba(255, 210, 50, 0.6);
+}
+
+/* Red: < 30% completion */
+.tracking-calendar-day--red {
+  background: rgba(239, 68, 68, 0.18);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.tracking-calendar-day--red .tracking-calendar-day-number {
+  color: rgba(255, 100, 100, 0.95);
+  font-weight: 600;
+}
+
+.tracking-calendar-day--red .tracking-calendar-day-count {
+  color: rgba(255, 100, 100, 0.6);
+}
+
+/* Future: days after today */
+.tracking-calendar-day--future {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.tracking-calendar-day--future .tracking-calendar-day-number {
+  color: rgba(255, 255, 255, 0.12);
+}
+
+/* Today: bright accent glow - stands out from all other days */
+.tracking-calendar-day--today {
+  border: 1.5px solid var(--accent-electric) !important;
+  box-shadow:
+    0 0 16px var(--accent-glow),
+    inset 0 0 8px rgba(255, 255, 255, 0.04);
+}
+
+.tracking-calendar-day--today .tracking-calendar-day-number {
+  color: white !important;
+  font-weight: 700;
+  text-shadow: 0 0 10px var(--accent-glow);
+}
+
+.tracking-calendar-day--today .tracking-calendar-day-count {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+/* ---- Legend ---- */
+
+.tracking-calendar-legend {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-top: 24px;
+  margin-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  flex-wrap: wrap;
+}
+
+.tracking-calendar-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.tracking-calendar-legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.tracking-calendar-legend-dot--green {
+  background: rgba(0, 220, 130, 0.6);
+  border: 1px solid rgba(0, 220, 130, 0.4);
+}
+
+.tracking-calendar-legend-dot--yellow {
+  background: rgba(255, 200, 0, 0.5);
+  border: 1px solid rgba(255, 200, 0, 0.35);
+}
+
+.tracking-calendar-legend-dot--red {
+  background: rgba(239, 68, 68, 0.5);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+.tracking-calendar-legend-dot--today {
+  background: transparent;
+  border: 1.5px solid var(--accent-electric);
+  box-shadow: 0 0 6px var(--accent-glow);
+}
+
+/* ---- Loading / Empty states ---- */
+
+.tracking-calendar-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.tracking-calendar-empty-hint {
+  text-align: center;
+  margin-top: 16px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* ==========================================================
+   Day Details Popup / Modal
+   ========================================================== */
+
+.calendar-popup-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(5, 8, 15, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.calendar-popup-panel {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  max-height: 80vh;
+  overflow-y: auto;
+  background: rgba(20, 25, 35, 0.85);
+  backdrop-filter: blur(32px) saturate(130%);
+  -webkit-backdrop-filter: blur(32px) saturate(130%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(255, 255, 255, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.calendar-popup-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.calendar-popup-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.calendar-popup-summary {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 4px;
+}
+
+.calendar-popup-close {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease-out;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+
+.calendar-popup-close:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: white;
+}
+
+.calendar-popup-close:focus-visible {
+  outline: 2px solid var(--accent-electric);
+  outline-offset: 2px;
+}
+
+.calendar-popup-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.calendar-popup-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.calendar-popup-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.calendar-popup-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.calendar-popup-section-title--done {
+  color: rgba(0, 220, 130, 0.8);
+}
+
+.calendar-popup-section-title--done svg {
+  color: rgba(0, 220, 130, 0.8);
+}
+
+.calendar-popup-section-title--not-done {
+  color: rgba(239, 68, 68, 0.8);
+}
+
+.calendar-popup-section-title--not-done svg {
+  color: rgba(239, 68, 68, 0.8);
+}
+
+.calendar-popup-goal-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.calendar-popup-goal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.calendar-popup-goal-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.calendar-popup-goal-target {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.35);
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+
+.calendar-popup-empty {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.3);
+  text-align: center;
+  padding: 12px 0;
+  margin: 0;
+}
+
+/* ---- Responsive ---- */
+
+@media (min-width: 640px) {
+  .tracking-calendar-title {
+    font-size: 26px;
+  }
+
+  .tracking-calendar-day-number {
+    font-size: 14px;
+  }
+
+  .tracking-calendar-day-count {
+    font-size: 10px;
+  }
+
+  .tracking-calendar-grid {
+    gap: 8px;
+  }
+
+  .tracking-calendar-weekdays {
+    gap: 8px;
+  }
+
+  .calendar-popup-panel {
+    padding: 28px;
+  }
+
+  .calendar-popup-title {
+    font-size: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .tracking-calendar {
+    max-width: 800px;
+  }
+
+  .tracking-calendar-day {
+    border-radius: 12px;
+  }
+
+  .tracking-calendar-day-number {
+    font-size: 15px;
+  }
+
+  .tracking-calendar-day-count {
+    font-size: 11px;
+  }
+}
+
+/* ---- Reduced Motion ---- */
+
+@media (prefers-reduced-motion: reduce) {
+  .tracking-calendar-day {
+    transition: none;
+  }
+}
