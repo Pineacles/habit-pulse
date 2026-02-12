@@ -71,22 +71,44 @@ function buildMonthGrid(month: Date) {
   const monthIndex = month.getMonth();
 
   const cells: Array<{
-    dayNumber: number | null;
+    dayNumber: number;
     dateString: string;
     dateObj: Date;
+    isOutsideMonth: boolean;
   }> = [];
 
+  // Fill leading cells with previous month dates (instead of invisible blanks)
+  const prevMonthLastDay = new Date(year, monthIndex, 0).getDate();
   for (let i = 0; i < leadingBlanks; i++) {
-    cells.push({ dayNumber: null, dateString: "", dateObj: new Date(0) });
+    const day = prevMonthLastDay - leadingBlanks + i + 1;
+    const dateObj = new Date(year, monthIndex - 1, day);
+    const dateString = format(dateObj, "yyyy-MM-dd");
+    cells.push({ dayNumber: day, dateString, dateObj, isOutsideMonth: true });
   }
 
   for (let day = 1; day <= totalDays; day++) {
     const dateObj = new Date(year, monthIndex, day);
     const dateString = format(dateObj, "yyyy-MM-dd");
-    cells.push({ dayNumber: day, dateString, dateObj });
+    cells.push({ dayNumber: day, dateString, dateObj, isOutsideMonth: false });
+  }
+
+  // Fill trailing cells to complete the final week
+  const trailingBlanks = (7 - (cells.length % 7)) % 7;
+  for (let i = 1; i <= trailingBlanks; i++) {
+    const dateObj = new Date(year, monthIndex + 1, i);
+    const dateString = format(dateObj, "yyyy-MM-dd");
+    cells.push({ dayNumber: i, dateString, dateObj, isOutsideMonth: true });
   }
 
   return cells;
+}
+
+/**
+ * Formats a time string from the API (HH:MM:SS or HH:MM) to HH:MM display.
+ */
+function formatTimeShort(time: string): string {
+  const parts = time.split(':');
+  return `${parts[0]}:${parts[1]}`;
 }
 
 /* ------------------------------------------------------------------ */
@@ -165,15 +187,20 @@ export function Calendar() {
   const {
     currentMonth,
     days,
+    eventDays,
+    monthEvents,
+    viewMode,
     isLoading,
     error,
     fetchMonth,
     goToPrevMonth,
     goToNextMonth,
+    setViewMode,
     isDetailsOpen,
     isDetailsLoading,
     selectedDate,
     selectedDayDetails,
+    selectedDayEvents,
     openDayDetails,
     closeDayDetails,
   } = useCalendarStore();
@@ -192,6 +219,27 @@ export function Calendar() {
     return map;
   }, [days]);
 
+  const eventDaysByDate = useMemo(() => {
+    const map = new Map<string, number>();
+    for (const eventDay of eventDays) {
+      map.set(eventDay.date, eventDay.eventCount);
+    }
+    return map;
+  }, [eventDays]);
+
+  // Index full events by date for inline rendering
+  const eventsByDate = useMemo(() => {
+    const map = new Map<string, typeof monthEvents>();
+    for (const event of monthEvents) {
+      const dateKey = event.date;
+      if (!map.has(dateKey)) {
+        map.set(dateKey, []);
+      }
+      map.get(dateKey)!.push(event);
+    }
+    return map;
+  }, [monthEvents]);
+
   const monthGrid = useMemo(() => buildMonthGrid(currentMonth), [currentMonth]);
   const monthLabel = format(currentMonth, "MMMM yyyy");
 
@@ -200,11 +248,11 @@ export function Calendar() {
   /** Handles clicking a day cell to show the details popup */
   const handleDayClick = useCallback(
     (dateString: string, dateObj: Date) => {
-      // Don't open details for future days or days without data
-      if (isFuture(dateObj)) return;
+      // In habits mode only, block future days (events are future-facing)
+      if (viewMode === 'habits' && isFuture(dateObj)) return;
       openDayDetails(dateString);
     },
-    [openDayDetails],
+    [openDayDetails, viewMode],
   );
 
   /** Formatted label for the popup header */
@@ -232,6 +280,28 @@ export function Calendar() {
           <p className="page-subtitle">Track your daily progress</p>
         </div>
       </motion.div>
+
+      {/* Filter Mode Tabs */}
+      <div className="calendar-filter-tabs">
+        <button
+          onClick={() => setViewMode('habits')}
+          className={`calendar-filter-tab ${viewMode === 'habits' ? 'active' : ''}`}
+        >
+          Habits
+        </button>
+        <button
+          onClick={() => setViewMode('events')}
+          className={`calendar-filter-tab ${viewMode === 'events' ? 'active' : ''}`}
+        >
+          Events
+        </button>
+        <button
+          onClick={() => setViewMode('all')}
+          className={`calendar-filter-tab ${viewMode === 'all' ? 'active' : ''}`}
+        >
+          All
+        </button>
+      </div>
 
       {/* Calendar Body */}
       <div className="tracking-calendar">
@@ -296,29 +366,66 @@ export function Calendar() {
                 exit="exit"
               >
                 {monthGrid.map((cell, index) => {
-                  if (cell.dayNumber === null) {
+                  if (cell.isOutsideMonth) {
                     return (
                       <div
-                        key={`empty-${index}`}
+                        key={`outside-${cell.dateString}-${index}`}
                         className="tracking-calendar-day tracking-calendar-day--outside"
-                      />
+                        aria-hidden="true"
+                      >
+                        <span className="tracking-calendar-day-number">
+                          {cell.dayNumber}
+                        </span>
+                      </div>
                     );
                   }
 
                   const dayData = daysByDate.get(cell.dateString);
-                  const intensity = getIntensity(dayData, cell.dateObj);
+                  const eventCount = eventDaysByDate.get(cell.dateString) || 0;
+                  const cellEvents = eventsByDate.get(cell.dateString) || [];
                   const isTodayCell = isToday(cell.dateObj);
-                  const tooltip = buildTooltip(dayData, cell.dateObj);
                   const isFutureDay = isFuture(cell.dateObj);
 
-                  const showCount =
-                    !isFutureDay && dayData && dayData.totalScheduled > 0;
+                  // Determine intensity and display based on view mode
+                  let intensity: CalendarIntensity = 'empty';
+                  let showContent = false;
+                  let tooltip = '';
 
+                  if (viewMode === 'habits') {
+                    intensity = getIntensity(dayData, cell.dateObj);
+                    tooltip = buildTooltip(dayData, cell.dateObj);
+                    showContent = Boolean(!isFutureDay && dayData && dayData.totalScheduled > 0);
+                  } else if (viewMode === 'events') {
+                    // Events are future-facing: show event counts on all days including future
+                    intensity = eventCount > 0 ? 'event' : 'empty';
+                    tooltip = eventCount > 0 
+                      ? `${format(cell.dateObj, 'MMM d, yyyy')}: ${eventCount} event${eventCount > 1 ? 's' : ''}`
+                      : `${format(cell.dateObj, 'MMM d, yyyy')}: no events`;
+                    showContent = eventCount > 0;
+                  } else {
+                    // 'all' mode: show habit intensity with event overlay, events shown on future days too
+                    intensity = getIntensity(dayData, cell.dateObj);
+                    if (isFutureDay) {
+                      tooltip = eventCount > 0
+                        ? `${format(cell.dateObj, 'MMM d, yyyy')}: ${eventCount} event${eventCount > 1 ? 's' : ''}`
+                        : `${format(cell.dateObj, 'MMM d, yyyy')}: no events`;
+                    } else {
+                      const habitCount = dayData ? `${dayData.completed}/${dayData.totalScheduled} habits` : 'no habits';
+                      const eventText = eventCount > 0 ? ` • ${eventCount} event${eventCount > 1 ? 's' : ''}` : '';
+                      tooltip = `${format(cell.dateObj, 'MMM d, yyyy')}: ${habitCount}${eventText}`;
+                    }
+                    // Show content if: (past/today with habits) OR (any day with events)
+                    showContent = Boolean((!isFutureDay && dayData && dayData.totalScheduled > 0) || eventCount > 0);
+                  }
+
+                  // In habits mode, future days are not clickable; in events/all modes, they are
+                  const isClickable = viewMode === 'habits' ? !isFutureDay : true;
+                  
                   const classNames = [
                     "tracking-calendar-day",
                     `tracking-calendar-day--${intensity}`,
                     isTodayCell ? "tracking-calendar-day--today" : "",
-                    !isFutureDay ? "tracking-calendar-day--clickable" : "",
+                    isClickable ? "tracking-calendar-day--clickable" : "",
                   ]
                     .filter(Boolean)
                     .join(" ");
@@ -331,17 +438,44 @@ export function Calendar() {
                       aria-label={tooltip}
                       role="gridcell"
                       onClick={() => handleDayClick(cell.dateString, cell.dateObj)}
-                      whileHover={!isFutureDay ? { scale: 1.08 } : undefined}
-                      whileTap={!isFutureDay ? { scale: 0.95 } : undefined}
-                      disabled={isFutureDay}
+                      whileHover={isClickable ? { scale: 1.08 } : undefined}
+                      whileTap={isClickable ? { scale: 0.95 } : undefined}
+                      disabled={!isClickable}
                     >
                       <span className="tracking-calendar-day-number">
                         {cell.dayNumber}
                       </span>
-                      {showCount && (
+                      {showContent && viewMode === 'habits' && dayData && (
                         <span className="tracking-calendar-day-count">
-                          {dayData!.completed}/{dayData!.totalScheduled}
+                          {dayData.completed}/{dayData.totalScheduled}
                         </span>
+                      )}
+                      {/* Events mode: always show count badge + inline titles */}
+                      {viewMode === 'events' && eventCount > 0 && (
+                        <span className="tracking-calendar-event-badge">
+                          {eventCount}
+                        </span>
+                      )}
+                      {showContent && viewMode === 'events' && cellEvents.length > 0 && (
+                        <div className="tracking-calendar-day-events">
+                          {cellEvents.slice(0, 3).map(evt => (
+                            <span key={evt.id} className="tracking-calendar-day-event-title">
+                              {evt.time ? `${formatTimeShort(evt.time)} ` : ''}{evt.title}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      {showContent && viewMode === 'all' && (
+                        <>
+                          {!isFutureDay && dayData && dayData.totalScheduled > 0 && (
+                            <span className="tracking-calendar-day-count">
+                              {dayData.completed}/{dayData.totalScheduled}
+                            </span>
+                          )}
+                          {eventCount > 0 && (
+                            <span className="tracking-calendar-event-dot" />
+                          )}
+                        </>
                       )}
                     </motion.button>
                   );
@@ -349,8 +483,8 @@ export function Calendar() {
               </motion.div>
             </AnimatePresence>
 
-            {/* Empty hint when no goals exist */}
-            {!hasAnyScheduledGoals && (
+            {/* Empty hint should only appear in habits mode */}
+            {viewMode === "habits" && !hasAnyScheduledGoals && (
               <p className="tracking-calendar-empty-hint">
                 No goals scheduled this month. Create goals to start tracking.
               </p>
@@ -358,20 +492,35 @@ export function Calendar() {
           </>
         )}
 
-        {/* Legend */}
+        {/* Legend - context-aware based on viewMode */}
         <div className="tracking-calendar-legend">
-          <div className="tracking-calendar-legend-item">
-            <span className="tracking-calendar-legend-dot tracking-calendar-legend-dot--green" />
-            <span>&ge; 80%</span>
-          </div>
-          <div className="tracking-calendar-legend-item">
-            <span className="tracking-calendar-legend-dot tracking-calendar-legend-dot--yellow" />
-            <span>30-79%</span>
-          </div>
-          <div className="tracking-calendar-legend-item">
-            <span className="tracking-calendar-legend-dot tracking-calendar-legend-dot--red" />
-            <span>&lt; 30%</span>
-          </div>
+          {/* Habit completion legend (habits & all modes) */}
+          {(viewMode === 'habits' || viewMode === 'all') && (
+            <>
+              <div className="tracking-calendar-legend-item">
+                <span className="tracking-calendar-legend-dot tracking-calendar-legend-dot--green" />
+                <span>&ge; 80%</span>
+              </div>
+              <div className="tracking-calendar-legend-item">
+                <span className="tracking-calendar-legend-dot tracking-calendar-legend-dot--yellow" />
+                <span>30-79%</span>
+              </div>
+              <div className="tracking-calendar-legend-item">
+                <span className="tracking-calendar-legend-dot tracking-calendar-legend-dot--red" />
+                <span>&lt; 30%</span>
+              </div>
+            </>
+          )}
+          
+          {/* Event legend (events & all modes) */}
+          {(viewMode === 'events' || viewMode === 'all') && (
+            <div className="tracking-calendar-legend-item">
+              <span className="tracking-calendar-legend-dot tracking-calendar-legend-dot--event" />
+              <span>Event</span>
+            </div>
+          )}
+          
+          {/* Today marker (all modes) */}
           <div className="tracking-calendar-legend-item">
             <span className="tracking-calendar-legend-dot tracking-calendar-legend-dot--today" />
             <span>Today</span>
@@ -402,12 +551,21 @@ export function Calendar() {
               <div className="calendar-popup-header">
                 <div>
                   <h3 className="calendar-popup-title">{popupDateLabel}</h3>
-                  {selectedDayDetails && (
-                    <p className="calendar-popup-summary">
-                      {selectedDayDetails.completed} / {selectedDayDetails.totalScheduled} goals
-                      completed
-                    </p>
-                  )}
+                  <p className="calendar-popup-summary">
+                    {selectedDayDetails && (
+                      <span>
+                        {selectedDayDetails.completed}/{selectedDayDetails.totalScheduled} habits
+                      </span>
+                    )}
+                    {selectedDayDetails && selectedDayEvents && selectedDayEvents.events.length > 0 && (
+                      <span> • </span>
+                    )}
+                    {selectedDayEvents && selectedDayEvents.events.length > 0 && (
+                      <span>
+                        {selectedDayEvents.events.length} event{selectedDayEvents.events.length > 1 ? 's' : ''}
+                      </span>
+                    )}
+                  </p>
                 </div>
                 <button
                   className="calendar-popup-close"
@@ -423,15 +581,50 @@ export function Calendar() {
               {/* Popup Body */}
               {isDetailsLoading ? (
                 <div className="calendar-popup-loading">Loading...</div>
-              ) : selectedDayDetails ? (
+              ) : (selectedDayDetails || selectedDayEvents) ? (
                 <div className="calendar-popup-body">
-                  {/* Done Section */}
+                  {/* Events Section */}
+                  {selectedDayEvents && selectedDayEvents.events.length > 0 && (
+                    <div className="calendar-popup-section">
+                      <h4 className="calendar-popup-section-title calendar-popup-section-title--events">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        Events ({selectedDayEvents.events.length})
+                      </h4>
+                      <ul className="calendar-popup-event-list">
+                        {selectedDayEvents.events.map((event, i) => (
+                          <motion.li
+                            key={event.id}
+                            className="calendar-popup-event"
+                            custom={i}
+                            variants={listItemVariants}
+                            initial="hidden"
+                            animate="visible"
+                          >
+                            <div className="calendar-popup-event-time">
+                              {event.time ? formatTimeShort(event.time) : 'All day'}
+                            </div>
+                            <div className="calendar-popup-event-info">
+                              <span className="calendar-popup-event-title">{event.title}</span>
+                              {event.description && (
+                                <span className="calendar-popup-event-description">{event.description}</span>
+                              )}
+                            </div>
+                          </motion.li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Done Habits Section */}
+                  {selectedDayDetails && (
                   <div className="calendar-popup-section">
                     <h4 className="calendar-popup-section-title calendar-popup-section-title--done">
                       <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                       </svg>
-                      Done ({selectedDayDetails.done.length})
+                      Done Habits ({selectedDayDetails.done.length})
                     </h4>
                     {selectedDayDetails.done.length > 0 ? (
                       <ul className="calendar-popup-goal-list">
@@ -440,17 +633,19 @@ export function Calendar() {
                         ))}
                       </ul>
                     ) : (
-                      <p className="calendar-popup-empty">No goals completed</p>
+                      <p className="calendar-popup-empty">No habits completed</p>
                     )}
                   </div>
+                  )}
 
-                  {/* Not Done Section */}
+                  {/* Not Done Habits Section */}
+                  {selectedDayDetails && (
                   <div className="calendar-popup-section">
                     <h4 className="calendar-popup-section-title calendar-popup-section-title--not-done">
                       <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
                       </svg>
-                      Not Done ({selectedDayDetails.notDone.length})
+                      Not Done Habits ({selectedDayDetails.notDone.length})
                     </h4>
                     {selectedDayDetails.notDone.length > 0 ? (
                       <ul className="calendar-popup-goal-list">
@@ -459,9 +654,10 @@ export function Calendar() {
                         ))}
                       </ul>
                     ) : (
-                      <p className="calendar-popup-empty">All goals completed!</p>
+                      <p className="calendar-popup-empty">All habits completed!</p>
                     )}
                   </div>
+                  )}
                 </div>
               ) : (
                 <div className="calendar-popup-loading">No data available</div>

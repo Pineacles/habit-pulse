@@ -9,4 +9,5 @@ public class User
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public ICollection<Goal> Goals { get; set; } = new List<Goal>();
+    public ICollection<Event> Events { get; set; } = new List<Event>();
 }

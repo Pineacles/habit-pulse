@@ -1,22 +1,26 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { GoalCard } from "../components/GoalCard";
 import { GoalModal } from "../components/GoalModal";
 import { useGoalStore } from "../stores/goalStore";
-import { DAY_NAMES_FULL, type GoalWithStatus } from "../types";
+import { DAY_NAMES_FULL, type GoalWithStatus, type Event } from "../types";
 import { goalsApi } from "../api/goals";
+import { eventsApi } from "../api/events";
 
 /**
  * Dashboard - Today's goals view with progress tracking and drag-drop reordering.
  * Shows different empty states for new users vs users with no goals scheduled today.
  */
 export function Dashboard() {
+  const navigate = useNavigate();
   const { goals, isLoading, error, fetchGoals, reorderGoals } = useGoalStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingGoal, setEditingGoal] = useState<GoalWithStatus | null>(null);
   const [draggedGoal, setDraggedGoal] = useState<GoalWithStatus | null>(null);
   const [dragOverGoalId, setDragOverGoalId] = useState<string | null>(null);
   const [hasAnyGoals, setHasAnyGoals] = useState<boolean | null>(null);
+  const [todayEvents, setTodayEvents] = useState<Event[]>([]);
 
   useEffect(() => {
     fetchGoals(true);
@@ -30,7 +34,56 @@ export function Dashboard() {
       .catch(() => {
         setHasAnyGoals(false);
       });
+
+    // Fetch today's events
+    const today = new Date().toISOString().split('T')[0];
+    eventsApi
+      .getAll(today)
+      .then((events) => {
+        setTodayEvents(events);
+      })
+      .catch(() => {
+        setTodayEvents([]);
+      });
   }, [fetchGoals]);
+
+  /**
+   * Pick a single event to preview under "X events today":
+   *   1. nearest future timed event
+   *   2. else latest past timed event (last one that already happened)
+   *   3. else first all-day event
+   */
+  const previewEvent = (() => {
+    if (todayEvents.length === 0) return null;
+    const now = new Date();
+
+    const timedEvents = todayEvents
+      .filter((e) => e.time)
+      .sort((a, b) => (a.time || '').localeCompare(b.time || ''));
+
+    // 1. nearest future timed event
+    const nearestFuture = timedEvents.find((e) => {
+      const [h, m] = (e.time || '').split(':').map(Number);
+      return new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m) > now;
+    });
+    if (nearestFuture) return nearestFuture;
+
+    // 2. latest past timed event (reverse to find last)
+    const latestPast = [...timedEvents].reverse().find((e) => {
+      const [h, m] = (e.time || '').split(':').map(Number);
+      return new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m) <= now;
+    });
+    if (latestPast) return latestPast;
+
+    // 3. first all-day event
+    return todayEvents.find((e) => !e.time) || todayEvents[0];
+  })();
+
+  /** Formats time to HH:MM (strips seconds if present) */
+  const formatTimeShort = (time: string): string => {
+    const parts = time.split(':');
+    return `${parts[0]}:${parts[1]}`;
+  };
 
   const completedCount = goals.filter((g) => g.isCompletedToday).length;
   const totalCount = goals.length;
@@ -132,25 +185,25 @@ export function Dashboard() {
       // New user - show full onboarding empty state
       return (
         <div className="empty-state">
-          <h3 className="empty-state-title">No goals yet</h3>
+          <h3 className="empty-state-title">No habits yet</h3>
           <p className="empty-state-text">
-            Create your first goal to start tracking your progress
+            Create your first habit to start tracking your progress
           </p>
           <div className="empty-state-icon-text">
             <span>HP</span>
             <span className="dot">.</span>
           </div>
           <button onClick={() => setIsModalOpen(true)} className="btn-glow">
-            Create Goal
+            Create Habit
           </button>
         </div>
       );
     } else {
-      // Has goals but none scheduled for today - minimal message
+      // Has habits but none scheduled for today - minimal message
       return (
         <div className="empty-state-minimal">
           <p className="empty-state-minimal-text">
-            No goals scheduled for today
+            No habits scheduled for today
           </p>
         </div>
       );
@@ -179,7 +232,7 @@ export function Dashboard() {
           <h1 className="page-title">{dayName}</h1>
           <p className="page-subtitle">{dateStr}</p>
         </div>
-        {/* Desktop: Add Goal button */}
+        {/* Desktop: Add Habit button */}
         <div className="page-header-desktop">
           <button onClick={() => setIsModalOpen(true)} className="btn-glow">
             <svg
@@ -195,7 +248,7 @@ export function Dashboard() {
                 d="M12 4v16m8-8H4"
               />
             </svg>
-            Add Goal
+            Add Habit
           </button>
         </div>
       </motion.div>
@@ -204,7 +257,7 @@ export function Dashboard() {
       <button
         onClick={() => setIsModalOpen(true)}
         className={`fab-add-goal ${isModalOpen ? "fab-hidden" : ""}`}
-        aria-label="Add Goal"
+        aria-label="Add Habit"
       >
         <svg
           className="w-6 h-6"
@@ -251,6 +304,54 @@ export function Dashboard() {
         </div>
       )}
 
+      {/* Today's Events Badge */}
+      {todayEvents.length > 0 && (
+        <motion.div
+          className="today-events-badge"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, ease: "easeOut", delay: 0.2 }}
+          onClick={() => navigate('/events?filter=today')}
+        >
+          <svg
+            className="today-events-icon"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+            />
+          </svg>
+          <div className="today-events-content">
+            <span className="today-events-count">
+              {todayEvents.length} event{todayEvents.length > 1 ? 's' : ''} today
+            </span>
+            {previewEvent && (
+              <span className="today-events-next">
+                {previewEvent.time ? `${formatTimeShort(previewEvent.time)} ` : 'All day: '}{previewEvent.title}
+              </span>
+            )}
+          </div>
+          <svg
+            className="today-events-arrow"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </motion.div>
+      )}
+
       {/* Error message */}
       {error && (
         <div className="mb-4 p-4 rounded-xl bg-red-500/20 border border-red-500/30 text-red-200">
@@ -258,9 +359,9 @@ export function Dashboard() {
         </div>
       )}
 
-      {/* Goals Section */}
+      {/* Habits Section */}
       <div className="dashboard-goals">
-        <h2 className="section-header">Today's Goals</h2>
+        <h2 className="section-header">Today's Habits</h2>
 
         {isLoading && goals.length === 0 ? (
           // Loading skeleton

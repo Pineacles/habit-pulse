@@ -24,6 +24,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Services
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<GoalService>();
+builder.Services.AddScoped<EventService>();
 
 // Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -121,6 +122,7 @@ using (var scope = app.Services.CreateScope())
 // Map endpoints
 app.MapAuthEndpoints();
 app.MapGoalEndpoints();
+app.MapEventEndpoints();
 
 // Health check
 app.MapGet("/health", () => Results.Ok(new { status = "healthy", timestamp = DateTime.UtcNow }))

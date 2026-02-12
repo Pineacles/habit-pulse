@@ -113,17 +113,17 @@ export function AllGoals() {
         transition={{ duration: 0.3, ease: "easeOut" }}
       >
         <div>
-          <h1 className="page-title">All Goals</h1>
+          <h1 className="page-title">Habits</h1>
           <p className="page-subtitle">Drag to reorder priorities</p>
         </div>
-        {/* Desktop: New Goal button */}
+        {/* Desktop: New Habit button */}
         <div className="page-header-desktop">
           <button onClick={() => setIsModalOpen(true)} className="btn-glow">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
                     d="M12 4v16m8-8H4" />
             </svg>
-            New Goal
+            New Habit
           </button>
         </div>
       </motion.div>
@@ -132,7 +132,7 @@ export function AllGoals() {
       <button
         onClick={() => setIsModalOpen(true)}
         className={`fab-add-goal ${isModalOpen ? "fab-hidden" : ""}`}
-        aria-label="New Goal"
+        aria-label="New Habit"
       >
         <svg
           className="w-6 h-6"
@@ -166,12 +166,12 @@ export function AllGoals() {
           <div className="empty-state-icon-text">
             <span>HP</span><span className="dot">.</span>
           </div>
-          <h3 className="empty-state-title">No goals yet</h3>
+          <h3 className="empty-state-title">No habits yet</h3>
           <p className="empty-state-text">
-            Create goals to track your daily habits
+            Create habits to track your daily progress
           </p>
           <button onClick={() => setIsModalOpen(true)} className="btn-glow">
-            Create Your First Goal
+            Create Your First Habit
           </button>
         </div>
       ) : (

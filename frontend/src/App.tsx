@@ -9,6 +9,7 @@ import { Register } from './pages/Register';
 import { ForgotPassword } from './pages/ForgotPassword';
 import { Dashboard } from './pages/Dashboard';
 import { AllGoals } from './pages/AllGoals';
+import { Events } from './pages/Events';
 import { Settings } from './pages/Settings';
 import { Calendar } from './pages/Calendar';
 
@@ -61,6 +62,7 @@ function App() {
           <Route element={<AppLayout />}>
             <Route path="/" element={<Dashboard />} />
             <Route path="/goals" element={<AllGoals />} />
+            <Route path="/events" element={<Events />} />
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/settings" element={<Settings />} />
           </Route>

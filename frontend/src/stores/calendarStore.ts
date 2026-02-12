@@ -1,18 +1,25 @@
 import { create } from 'zustand';
 import { goalsApi } from '../api/goals';
-import { startOfMonth, endOfMonth, format, addMonths, subMonths } from 'date-fns';
-import type { CalendarDay, CalendarDayDetails } from '../types';
+import { eventsApi } from '../api/events';
+import { startOfMonth, endOfMonth, format, addMonths, subMonths, isFuture, parseISO } from 'date-fns';
+import type { CalendarDay, CalendarDayDetails, CalendarEventDay, CalendarDayEvents, Event } from '../types';
+
+export type CalendarViewMode = 'habits' | 'events' | 'all';
 
 interface CalendarState {
   /* Monthly grid data */
   currentMonth: Date;
   days: CalendarDay[];
+  eventDays: CalendarEventDay[];
+  monthEvents: Event[]; // Full event details for inline rendering
+  viewMode: CalendarViewMode;
   isLoading: boolean;
   error: string | null;
 
   /* Day details popup */
   selectedDate: string | null;
   selectedDayDetails: CalendarDayDetails | null;
+  selectedDayEvents: CalendarDayEvents | null;
   isDetailsLoading: boolean;
   isDetailsOpen: boolean;
 
@@ -20,6 +27,7 @@ interface CalendarState {
   fetchMonth: (month: Date) => Promise<void>;
   goToPrevMonth: () => void;
   goToNextMonth: () => void;
+  setViewMode: (mode: CalendarViewMode) => void;
   clearError: () => void;
   openDayDetails: (date: string) => Promise<void>;
   closeDayDetails: () => void;
@@ -35,11 +43,15 @@ function toDateString(date: Date): string {
 export const useCalendarStore = create<CalendarState>((set, get) => ({
   currentMonth: new Date(),
   days: [],
+  eventDays: [],
+  monthEvents: [],
+  viewMode: 'habits',
   isLoading: false,
   error: null,
 
   selectedDate: null,
   selectedDayDetails: null,
+  selectedDayEvents: null,
   isDetailsLoading: false,
   isDetailsOpen: false,
 
@@ -50,8 +62,24 @@ export const useCalendarStore = create<CalendarState>((set, get) => ({
     const endDate = toDateString(endOfMonth(month));
 
     try {
-      const days = await goalsApi.getCalendar(startDate, endDate);
-      set({ days, isLoading: false });
+      const { viewMode } = get();
+      
+      // Fetch habits data for 'habits' and 'all' modes
+      let days: CalendarDay[] = [];
+      if (viewMode === 'habits' || viewMode === 'all') {
+        days = await goalsApi.getCalendar(startDate, endDate);
+      }
+
+      // Fetch events data for 'events' and 'all' modes
+      let eventDays: CalendarEventDay[] = [];
+      let monthEvents: Event[] = [];
+      if (viewMode === 'events' || viewMode === 'all') {
+        eventDays = await eventsApi.getCalendar(startDate, endDate);
+        // Also fetch full event details for inline rendering in calendar cells
+        monthEvents = await eventsApi.getAll(undefined, startDate, endDate);
+      }
+
+      set({ days, eventDays, monthEvents, isLoading: false });
     } catch (err) {
       set({
         error: err instanceof Error ? err.message : 'Failed to fetch calendar data',
@@ -70,6 +98,12 @@ export const useCalendarStore = create<CalendarState>((set, get) => ({
     get().fetchMonth(nextMonth);
   },
 
+  setViewMode: (mode: CalendarViewMode) => {
+    set({ viewMode: mode });
+    // Refetch data for new mode
+    get().fetchMonth(get().currentMonth);
+  },
+
   clearError: () => set({ error: null }),
 
   openDayDetails: async (date: string) => {
@@ -78,11 +112,32 @@ export const useCalendarStore = create<CalendarState>((set, get) => ({
       isDetailsOpen: true,
       isDetailsLoading: true,
       selectedDayDetails: null,
+      selectedDayEvents: null,
     });
 
     try {
-      const details = await goalsApi.getCalendarDayDetails(date);
-      set({ selectedDayDetails: details, isDetailsLoading: false });
+      const { viewMode } = get();
+      const isFutureDate = isFuture(parseISO(date));
+      
+      // Fetch habits for:
+      // - habits mode (existing behavior)
+      // - all mode only for non-future dates
+      let habitDetails: CalendarDayDetails | null = null;
+      if (viewMode === 'habits' || (viewMode === 'all' && !isFutureDate)) {
+        habitDetails = await goalsApi.getCalendarDayDetails(date);
+      }
+
+      // Fetch events in events/all modes (future-facing)
+      let eventDetails: CalendarDayEvents | null = null;
+      if (viewMode === 'events' || viewMode === 'all') {
+        eventDetails = await eventsApi.getCalendarDayEvents(date);
+      }
+
+      set({ 
+        selectedDayDetails: habitDetails, 
+        selectedDayEvents: eventDetails,
+        isDetailsLoading: false 
+      });
     } catch (err) {
       set({
         error: err instanceof Error ? err.message : 'Failed to fetch day details',
@@ -96,6 +151,7 @@ export const useCalendarStore = create<CalendarState>((set, get) => ({
       isDetailsOpen: false,
       selectedDate: null,
       selectedDayDetails: null,
+      selectedDayEvents: null,
       isDetailsLoading: false,
     });
   },

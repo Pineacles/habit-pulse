@@ -12,6 +12,7 @@ public class AppDbContext : DbContext
     public DbSet<User> Users => Set<User>();
     public DbSet<Goal> Goals => Set<Goal>();
     public DbSet<Completion> Completions => Set<Completion>();
+    public DbSet<Event> Events => Set<Event>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -63,6 +64,28 @@ public class AppDbContext : DbContext
                 .WithMany(g => g.Completions)
                 .HasForeignKey(e => e.GoalId)
                 .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // Event configuration
+        modelBuilder.Entity<Event>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id).HasDefaultValueSql("gen_random_uuid()");
+            entity.Property(e => e.Title).HasMaxLength(200).IsRequired();
+            entity.Property(e => e.Date).IsRequired();
+            entity.Property(e => e.Description).HasMaxLength(500);
+            entity.Property(e => e.Status).HasMaxLength(20).HasDefaultValue("active");
+            entity.Property(e => e.SortOrder).HasDefaultValue(0);
+            entity.Property(e => e.Source).HasMaxLength(20).HasDefaultValue("local");
+            entity.Property(e => e.ExternalId).HasMaxLength(255);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("now()");
+
+            entity.HasOne(e => e.User)
+                .WithMany(u => u.Events)
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasIndex(e => new { e.UserId, e.Date });
         });
     }
 }

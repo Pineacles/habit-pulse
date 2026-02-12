@@ -143,6 +143,12 @@
   color: rgba(255, 255, 255, 0.3);
 }
 
+/* Time input: styled text field (HH:MM) instead of native picker popup */
+.modal-time-input {
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.04em;
+}
+
 .modal-error {
   padding: 12px 16px;
   border-radius: 12px;
@@ -745,10 +751,18 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 16px;
   max-height: calc(90vh - 80px);
   overflow-y: auto;
   padding-bottom: calc(20px + var(--safe-area-bottom));
+}
+
+/* Keep header and action buttons full-width inside centered drawer */
+.calendar-drawer-inner>.calendar-drawer-header,
+.calendar-drawer-inner>.calendar-quick-actions {
+  width: 100%;
+  align-self: stretch;
 }
 
 @media (min-width: 640px) {

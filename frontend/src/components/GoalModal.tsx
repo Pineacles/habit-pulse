@@ -290,7 +290,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
     e.preventDefault();
 
     if (!name.trim()) {
-      setError("Please enter a goal name");
+      setError("Please enter a habit name");
       return;
     }
 
@@ -328,7 +328,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
       }
       onClose();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to save goal");
+      setError(err instanceof Error ? err.message : "Failed to save habit");
     } finally {
       setIsSubmitting(false);
     }
@@ -365,7 +365,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
           <form onSubmit={handleSubmit} className="modal-form">
             <div className="modal-header">
               <h2 className="modal-title">
-                {isEditing ? "Edit Goal" : "New Goal"}
+                {isEditing ? "Edit Habit" : "New Habit"}
               </h2>
               <button type="button" onClick={onClose} className="modal-close">
                 <svg
@@ -388,7 +388,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
             {error && <div className="modal-error">{error}</div>}
 
             <div className="modal-section">
-              <label className="modal-label">Goal Name</label>
+              <label className="modal-label">Habit Name</label>
               <div className="goal-name-row">
                 <input
                   type="text"
@@ -512,7 +512,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
                       <textarea
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        placeholder="Add notes or details about this goal..."
+                        placeholder="Add notes or details about this habit..."
                         maxLength={500}
                         className="mobile-description-textarea"
                         rows={3}
@@ -529,7 +529,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
             </div>
 
             <div className="modal-section">
-              <label className="modal-label">Goal Type</label>
+              <label className="modal-label">Habit Type</label>
               <div className="goal-type-toggle">
                 <button
                   type="button"
@@ -870,7 +870,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
                   ? "Saving..."
                   : isEditing
                   ? "Save Changes"
-                  : "Create Goal"}
+                  : "Create Habit"}
               </button>
             </div>
           </form>
@@ -951,7 +951,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  placeholder="Add notes or details about this goal..."
+                  placeholder="Add notes or details about this habit..."
                   maxLength={500}
                   className="description-textarea"
                   rows={8}

@@ -106,7 +106,7 @@ export interface CalendarDay {
   completed: number;
 }
 
-export type CalendarIntensity = 'green' | 'yellow' | 'red' | 'empty' | 'future';
+export type CalendarIntensity = 'green' | 'yellow' | 'red' | 'empty' | 'future' | 'event';
 
 export interface CalendarGoalItem {
   id: string;
@@ -122,4 +122,45 @@ export interface CalendarDayDetails {
   completed: number;
   done: CalendarGoalItem[];
   notDone: CalendarGoalItem[];
+}
+
+// Event types
+export interface Event {
+  id: string;
+  title: string;
+  date: string;          // "YYYY-MM-DD"
+  time: string | null;   // "HH:mm" or null
+  description: string | null;
+  status: 'active' | 'completed' | 'cancelled';
+  sortOrder: number;
+  source: string;        // 'local' | 'google' | 'outlook'
+  externalId: string | null;
+  lastSyncedAt: string | null;
+  createdAt: string;
+}
+
+export interface CreateEventRequest {
+  title: string;
+  date: string;
+  time?: string | null;
+  description?: string | null;
+}
+
+export interface UpdateEventRequest {
+  title?: string;
+  date?: string;
+  time?: string | null;
+  description?: string | null;
+  status?: 'active' | 'completed' | 'cancelled';
+  sortOrder?: number;
+}
+
+export interface CalendarEventDay {
+  date: string;
+  eventCount: number;
+}
+
+export interface CalendarDayEvents {
+  date: string;
+  events: Event[];
 }

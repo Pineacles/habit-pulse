@@ -161,7 +161,7 @@ export function GoalModalMobile({
 
   const handleSubmit = async () => {
     if (!name.trim()) {
-      setError("Please enter a goal name");
+      setError("Please enter a habit name");
       return;
     }
 
@@ -198,7 +198,7 @@ export function GoalModalMobile({
       }
       onClose();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to save goal");
+      setError(err instanceof Error ? err.message : "Failed to save habit");
     } finally {
       setIsSubmitting(false);
     }
@@ -238,7 +238,7 @@ export function GoalModalMobile({
               </svg>
             </button>
             <h1 className="mobile-modal-title">
-              {isEditing ? "Edit Goal" : "New Goal"}
+              {isEditing ? "Edit Habit" : "New Habit"}
             </h1>
             <div className="w-10" /> {/* Spacer for centering */}
           </div>
@@ -248,9 +248,9 @@ export function GoalModalMobile({
             {/* Error */}
             {error && <div className="mobile-modal-error">{error}</div>}
 
-            {/* Goal Name */}
+            {/* Habit Name */}
             <div className="mobile-field">
-              <label className="mobile-label">What's your goal?</label>
+              <label className="mobile-label">What's your habit?</label>
               <input
                 type="text"
                 value={name}
@@ -277,9 +277,9 @@ export function GoalModalMobile({
               />
             </div>
 
-            {/* Goal Type */}
+            {/* Habit Type */}
             <div className="mobile-field">
-              <label className="mobile-label">Goal type</label>
+              <label className="mobile-label">Habit type</label>
               <div className="mobile-toggle-group">
                 <button
                   type="button"

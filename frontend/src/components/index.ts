@@ -1,10 +1,14 @@
 export { AnimatedBackground } from './AnimatedBackground';
 export { BottomNav } from './BottomNav';
 export { DescriptionModal } from './DescriptionModal';
+export { EventCard } from './EventCard';
+export { EventModal } from './EventModal';
+export { EventModalMobile } from './EventModalMobile';
 export { FormField } from './FormField';
 export { GlassCard } from './GlassCard';
 export { GoalCard } from './GoalCard';
 export { GoalModal } from './GoalModal';
+export { NavIcon } from './NavIcon';
 export { PasswordInput } from './PasswordInput';
 export { PasswordStrengthChecker, PasswordSatellitePanel } from './PasswordStrengthChecker';
 export { ProtectedRoute } from './ProtectedRoute';
