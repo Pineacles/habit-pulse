@@ -241,3 +241,8 @@
   margin-bottom: 16px;
   padding-left: 2px;
 }
+
+[data-mode="light"] .section-header {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
