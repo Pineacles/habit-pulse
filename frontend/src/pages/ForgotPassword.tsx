@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FormField } from '../components/FormField';
+import { useThemeStore } from '../stores/themeStore';
 
 /**
  * ForgotPassword - Password reset request form.
  */
 export function ForgotPassword() {
+  const { mode, setMode } = useThemeStore();
   const [username, setUsername] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -23,7 +25,26 @@ export function ForgotPassword() {
   return (
     <div className="auth-page">
       <div className="animated-bg" />
-      
+
+      {/* Dark/Light Mode Toggle */}
+      <button
+        type="button"
+        className="auth-mode-toggle"
+        onClick={() => setMode(mode === 'dark' ? 'light' : 'dark')}
+        aria-label={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}
+        title={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}
+      >
+        {mode === 'light' ? (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v2m0 14v2m7-9h2M3 12H5m11.657-6.657 1.414 1.414M5.929 18.071l1.414-1.414m0-9.9L5.93 5.343m12.728 12.728-1.414-1.414M12 8a4 4 0 100 8 4 4 0 000-8z" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+          </svg>
+        )}
+      </button>
+
       {/* Glass Panel */}
       <div className="glass-solid glass-form">
         
@@ -95,12 +116,7 @@ export function ForgotPassword() {
         ) : (
           /* Form State */
           <form onSubmit={handleSubmit} noValidate>
-            <p style={{ 
-              color: 'rgba(255, 255, 255, 0.5)', 
-              fontSize: '14px',
-              textAlign: 'center',
-              marginBottom: '20px'
-            }}>
+            <p className="footer-text" style={{ textAlign: 'center', marginBottom: '20px' }}>
               Enter your username and we'll send you instructions to reset your password.
             </p>
 
@@ -137,7 +153,7 @@ export function ForgotPassword() {
 
             {/* Footer */}
             <div className="footer-links">
-              <span style={{ color: 'rgba(255, 255, 255, 0.5)', fontSize: '14px' }}>
+              <span className="footer-text">
                 Remember your password?
               </span>
               {' '}

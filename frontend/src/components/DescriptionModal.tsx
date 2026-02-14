@@ -17,9 +17,8 @@ export function DescriptionModal({ isOpen, onClose, goal }: DescriptionModalProp
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        className="modal-panel"
+        className="modal-panel description-modal"
         onClick={(e) => e.stopPropagation()}
-        style={{ maxWidth: '500px' }}
       >
         <div className="modal-header">
           <h2 className="modal-title">{goal.name}</h2>
@@ -30,33 +29,16 @@ export function DescriptionModal({ isOpen, onClose, goal }: DescriptionModalProp
           </button>
         </div>
 
-        {goal.description ? (
-          <div style={{ padding: '20px 0' }}>
-            <p style={{ 
-              color: 'rgba(255, 255, 255, 0.9)', 
-              lineHeight: '1.6',
-              fontSize: '15px',
-              whiteSpace: 'pre-wrap',
-              wordBreak: 'break-word'
-            }}>
-              {goal.description}
-            </p>
-          </div>
-        ) : (
-          <div style={{ padding: '20px 0' }}>
-            <p style={{ 
-              color: 'rgba(255, 255, 255, 0.6)', 
-              lineHeight: '1.6',
-              fontSize: '15px',
-              fontStyle: 'italic'
-            }}>
-              No description available for this goal.
-            </p>
-          </div>
-        )}
+        <div className="description-modal-body">
+          {goal.description ? (
+            <p className="description-modal-text">{goal.description}</p>
+          ) : (
+            <p className="description-modal-empty">No description available for this goal.</p>
+          )}
+        </div>
 
         <div className="modal-actions">
-          <button type="button" onClick={onClose} className="btn-glow" style={{ width: '100%' }}>
+          <button type="button" onClick={onClose} className="btn-glow description-modal-close-btn">
             Close
           </button>
         </div>

@@ -1,4 +1,3 @@
-
 .animated-bg {
   position: fixed;
   inset: 0;
@@ -8,19 +7,34 @@
   background:
     /* Top-left: Blue aurora gradient - more subtle */
     radial-gradient(1400px 900px at 15% 5%,
-      rgba(40, 100, 180, 0.12),
+      var(--bg-aurora-blue, rgba(40, 100, 180, 0.12)),
       transparent 55%),
     /* Bottom-right: Orange warmth gradient - more subtle */
     radial-gradient(1200px 800px at 90% 90%,
-      rgba(255, 100, 50, 0.08),
+      var(--bg-aurora-warm, rgba(255, 100, 50, 0.08)),
       transparent 50%),
     /* Center-right: Teal accent gradient - more subtle */
     radial-gradient(900px 700px at 70% 40%,
-      rgba(0, 200, 200, 0.06),
+      var(--bg-aurora-teal, rgba(0, 200, 200, 0.06)),
       transparent 45%),
     /* Base background color */
-    #050508;
+    var(--bg-aurora-base);
   background-attachment: fixed;
+}
+
+[data-mode="light"] .animated-bg {
+  background:
+    radial-gradient(1500px 980px at 12% 4%,
+      var(--bg-aurora-blue, rgba(132, 164, 255, 0.2)),
+      transparent 62%),
+    radial-gradient(1320px 900px at 92% 88%,
+      var(--bg-aurora-warm, rgba(255, 184, 146, 0.16)),
+      transparent 58%),
+    radial-gradient(980px 760px at 68% 36%,
+      var(--bg-aurora-teal, rgba(118, 218, 205, 0.14)),
+      transparent 54%),
+    var(--bg-aurora-base);
+  filter: saturate(115%);
 }
 
 /* Reduced Motion - Accessibility support */

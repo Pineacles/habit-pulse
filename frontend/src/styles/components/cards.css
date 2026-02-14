@@ -1,27 +1,126 @@
 .glass {
-  background: rgba(20, 25, 35, 0.55);
+  background: var(--surface-glass);
   backdrop-filter: blur(24px) saturate(120%);
   -webkit-backdrop-filter: blur(24px) saturate(120%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-default);
   border-radius: 20px;
 
   /* Etched crystal edge lighting */
   box-shadow:
-    0 8px 40px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    var(--shadow-md),
+    var(--shadow-inset);
+}
+
+/* Light mode normalization for cards and popovers */
+[data-mode="light"] :is(.goal-name,
+  .settings-section-title,
+  .goal-target-value) {
+  color: var(--text-primary);
+}
+
+[data-mode="light"] :is(.goal-schedule,
+  .progress-text-small,
+  .progress-text-large .label,
+  .goal-description-btn,
+  .drag-handle) {
+  color: var(--text-muted);
+}
+
+[data-mode="light"] :is(.goal-card,
+  .progress-card,
+  .settings-card) {
+  background: var(--surface-glass-solid);
+  border-color: var(--border-default);
+  box-shadow:
+    var(--shadow-sm),
+    var(--shadow-inset);
+}
+
+[data-mode="light"] :is(.goal-action-btn,
+  .goal-description-btn,
+  .priority-badge) {
+  background: var(--surface-subtle);
+  border-color: var(--border-default);
+}
+
+[data-mode="light"] :is(.goal-action-btn:hover,
+  .goal-description-btn:hover) {
+  background: var(--surface-hover);
+  border-color: var(--border-prominent);
+  color: var(--text-primary);
+}
+
+[data-mode="light"] .goal-target-unit {
+  color: var(--text-muted);
+}
+
+/* Kebab action sheet — light mode adjustments */
+[data-mode="light"] .kebab-menu-backdrop {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+[data-mode="light"] .kebab-menu-dropdown {
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 1024px) {
+  [data-mode="light"] .kebab-menu-dropdown {
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+[data-mode="light"] .priority-badge {
+  color: var(--text-secondary);
+}
+
+[data-mode="light"] .drag-handle:hover {
+  color: var(--text-secondary);
+}
+
+[data-mode="light"] .goal-description-btn:hover {
+  color: var(--text-primary);
+}
+
+[data-mode="light"] .progress-text-large {
+  color: var(--text-primary);
+}
+
+[data-mode="light"] .progress-text-large .separator {
+  color: var(--text-dim);
+}
+
+[data-mode="light"] .circular-progress .bg {
+  stroke: var(--border-default);
+}
+
+[data-mode="light"] .goal-card:hover {
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 0 24px var(--accent-glow),
+    var(--shadow-inset);
+}
+
+[data-mode="light"] .goal-card.drag-over {
+  background: var(--accent-surface);
+}
+
+[data-mode="light"] .card-progress {
+  background: linear-gradient(to top,
+      var(--accent-surface),
+      transparent);
 }
 
 .glass-solid {
-  background: rgba(20, 25, 35, 0.65);
+  background: var(--surface-glass-solid);
   backdrop-filter: blur(24px) saturate(120%);
   -webkit-backdrop-filter: blur(24px) saturate(120%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-default);
   border-radius: 20px;
 
   /* Etched crystal edge lighting */
   box-shadow:
-    0 8px 40px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    var(--shadow-md),
+    var(--shadow-inset);
 }
 
 /* Glass Card with Form Layout */
@@ -46,17 +145,17 @@
 
 .goal-card {
   /* Glass panel styling - enhanced for better readability */
-  background: rgba(20, 25, 35, 0.65);
+  background: var(--surface-glass-solid);
   backdrop-filter: blur(24px) saturate(120%);
   -webkit-backdrop-filter: blur(24px) saturate(120%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-prominent);
   border-radius: 18px;
   padding: 16px;
   margin: 0 0 12px 0;
   /* Etched crystal depth effect */
   box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    var(--shadow-sm),
+    var(--shadow-inset);
   transition: all 0.2s ease;
   cursor: pointer;
 }
@@ -69,7 +168,7 @@
 }
 
 .goal-card:hover {
-  background: rgba(20, 25, 35, 0.65);
+  background: var(--surface-glass-solid);
   /* Theme color border on hover */
   border-color: var(--accent-electric);
   transform: translateX(4px);
@@ -84,31 +183,6 @@
   outline-offset: 2px;
 }
 
-/* Theme-specific goal card hover states */
-[data-theme="teal"] .goal-card:hover {
-  border-color: #14B8A6;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 24px rgba(20, 184, 166, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-[data-theme="purple"] .goal-card:hover {
-  border-color: #A855F7;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 24px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-[data-theme="blue"] .goal-card:hover {
-  border-color: #3B82F6;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 24px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-[data-theme="rose"] .goal-card:hover {
-  border-color: #F43F5E;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 24px rgba(244, 63, 94, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-[data-theme="emerald"] .goal-card:hover {
-  border-color: #10B981;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 24px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
 
 /* Completed State - Green light activation */
 .goal-card.completed {
@@ -146,7 +220,7 @@
   font-family: 'Space Grotesk', sans-serif;
   font-size: 16px;
   font-weight: 500;
-  color: white;
+  color: var(--text-primary);
   margin: 0 0 4px 0;
   line-height: 1.3;
   word-wrap: break-word;
@@ -188,7 +262,7 @@
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
   letter-spacing: 0.05em;
-  color: rgba(255, 255, 255, 0.65);
+  color: var(--text-secondary);
   text-transform: uppercase;
   display: flex;
   align-items: center;
@@ -218,8 +292,7 @@
   font-family: 'JetBrains Mono', monospace;
   font-size: 26px;
   font-weight: 700;
-  color: #E0E0E0;
-  /* Light grey for premium look */
+  color: var(--text-secondary);
   letter-spacing: -0.02em;
   line-height: 1;
 }
@@ -229,8 +302,7 @@
   font-size: 11px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgba(224, 224, 224, 0.6);
-  /* Light grey with reduced opacity for unit */
+  color: var(--text-muted);
   margin-top: 2px;
 }
 
@@ -286,9 +358,9 @@
   min-width: 44px;
   min-height: 44px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.4);
+  border: 1px solid var(--border-default);
+  background: var(--surface-subtle);
+  color: var(--text-muted);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -298,20 +370,20 @@
 }
 
 .goal-action-btn-primary {
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.7);
+  background: var(--surface-hover);
+  color: var(--text-secondary);
 }
 
 .goal-action-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.12);
-  color: white;
+  background: var(--surface-active);
+  border-color: var(--border-prominent);
+  color: var(--text-primary);
 }
 
 .goal-action-btn.danger:hover {
-  background: rgba(239, 68, 68, 0.15);
-  border-color: rgba(239, 68, 68, 0.3);
-  color: #EF4444;
+  background: var(--surface-danger-hover);
+  border-color: var(--border-danger-hover);
+  color: var(--text-danger);
 }
 
 .goal-action-btn:focus-visible {
@@ -325,32 +397,32 @@
 }
 
 
+/* ── Kebab / Action-sheet menu ── */
+
 .kebab-menu-container {
   position: relative;
   flex-shrink: 0;
 }
 
 .kebab-menu-btn {
-  width: 44px;
-  height: 44px;
-  min-width: 44px;
-  min-height: 44px;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.5);
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s ease-out;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .kebab-menu-btn:hover,
 .kebab-menu-btn[aria-expanded="true"] {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.12);
-  color: white;
+  background: var(--surface-active);
+  color: var(--text-primary);
 }
 
 .kebab-menu-btn:focus-visible {
@@ -365,13 +437,13 @@
   }
 }
 
-/* Backdrop for mobile bottom sheet */
+/* Backdrop */
 .kebab-menu-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(5, 8, 15, 0.6);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   z-index: 199;
 }
 
@@ -381,111 +453,152 @@
   }
 }
 
-/* Mobile: Bottom sheet action menu */
+/* Mobile: Action sheet */
 .kebab-menu-dropdown {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   width: 100%;
-  max-height: 50vh;
-  background: rgba(20, 25, 35, 0.98);
-  backdrop-filter: blur(32px) saturate(130%);
-  -webkit-backdrop-filter: blur(32px) saturate(130%);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px 24px 0 0;
-  box-shadow:
-    0 -8px 32px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  padding: 8px;
+  max-height: 60vh;
+  background: var(--surface-elevated);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.25);
+  padding: 0 8px 8px;
   padding-bottom: calc(8px + var(--safe-area-bottom, 0px));
   z-index: 200;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  /* Let framer-motion handle the animation on mobile */
   transform: translateY(100%);
+}
+
+.kebab-menu-handle {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0 6px;
+  flex-shrink: 0;
+}
+
+.kebab-menu-handle::after {
+  content: '';
+  width: 36px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--border-prominent);
+}
+
+.kebab-menu-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.kebab-menu-separator {
+  height: 1px;
+  background: var(--border-default);
+  margin: 4px 12px;
 }
 
 /* Desktop: Traditional dropdown */
 @media (min-width: 1024px) {
   .kebab-menu-dropdown {
     position: absolute;
-    top: calc(100% + 8px);
+    top: calc(100% + 6px);
     bottom: auto;
     left: auto;
     right: 0;
     width: auto;
-    min-width: 180px;
+    min-width: 200px;
     max-height: none;
-    border-top: none;
     border-radius: 12px;
     padding: 4px;
     padding-bottom: 4px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-default);
     transform: none !important;
-    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .kebab-menu-handle {
+    display: none;
+  }
+
+  .kebab-menu-separator {
+    margin: 2px 8px;
   }
 }
 
+/* Menu items */
 .kebab-menu-item {
   width: 100%;
-  padding: 16px 20px;
+  padding: 14px 16px;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   border: none;
   background: transparent;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-secondary);
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   cursor: pointer;
-  border-radius: 12px;
-  transition: all 0.15s ease;
+  border-radius: 10px;
+  transition: background 0.12s ease, color 0.12s ease;
   text-align: left;
-  min-height: 56px;
 }
 
 @media (min-width: 1024px) {
   .kebab-menu-item {
-    padding: 12px 16px;
+    padding: 10px 12px;
     font-size: 14px;
-    min-height: 44px;
-    gap: 12px;
+    gap: 10px;
+    border-radius: 8px;
   }
 }
 
 .kebab-menu-item:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: white;
+  background: var(--surface-hover);
+  color: var(--text-primary);
+}
+
+.kebab-menu-item:active {
+  background: var(--surface-active);
 }
 
 .kebab-menu-item svg {
   width: 18px;
   height: 18px;
   flex-shrink: 0;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-muted);
+  transition: color 0.12s ease;
 }
 
 .kebab-menu-item:hover svg {
-  color: white;
+  color: var(--text-primary);
 }
 
+/* Danger item */
 .kebab-menu-item-danger {
-  color: rgba(239, 68, 68, 0.9);
+  color: var(--text-danger);
 }
 
 .kebab-menu-item-danger:hover {
-  background: rgba(239, 68, 68, 0.15);
-  color: #EF4444;
+  background: var(--surface-danger);
+  color: var(--text-danger);
+}
+
+.kebab-menu-item-danger:active {
+  background: var(--surface-danger-hover);
 }
 
 .kebab-menu-item-danger svg {
-  color: rgba(239, 68, 68, 0.8);
+  color: var(--text-danger);
+  opacity: 0.8;
 }
 
 .kebab-menu-item-danger:hover svg {
-  color: #EF4444;
+  color: var(--text-danger);
+  opacity: 1;
 }
 
 /* Priority badge alignment */
@@ -497,12 +610,12 @@
   height: 32px;
   min-width: 32px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--surface-hover);
+  border: 1px solid var(--border-default);
   font-family: 'JetBrains Mono', monospace;
   font-size: 14px;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   flex-shrink: 0;
 }
 
@@ -528,29 +641,7 @@
   }
 }
 
-/* Drag handle alignment */
-.drag-handle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  min-width: 32px;
-  color: rgba(255, 255, 255, 0.4);
-  cursor: grab;
-  flex-shrink: 0;
-}
-
-.drag-handle:active {
-  cursor: grabbing;
-}
-
-/* Ensure vertical alignment of all elements */
-.goal-card-inner {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+/* Duplicate .drag-handle and .goal-card-inner removed — see definitions below */
 
 /* Description Button */
 .goal-description-btn {
@@ -559,9 +650,9 @@
   min-width: 44px;
   min-height: 44px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--border-default);
+  background: var(--surface-subtle);
+  color: var(--text-muted);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -571,9 +662,9 @@
 }
 
 .goal-description-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.12);
-  color: white;
+  background: var(--surface-active);
+  border-color: var(--border-prominent);
+  color: var(--text-primary);
 }
 
 .goal-description-btn:focus-visible {
@@ -616,7 +707,7 @@
   align-items: center;
   justify-content: center;
   width: 24px;
-  color: rgba(255, 255, 255, 0.25);
+  color: var(--text-dim);
   cursor: grab;
   flex-shrink: 0;
   margin-right: 8px;
@@ -624,7 +715,7 @@
 }
 
 .drag-handle:hover {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
 }
 
 .goal-card.draggable:active .drag-handle {
@@ -634,53 +725,28 @@
 /* Drag Over State - Visual drop target indicator */
 .goal-card.drag-over {
   border-color: var(--accent-electric) !important;
-  background: rgba(255, 77, 0, 0.08);
+  background: var(--accent-surface);
   box-shadow:
     0 0 24px var(--accent-glow),
     0 8px 32px rgba(0, 0, 0, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-/* Theme-specific drag over states */
-[data-theme="teal"] .goal-card.drag-over {
-  background: rgba(20, 184, 166, 0.08);
-  box-shadow: 0 0 24px rgba(20, 184, 166, 0.4), 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-[data-theme="purple"] .goal-card.drag-over {
-  background: rgba(168, 85, 247, 0.08);
-  box-shadow: 0 0 24px rgba(168, 85, 247, 0.4), 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-[data-theme="blue"] .goal-card.drag-over {
-  background: rgba(59, 130, 246, 0.08);
-  box-shadow: 0 0 24px rgba(59, 130, 246, 0.4), 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-[data-theme="rose"] .goal-card.drag-over {
-  background: rgba(244, 63, 94, 0.08);
-  box-shadow: 0 0 24px rgba(244, 63, 94, 0.4), 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
-
-[data-theme="emerald"] .goal-card.drag-over {
-  background: rgba(16, 185, 129, 0.08);
-  box-shadow: 0 0 24px rgba(16, 185, 129, 0.4), 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-}
 
 
 .progress-card {
   /* Floating island glass panel */
-  background: rgba(20, 25, 35, 0.55);
+  background: var(--surface-glass);
   backdrop-filter: blur(24px) saturate(120%);
   -webkit-backdrop-filter: blur(24px) saturate(120%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-default);
   border-radius: 20px;
   padding: 28px;
   margin-bottom: 32px;
 
   box-shadow:
-    0 8px 40px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    var(--shadow-md),
+    var(--shadow-inset);
 }
 
 .progress-stats {
@@ -694,7 +760,7 @@
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--text-muted);
   margin-bottom: 8px;
 }
 
@@ -706,7 +772,7 @@
 }
 
 .progress-text-large .separator {
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--text-dim);
   margin: 0 6px;
 }
 
@@ -715,7 +781,7 @@
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--text-dim);
   font-weight: 400;
   margin-left: 12px;
 }
@@ -735,7 +801,7 @@
 
 .circular-progress .bg {
   fill: none;
-  stroke: rgba(255, 255, 255, 0.08);
+  stroke: var(--border-default);
   stroke-width: 5;
 }
 
@@ -762,30 +828,30 @@
 
 
 .settings-card {
-  background: rgba(255, 255, 255, 0.025);
+  background: var(--surface-subtle);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-default);
   border-radius: 20px;
   padding: 32px;
 
   box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    var(--shadow-sm),
+    var(--shadow-inset);
 }
 
 .settings-section-title {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 20px;
   font-weight: 600;
-  color: white;
+  color: var(--text-primary);
   margin-bottom: 20px;
   padding-bottom: 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--border-default);
 }
 
 .settings-description {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--text-muted);
   margin-bottom: 20px;
 }

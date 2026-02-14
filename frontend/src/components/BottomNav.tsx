@@ -92,14 +92,14 @@ export function BottomNav() {
                     }}
                   />
                   <motion.div
-                    initial={{ y: '100%', opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: '100%', opacity: 0 }}
+                    initial={{ y: 20, opacity: 0, scale: 0.95 }}
+                    animate={{ y: 0, opacity: 1, scale: 1 }}
+                    exit={{ y: 20, opacity: 0, scale: 0.95 }}
                     transition={{
                       type: 'spring',
-                      damping: 35,
+                      damping: 30,
                       stiffness: 400,
-                      mass: 0.8,
+                      mass: 0.6,
                     }}
                     className="bottom-nav-overflow-menu"
                     onClick={(e) => e.stopPropagation()}
@@ -116,7 +116,7 @@ export function BottomNav() {
                           end={item.path === '/'}
                           className={`bottom-nav-overflow-item ${isActive ? 'active' : ''}`}
                         >
-                          <NavIcon icon={item.icon} className="w-5 h-5" />
+                          <NavIcon icon={item.icon} className="bottom-nav-overflow-icon" />
                           <span>{item.label}</span>
                         </NavLink>
                       );

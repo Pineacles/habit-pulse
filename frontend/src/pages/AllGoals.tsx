@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GoalModal } from '../components/GoalModal';
 import { DescriptionModal } from '../components/DescriptionModal';
@@ -317,81 +318,76 @@ export function AllGoals() {
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
                             </svg>
                           </button>
-                          <AnimatePresence>
-                            {openKebabMenuId === goal.id && (
-                              <>
-                                {/* Backdrop for mobile */}
-                                <motion.div
-                                  initial={{ opacity: 0 }}
-                                  animate={{ opacity: 1 }}
-                                  exit={{ opacity: 0 }}
-                                  transition={{ duration: 0.2 }}
-                                  className="kebab-menu-backdrop"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setOpenKebabMenuId(null);
-                                  }}
-                                />
-                                <motion.div
-                                  initial={{ y: '100%', opacity: 0 }}
-                                  animate={{ y: 0, opacity: 1 }}
-                                  exit={{ y: '100%', opacity: 0 }}
-                                  transition={{ 
-                                    type: 'spring', 
-                                    damping: 35, 
-                                    stiffness: 400,
-                                    mass: 0.8
-                                  }}
-                                  className="kebab-menu-dropdown"
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                              {goal.description && (
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setDescriptionModalGoal(goal);
-                                    setOpenKebabMenuId(null);
-                                  }}
-                                  className="kebab-menu-item"
-                                >
-                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                  </svg>
-                                  <span>View Description</span>
-                                </button>
+                          {createPortal(
+                            <AnimatePresence>
+                              {openKebabMenuId === goal.id && (
+                                <>
+                                  <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="kebab-menu-backdrop"
+                                    onClick={() => setOpenKebabMenuId(null)}
+                                  />
+                                  <motion.div
+                                    initial={{ y: 60, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    exit={{ y: 60, opacity: 0 }}
+                                    transition={{ type: 'spring', damping: 28, stiffness: 380 }}
+                                    className="kebab-menu-dropdown"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <div className="kebab-menu-handle" />
+                                    <div className="kebab-menu-items">
+                                      {goal.description && (
+                                        <button
+                                          onClick={() => {
+                                            setDescriptionModalGoal(goal);
+                                            setOpenKebabMenuId(null);
+                                          }}
+                                          className="kebab-menu-item"
+                                        >
+                                          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                          </svg>
+                                          <span>View Description</span>
+                                        </button>
+                                      )}
+                                      <button
+                                        onClick={() => {
+                                          handleToggleActive(goal);
+                                          setOpenKebabMenuId(null);
+                                        }}
+                                        className="kebab-menu-item"
+                                      >
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                                d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                        </svg>
+                                        <span>Deactivate</span>
+                                      </button>
+                                      <div className="kebab-menu-separator" />
+                                      <button
+                                        onClick={() => {
+                                          handleDelete(goal);
+                                          setOpenKebabMenuId(null);
+                                        }}
+                                        className="kebab-menu-item kebab-menu-item-danger"
+                                      >
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                        <span>Delete</span>
+                                      </button>
+                                    </div>
+                                  </motion.div>
+                                </>
                               )}
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleToggleActive(goal);
-                                  setOpenKebabMenuId(null);
-                                }}
-                                className="kebab-menu-item"
-                              >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                                        d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                                </svg>
-                                <span>Deactivate</span>
-                              </button>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleDelete(goal);
-                                  setOpenKebabMenuId(null);
-                                }}
-                                className="kebab-menu-item kebab-menu-item-danger"
-                              >
-                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                                <span>Delete</span>
-                              </button>
-                                </motion.div>
-                              </>
-                            )}
-                          </AnimatePresence>
+                            </AnimatePresence>,
+                            document.body
+                          )}
                         </div>
                       </div>
                     </div>
@@ -510,67 +506,63 @@ export function AllGoals() {
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
                             </svg>
                           </button>
-                          <AnimatePresence>
-                            {openKebabMenuId === goal.id && (
-                              <>
-                                {/* Backdrop for mobile */}
-                                <motion.div
-                                  initial={{ opacity: 0 }}
-                                  animate={{ opacity: 1 }}
-                                  exit={{ opacity: 0 }}
-                                  transition={{ duration: 0.2 }}
-                                  className="kebab-menu-backdrop"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setOpenKebabMenuId(null);
-                                  }}
-                                />
-                                <motion.div
-                                  initial={{ y: '100%', opacity: 0 }}
-                                  animate={{ y: 0, opacity: 1 }}
-                                  exit={{ y: '100%', opacity: 0 }}
-                                  transition={{ 
-                                    type: 'spring', 
-                                    damping: 35, 
-                                    stiffness: 400,
-                                    mass: 0.8
-                                  }}
-                                  className="kebab-menu-dropdown"
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  {goal.description && (
-                                    <button
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        setDescriptionModalGoal(goal);
-                                        setOpenKebabMenuId(null);
-                                      }}
-                                      className="kebab-menu-item"
-                                    >
-                                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                      </svg>
-                                      <span>View Description</span>
-                                    </button>
-                                  )}
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      handleDelete(goal);
-                                      setOpenKebabMenuId(null);
-                                    }}
-                                    className="kebab-menu-item kebab-menu-item-danger"
+                          {createPortal(
+                            <AnimatePresence>
+                              {openKebabMenuId === goal.id && (
+                                <>
+                                  <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="kebab-menu-backdrop"
+                                    onClick={() => setOpenKebabMenuId(null)}
+                                  />
+                                  <motion.div
+                                    initial={{ y: 60, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    exit={{ y: 60, opacity: 0 }}
+                                    transition={{ type: 'spring', damping: 28, stiffness: 380 }}
+                                    className="kebab-menu-dropdown"
+                                    onClick={(e) => e.stopPropagation()}
                                   >
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                    </svg>
-                                    <span>Delete</span>
-                                  </button>
-                                </motion.div>
-                              </>
-                            )}
-                          </AnimatePresence>
+                                    <div className="kebab-menu-handle" />
+                                    <div className="kebab-menu-items">
+                                      {goal.description && (
+                                        <button
+                                          onClick={() => {
+                                            setDescriptionModalGoal(goal);
+                                            setOpenKebabMenuId(null);
+                                          }}
+                                          className="kebab-menu-item"
+                                        >
+                                          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                          </svg>
+                                          <span>View Description</span>
+                                        </button>
+                                      )}
+                                      <div className="kebab-menu-separator" />
+                                      <button
+                                        onClick={() => {
+                                          handleDelete(goal);
+                                          setOpenKebabMenuId(null);
+                                        }}
+                                        className="kebab-menu-item kebab-menu-item-danger"
+                                      >
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                        <span>Delete</span>
+                                      </button>
+                                    </div>
+                                  </motion.div>
+                                </>
+                              )}
+                            </AnimatePresence>,
+                            document.body
+                          )}
                         </div>
                       </div>
                     </div>
