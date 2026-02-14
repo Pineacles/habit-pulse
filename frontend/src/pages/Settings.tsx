@@ -1,13 +1,13 @@
 import { motion } from 'framer-motion';
 import { useAuthStore } from '../stores/authStore';
-import { useThemeStore, THEME_OPTIONS } from '../stores/themeStore';
+import { useThemeStore, THEME_OPTIONS, MODE_OPTIONS } from '../stores/themeStore';
 
 /**
  * Settings - User preferences including theme selection and account info.
  */
 export function Settings() {
   const { user, logout } = useAuthStore();
-  const { theme, setTheme } = useThemeStore();
+  const { theme, setTheme, mode, setMode } = useThemeStore();
 
   return (
     <>
@@ -26,6 +26,26 @@ export function Settings() {
 
       {/* Settings Grid */}
       <div className="settings-grid">
+        <div className="settings-card">
+          <h2 className="settings-section-title">Appearance</h2>
+          <p className="settings-description">
+            Choose how Habit Pulse looks.
+          </p>
+
+          <div className="segmented-control mode-segmented-control">
+            {MODE_OPTIONS.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                className={`segment-btn ${mode === option.value ? 'active' : ''}`}
+                onClick={() => setMode(option.value)}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Theme section */}
         <div className="settings-card">
           <h2 className="settings-section-title">Theme Color</h2>

@@ -4,12 +4,347 @@
   z-index: 100;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg,
-      rgba(15, 18, 25, 0.98) 0%,
-      rgba(10, 12, 18, 0.99) 100%);
+  background: var(--surface-glass-dense);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   pointer-events: auto;
+}
+
+/* Light mode normalization for mobile goal modal stack */
+[data-mode="light"] .mobile-goal-modal {
+  color: var(--text-primary);
+  background: var(--surface-glass-dense);
+}
+
+[data-mode="light"] .mobile-goal-modal :is(.mobile-modal-title,
+  .mobile-label,
+  .mobile-input,
+  .mobile-textarea,
+  .mobile-stepper-input,
+  .mobile-select,
+  .mobile-date-value,
+  .mobile-calendar-wrapper .rdp-day,
+  .mobile-calendar-wrapper .rdp-caption_label,
+  .mobile-calendar-wrapper .rdp-month_caption_label) {
+  color: var(--text-primary);
+}
+
+[data-mode="light"] .mobile-goal-modal :is(.mobile-modal-header,
+  .mobile-modal-footer,
+  .mobile-calendar-wrapper) {
+  background: var(--surface-glass-heavy);
+  border-color: var(--border-default);
+}
+
+[data-mode="light"] .mobile-goal-modal :is(.mobile-modal-back,
+  .mobile-toggle-btn,
+  .mobile-stepper,
+  .mobile-preset,
+  .mobile-schedule-chip,
+  .mobile-day-btn,
+  .mobile-date-btn,
+  .mobile-calendar-btn,
+  .mobile-btn-secondary) {
+  background: var(--surface-subtle);
+  border-color: var(--border-default);
+  color: var(--text-secondary);
+}
+
+[data-mode="light"] .mobile-goal-modal :is(.mobile-modal-back:hover,
+  .mobile-toggle-btn:hover,
+  .mobile-preset:hover,
+  .mobile-schedule-chip:hover,
+  .mobile-day-btn:hover,
+  .mobile-date-btn:hover,
+  .mobile-calendar-btn:hover,
+  .mobile-btn-secondary:hover) {
+  background: var(--surface-hover);
+  border-color: var(--border-prominent);
+  color: var(--text-primary);
+}
+
+[data-mode="light"] .mobile-goal-modal :is(.mobile-toggle-btn.active,
+  .mobile-preset.active,
+  .mobile-schedule-chip.active,
+  .mobile-day-btn.active,
+  .mobile-date-btn.active,
+  .mobile-calendar-btn.primary,
+  .mobile-btn-primary,
+  .mobile-submit-btn) {
+  color: var(--text-on-accent);
+}
+
+[data-mode="light"] .mobile-goal-modal :is([class^="mobile-"],
+  [class*=" mobile-"]) {
+  color: var(--text-primary);
+}
+
+[data-mode="light"] .mobile-goal-modal :is(.mobile-label-optional,
+  .mobile-toggle-desc,
+  .mobile-hint,
+  .mobile-char-count,
+  .mobile-interval-text,
+  .mobile-calendar-wrapper .rdp-head_cell) {
+  color: var(--text-muted);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-modal-error {
+  background: var(--surface-danger);
+  border-color: var(--border-danger);
+  color: var(--text-danger);
+}
+
+/* Solid-accent active states get white text */
+[data-mode="light"] .mobile-goal-modal :is(.mobile-calendar-btn.primary,
+  .mobile-btn-primary,
+  .mobile-submit-btn,
+  .mobile-preset.active,
+  .mobile-schedule-chip.active,
+  .mobile-day-btn.active) {
+  color: var(--text-on-accent) !important;
+}
+
+/* Tinted-accent active states keep dark text (background is subtle, not solid) */
+[data-mode="light"] .mobile-goal-modal .mobile-toggle-btn.active {
+  color: var(--text-primary) !important;
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-date-btn.active {
+  color: var(--text-primary) !important;
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-date-btn.active .mobile-date-value {
+  color: var(--text-primary) !important;
+}
+
+/* Re-apply accent backgrounds for active/primary states in light mode.
+   The general rule above overrides background to --surface-subtle, so we
+   must explicitly restore accent styling with matching specificity. */
+[data-mode="light"] .mobile-goal-modal .mobile-toggle-btn.active {
+  background: linear-gradient(180deg,
+      color-mix(in srgb, var(--accent-electric) 18%, transparent) 0%,
+      color-mix(in srgb, var(--accent-electric) 10%, transparent) 100%);
+  border-color: var(--accent-electric);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-toggle-btn svg {
+  color: var(--text-primary);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-toggle-btn.active svg {
+  color: var(--accent-electric);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-preset.active {
+  background: var(--accent-electric);
+  border-color: var(--accent-electric);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-schedule-chip.active {
+  background: var(--accent-electric);
+  border-color: var(--accent-electric);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-day-btn.active {
+  background: var(--accent-electric);
+  border-color: var(--accent-electric);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-btn.primary {
+  background: var(--accent-electric);
+  border-color: var(--accent-electric);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-date-btn.active {
+  border-color: var(--accent-electric);
+  background: color-mix(in srgb, var(--accent-electric) 8%, transparent);
+}
+
+/* Mobile input/textarea surfaces in light mode */
+[data-mode="light"] .mobile-goal-modal .mobile-input {
+  background: var(--surface-input);
+  border-color: var(--border-input);
+  color: var(--text-primary);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-input:focus {
+  background: var(--surface-input);
+  border-color: var(--accent-electric);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-input::placeholder {
+  color: var(--text-placeholder);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-textarea {
+  background: var(--surface-input);
+  border-color: var(--border-input);
+  color: var(--text-primary);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-textarea:focus {
+  background: var(--surface-input);
+  border-color: var(--accent-electric);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-textarea::placeholder {
+  color: var(--text-placeholder);
+}
+
+/* Mobile close button in light mode */
+[data-mode="light"] .mobile-goal-modal .mobile-modal-close {
+  background: var(--surface-subtle);
+  border-color: var(--border-default);
+  color: var(--text-secondary);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-modal-close:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-prominent);
+  color: var(--text-primary);
+}
+
+/* Mobile stepper in light mode */
+[data-mode="light"] .mobile-goal-modal .mobile-stepper {
+  background: var(--surface-input);
+  border-color: var(--border-input);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-stepper-btn {
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-stepper-btn:first-child {
+  border-right-color: var(--border-default);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-stepper-btn:last-child {
+  border-left-color: var(--border-default);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-stepper-btn:hover {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-stepper-input {
+  color: var(--text-primary);
+}
+
+/* Mobile select in light mode */
+[data-mode="light"] .mobile-goal-modal .mobile-select {
+  background: var(--surface-input);
+  border-color: var(--border-input);
+  color: var(--text-primary);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(107,114,128,0.8)'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 18px;
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-select option {
+  background: var(--surface-elevated);
+  color: var(--text-primary);
+}
+
+/* Mobile calendar wrapper in light mode */
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-wrapper {
+  background: var(--surface-subtle);
+  border-color: var(--border-default);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-wrapper .rdp-head_cell {
+  color: var(--text-muted);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-wrapper .rdp-caption_label,
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-wrapper .rdp-month_caption_label,
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-wrapper .rdp-caption .rdp-caption_label,
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-wrapper .rdp-month_caption .rdp-month_caption_label {
+  color: var(--text-primary) !important;
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-wrapper .rdp-nav_button,
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button,
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-wrapper button.rdp-nav_button,
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-wrapper .rdp-nav button,
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-wrapper .rdp-nav .rdp-button_reset {
+  background: var(--surface-hover) !important;
+  border-color: var(--border-default) !important;
+  color: var(--text-secondary) !important;
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-wrapper .rdp-nav_button:hover,
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button:hover,
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-wrapper button.rdp-nav_button:hover,
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-wrapper .rdp-nav button:hover,
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-wrapper .rdp-nav .rdp-button_reset:hover {
+  background: var(--surface-active) !important;
+  border-color: var(--border-prominent) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-wrapper .rdp-nav_button:active,
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button:active,
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-wrapper button.rdp-nav_button:active,
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-wrapper .rdp-nav button:active,
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-wrapper .rdp-nav .rdp-button_reset:active {
+  background: var(--accent-electric) !important;
+  border-color: var(--accent-electric) !important;
+  color: var(--text-on-accent) !important;
+}
+
+/* Mobile calendar container (event modal) */
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-container {
+  background: var(--surface-subtle);
+  border-color: var(--border-default);
+}
+
+/* Mobile calendar actions border */
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-actions {
+  border-top-color: var(--border-default);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-btn {
+  background: var(--surface-subtle);
+  border-color: var(--border-default);
+  color: var(--text-secondary);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-calendar-btn:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-prominent);
+  color: var(--text-primary);
+}
+
+/* Mobile date button text and svg in light mode */
+[data-mode="light"] .mobile-goal-modal .mobile-date-btn {
+  color: var(--text-secondary);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-date-value {
+  color: var(--text-primary);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-date-btn svg {
+  color: var(--text-muted);
+}
+
+[data-mode="light"] .mobile-goal-modal .mobile-date-btn.active svg {
+  color: var(--accent-electric);
+}
+
+/* Mobile toggle button description in light mode */
+[data-mode="light"] .mobile-goal-modal .mobile-toggle-btn.active .mobile-toggle-desc {
+  color: var(--text-secondary);
+}
+
+/* Mobile modal footer in light mode */
+[data-mode="light"] .mobile-goal-modal .mobile-modal-footer {
+  background: var(--surface-elevated);
+  border-top-color: var(--border-default);
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
 }
 
 /* Hide on desktop */
@@ -25,8 +360,8 @@
   justify-content: space-between;
   padding: 16px 20px;
   padding-top: calc(16px + var(--safe-area-top, 0px));
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--border-default);
+  background: var(--surface-subtle);
 }
 
 .mobile-modal-back {
@@ -37,15 +372,15 @@
   justify-content: center;
   border-radius: 12px;
   border: none;
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.7);
+  background: var(--surface-hover);
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .mobile-modal-back:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: var(--surface-active);
+  color: var(--text-primary);
 }
 
 .mobile-modal-back:active {
@@ -56,7 +391,7 @@
   font-family: 'Space Grotesk', sans-serif;
   font-size: 18px;
   font-weight: 600;
-  color: white;
+  color: var(--text-primary);
   letter-spacing: -0.02em;
 }
 
@@ -73,9 +408,9 @@
   padding: 14px 16px;
   margin-bottom: 20px;
   border-radius: 12px;
-  background: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.25);
-  color: #FCA5A5;
+  background: var(--surface-danger-hover);
+  border: 1px solid var(--border-danger-hover);
+  color: var(--text-danger);
   font-size: 14px;
   font-weight: 500;
 }
@@ -90,14 +425,14 @@
   font-family: 'Space Grotesk', sans-serif;
   font-size: 15px;
   font-weight: 600;
-  color: white;
+  color: var(--text-primary);
   margin-bottom: 12px;
   letter-spacing: -0.01em;
 }
 
 .mobile-label-optional {
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-muted);
   font-size: 13px;
 }
 
@@ -105,10 +440,10 @@
 .mobile-input {
   width: 100%;
   padding: 16px 18px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  background: var(--surface-input);
+  border: 1.5px solid var(--border-input);
   border-radius: 14px;
-  color: white;
+  color: var(--text-primary);
   font-family: 'Space Grotesk', sans-serif;
   font-size: 16px;
   transition: all 0.2s ease;
@@ -116,22 +451,22 @@
 
 .mobile-input:focus {
   outline: none;
-  border-color: var(--accent-electric, #FF4D00);
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 0 4px var(--accent-glow, rgba(255, 77, 0, 0.15));
+  border-color: var(--accent-electric);
+  background: var(--surface-input-focus);
+  box-shadow: 0 0 0 4px var(--accent-surface);
 }
 
 .mobile-input::placeholder {
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--text-placeholder);
 }
 
 .mobile-textarea {
   width: 100%;
   padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  background: var(--surface-input);
+  border: 1.5px solid var(--border-input);
   border-radius: 14px;
-  color: white;
+  color: var(--text-primary);
   font-family: 'Space Grotesk', sans-serif;
   font-size: 15px;
   line-height: 1.5;
@@ -141,13 +476,13 @@
 
 .mobile-textarea:focus {
   outline: none;
-  border-color: var(--accent-electric, #FF4D00);
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 0 4px var(--accent-glow, rgba(255, 77, 0, 0.15));
+  border-color: var(--accent-electric);
+  background: var(--surface-input-focus);
+  box-shadow: 0 0 0 4px var(--accent-surface);
 }
 
 .mobile-textarea::placeholder {
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--text-placeholder);
 }
 
 
@@ -163,16 +498,16 @@
   align-items: center;
   gap: 6px;
   padding: 18px 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1.5px solid rgba(255, 255, 255, 0.08);
+  background: var(--surface-subtle);
+  border: 1.5px solid var(--border-default);
   border-radius: 16px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .mobile-toggle-btn svg {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-dim);
   transition: all 0.2s ease;
 }
 
@@ -184,75 +519,31 @@
 
 .mobile-toggle-desc {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--text-dim);
 }
 
 .mobile-toggle-btn:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.12);
+  background: var(--surface-hover);
+  border-color: var(--border-prominent);
 }
 
 .mobile-toggle-btn.active {
   background: linear-gradient(180deg,
-      rgba(255, 77, 0, 0.15) 0%,
-      rgba(255, 77, 0, 0.08) 100%);
-  border-color: var(--accent-electric, #FF4D00);
-  color: white;
+      color-mix(in srgb, var(--accent-electric) 15%, transparent) 0%,
+      color-mix(in srgb, var(--accent-electric) 8%, transparent) 100%);
+  border-color: var(--accent-electric);
+  color: var(--text-primary);
 }
 
 .mobile-toggle-btn.active svg {
-  color: var(--accent-electric, #FF4D00);
+  color: var(--accent-electric);
 }
 
 .mobile-toggle-btn.active .mobile-toggle-desc {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
 }
 
-/* Theme variants */
-[data-theme="teal"] .mobile-toggle-btn.active {
-  background: linear-gradient(180deg, rgba(20, 184, 166, 0.15) 0%, rgba(20, 184, 166, 0.08) 100%);
-  border-color: #14B8A6;
-}
-
-[data-theme="teal"] .mobile-toggle-btn.active svg {
-  color: #14B8A6;
-}
-
-[data-theme="purple"] .mobile-toggle-btn.active {
-  background: linear-gradient(180deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.08) 100%);
-  border-color: #A855F7;
-}
-
-[data-theme="purple"] .mobile-toggle-btn.active svg {
-  color: #A855F7;
-}
-
-[data-theme="blue"] .mobile-toggle-btn.active {
-  background: linear-gradient(180deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.08) 100%);
-  border-color: #3B82F6;
-}
-
-[data-theme="blue"] .mobile-toggle-btn.active svg {
-  color: #3B82F6;
-}
-
-[data-theme="rose"] .mobile-toggle-btn.active {
-  background: linear-gradient(180deg, rgba(244, 63, 94, 0.15) 0%, rgba(244, 63, 94, 0.08) 100%);
-  border-color: #F43F5E;
-}
-
-[data-theme="rose"] .mobile-toggle-btn.active svg {
-  color: #F43F5E;
-}
-
-[data-theme="emerald"] .mobile-toggle-btn.active {
-  background: linear-gradient(180deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.08) 100%);
-  border-color: #10B981;
-}
-
-[data-theme="emerald"] .mobile-toggle-btn.active svg {
-  color: #10B981;
-}
+/* Theme variants for toggle buttons handled by --accent-electric token */
 
 
 .mobile-target-row {
@@ -266,8 +557,8 @@
 .mobile-stepper {
   display: flex;
   align-items: stretch;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  background: var(--surface-input);
+  border: 1.5px solid var(--border-input);
   border-radius: 14px;
   overflow: hidden;
   flex: 1 1 auto;
@@ -286,9 +577,9 @@
   width: 52px;
   min-width: 52px;
   flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--surface-hover);
   border: none;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   font-size: 24px;
   font-weight: 300;
   cursor: pointer;
@@ -296,30 +587,30 @@
 }
 
 .mobile-stepper-btn:first-child {
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  border-right: 1px solid var(--border-default);
   flex-shrink: 0;
 }
 
 .mobile-stepper-btn:last-child {
-  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  border-left: 1px solid var(--border-default);
   flex-shrink: 0;
 }
 
 .mobile-stepper-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: var(--surface-active);
+  color: var(--text-primary);
 }
 
 .mobile-stepper-btn:active {
-  background: var(--accent-electric, #FF4D00);
-  color: white;
+  background: var(--accent-electric);
+  color: var(--text-on-accent);
 }
 
 .mobile-stepper-input {
   flex: 1 1 auto;
   background: transparent;
   border: none;
-  color: white;
+  color: var(--text-primary);
   font-family: 'JetBrains Mono', monospace;
   font-size: 28px;
   font-weight: 600;
@@ -358,10 +649,10 @@
   height: 56px;
   padding: 16px 16px;
   padding-right: 42px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  background: var(--surface-input);
+  border: 1.5px solid var(--border-input);
   border-radius: 14px;
-  color: white;
+  color: var(--text-primary);
   font-family: 'Space Grotesk', sans-serif;
   font-size: 15px;
   cursor: pointer;
@@ -375,12 +666,12 @@
 
 .mobile-select:focus {
   outline: none;
-  border-color: var(--accent-electric, #FF4D00);
+  border-color: var(--accent-electric);
 }
 
 .mobile-select option {
-  background: #1a1f2e;
-  color: white;
+  background: var(--surface-elevated);
+  color: var(--text-primary);
 }
 
 
@@ -393,9 +684,9 @@
   flex: 1;
   padding: 12px;
   border-radius: 12px;
-  border: 1.5px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.5);
+  border: 1.5px solid var(--border-default);
+  background: var(--surface-subtle);
+  color: var(--text-muted);
   font-family: 'JetBrains Mono', monospace;
   font-size: 15px;
   font-weight: 500;
@@ -404,48 +695,19 @@
 }
 
 .mobile-preset:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.8);
+  background: var(--surface-hover);
+  border-color: var(--border-prominent);
+  color: var(--text-secondary);
 }
 
 .mobile-preset.active {
-  background: var(--accent-electric, #FF4D00);
-  border-color: var(--accent-electric, #FF4D00);
-  color: white;
-  box-shadow: 0 4px 16px var(--accent-glow, rgba(255, 77, 0, 0.4));
+  background: var(--accent-electric);
+  border-color: var(--accent-electric);
+  color: var(--text-on-accent);
+  box-shadow: 0 4px 16px var(--accent-glow);
 }
 
-/* Theme variants */
-[data-theme="teal"] .mobile-preset.active {
-  background: #14B8A6;
-  border-color: #14B8A6;
-  box-shadow: 0 4px 16px rgba(20, 184, 166, 0.4);
-}
-
-[data-theme="purple"] .mobile-preset.active {
-  background: #A855F7;
-  border-color: #A855F7;
-  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.4);
-}
-
-[data-theme="blue"] .mobile-preset.active {
-  background: #3B82F6;
-  border-color: #3B82F6;
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
-}
-
-[data-theme="rose"] .mobile-preset.active {
-  background: #F43F5E;
-  border-color: #F43F5E;
-  box-shadow: 0 4px 16px rgba(244, 63, 94, 0.4);
-}
-
-[data-theme="emerald"] .mobile-preset.active {
-  background: #10B981;
-  border-color: #10B981;
-  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
-}
+/* Theme variants for presets are handled by --accent-electric/--accent-glow tokens */
 
 
 .mobile-schedule-chips {
@@ -457,9 +719,9 @@
 .mobile-schedule-chip {
   padding: 12px 18px;
   border-radius: 24px;
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.6);
+  border: 1.5px solid var(--border-default);
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
   font-family: 'Space Grotesk', sans-serif;
   font-size: 14px;
   font-weight: 500;
@@ -468,48 +730,19 @@
 }
 
 .mobile-schedule-chip:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.8);
+  background: var(--surface-hover);
+  border-color: var(--border-prominent);
+  color: var(--text-primary);
 }
 
 .mobile-schedule-chip.active {
-  background: var(--accent-electric, #FF4D00);
-  border-color: var(--accent-electric, #FF4D00);
-  color: white;
-  box-shadow: 0 4px 16px var(--accent-glow, rgba(255, 77, 0, 0.4));
+  background: var(--accent-electric);
+  border-color: var(--accent-electric);
+  color: var(--text-on-accent);
+  box-shadow: 0 4px 16px var(--accent-glow);
 }
 
-/* Theme variants */
-[data-theme="teal"] .mobile-schedule-chip.active {
-  background: #14B8A6;
-  border-color: #14B8A6;
-  box-shadow: 0 4px 16px rgba(20, 184, 166, 0.4);
-}
-
-[data-theme="purple"] .mobile-schedule-chip.active {
-  background: #A855F7;
-  border-color: #A855F7;
-  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.4);
-}
-
-[data-theme="blue"] .mobile-schedule-chip.active {
-  background: #3B82F6;
-  border-color: #3B82F6;
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
-}
-
-[data-theme="rose"] .mobile-schedule-chip.active {
-  background: #F43F5E;
-  border-color: #F43F5E;
-  box-shadow: 0 4px 16px rgba(244, 63, 94, 0.4);
-}
-
-[data-theme="emerald"] .mobile-schedule-chip.active {
-  background: #10B981;
-  border-color: #10B981;
-  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
-}
+/* Theme variants for schedule chips handled by --accent-electric/--accent-glow tokens */
 
 
 .mobile-days-section {
@@ -529,9 +762,9 @@
   align-items: center;
   justify-content: center;
   border-radius: 12px;
-  border: 1.5px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.5);
+  border: 1.5px solid var(--border-default);
+  background: var(--surface-subtle);
+  color: var(--text-muted);
   font-family: 'JetBrains Mono', monospace;
   font-size: 13px;
   font-weight: 500;
@@ -540,47 +773,18 @@
 }
 
 .mobile-day-btn:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.12);
+  background: var(--surface-hover);
+  border-color: var(--border-prominent);
 }
 
 .mobile-day-btn.active {
-  background: linear-gradient(180deg, var(--accent-electric, #FF4D00) 0%, var(--accent-dim, #CC3D00) 100%);
-  border-color: var(--accent-electric, #FF4D00);
-  color: white;
-  box-shadow: 0 4px 12px var(--accent-glow, rgba(255, 77, 0, 0.4));
+  background: linear-gradient(180deg, var(--accent-electric) 0%, var(--accent-dim) 100%);
+  border-color: var(--accent-electric);
+  color: var(--text-on-accent);
+  box-shadow: 0 4px 12px var(--accent-glow);
 }
 
-/* Theme variants */
-[data-theme="teal"] .mobile-day-btn.active {
-  background: linear-gradient(180deg, #14B8A6 0%, #0D9488 100%);
-  border-color: #14B8A6;
-  box-shadow: 0 4px 12px rgba(20, 184, 166, 0.4);
-}
-
-[data-theme="purple"] .mobile-day-btn.active {
-  background: linear-gradient(180deg, #A855F7 0%, #7E22CE 100%);
-  border-color: #A855F7;
-  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
-}
-
-[data-theme="blue"] .mobile-day-btn.active {
-  background: linear-gradient(180deg, #3B82F6 0%, #2563EB 100%);
-  border-color: #3B82F6;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
-}
-
-[data-theme="rose"] .mobile-day-btn.active {
-  background: linear-gradient(180deg, #F43F5E 0%, #BE123C 100%);
-  border-color: #F43F5E;
-  box-shadow: 0 4px 12px rgba(244, 63, 94, 0.4);
-}
-
-[data-theme="emerald"] .mobile-day-btn.active {
-  background: linear-gradient(180deg, #10B981 0%, #047857 100%);
-  border-color: #10B981;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
-}
+/* Theme variants for day buttons handled by --accent-electric/--accent-dim/--accent-glow tokens */
 
 
 .mobile-interval-section {
@@ -598,7 +802,7 @@
 
 .mobile-interval-text {
   font-size: 15px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
 }
 
 .mobile-date-btn {
@@ -607,52 +811,52 @@
   justify-content: space-between;
   width: 100%;
   padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  background: var(--surface-subtle);
+  border: 1.5px solid var(--border-default);
   border-radius: 14px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
   font-size: 15px;
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .mobile-date-btn:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.15);
+  background: var(--surface-hover);
+  border-color: var(--border-prominent);
 }
 
 .mobile-date-btn.active {
-  border-color: var(--accent-electric, #FF4D00);
-  background: rgba(255, 77, 0, 0.08);
+  border-color: var(--accent-electric);
+  background: var(--accent-surface);
 }
 
 .mobile-date-value {
   font-weight: 600;
-  color: white;
+  color: var(--text-primary);
 }
 
 .mobile-date-btn svg {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-dim);
 }
 
 .mobile-date-btn.active svg {
-  color: var(--accent-electric, #FF4D00);
+  color: var(--accent-electric);
 }
 
 
 .mobile-calendar-wrapper {
   margin-top: 16px;
   padding: 16px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--surface-input);
+  border: 1px solid var(--border-subtle);
   border-radius: 16px;
   overflow: hidden;
 }
 
 .mobile-calendar-wrapper .rdp {
   --rdp-cell-size: 42px;
-  --rdp-accent-color: var(--accent-electric, #FF4D00);
-  --rdp-background-color: rgba(255, 77, 0, 0.15);
+  --rdp-accent-color: var(--accent-electric);
+  --rdp-background-color: var(--accent-surface);
   margin: 0;
   padding: 4px 6px 10px;
 }
@@ -673,7 +877,7 @@
 
 .mobile-calendar-wrapper .rdp-head_cell {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-dim);
   font-weight: 500;
   padding: 8px 0;
 }
@@ -707,7 +911,7 @@
   font-family: 'Space Grotesk', sans-serif !important;
   font-size: 17px !important;
   font-weight: 700 !important;
-  color: white !important;
+  color: var(--text-primary) !important;
   position: absolute !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
@@ -740,9 +944,9 @@
   height: 40px;
   min-width: 40px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.9);
+  background: var(--surface-active);
+  border: 1.5px solid var(--border-strong);
+  color: var(--text-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -758,9 +962,9 @@
 .mobile-calendar-wrapper button.rdp-nav_button:hover,
 .mobile-calendar-wrapper .rdp-nav button:hover,
 .mobile-calendar-wrapper .rdp-nav .rdp-button_reset:hover {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(255, 255, 255, 0.3);
-  color: white;
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
 }
 
 .mobile-calendar-wrapper .rdp-nav_button:active,
@@ -768,9 +972,9 @@
 .mobile-calendar-wrapper button.rdp-nav_button:active,
 .mobile-calendar-wrapper .rdp-nav button:active,
 .mobile-calendar-wrapper .rdp-nav .rdp-button_reset:active {
-  background: var(--accent-electric, #FF4D00);
-  border-color: var(--accent-electric, #FF4D00);
-  color: white;
+  background: var(--accent-electric);
+  border-color: var(--accent-electric);
+  color: var(--text-on-accent);
 }
 
 .mobile-calendar-wrapper .rdp-nav_button svg,
@@ -789,16 +993,16 @@
   gap: 12px;
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--border-subtle);
 }
 
 .mobile-calendar-btn {
   flex: 1;
   padding: 12px;
   border-radius: 12px;
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.7);
+  border: 1.5px solid var(--border-default);
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
   font-family: 'Space Grotesk', sans-serif;
   font-size: 14px;
   font-weight: 600;
@@ -807,146 +1011,22 @@
 }
 
 .mobile-calendar-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.15);
-  color: white;
+  background: var(--surface-hover);
+  border-color: var(--border-prominent);
+  color: var(--text-primary);
 }
 
 .mobile-calendar-btn.primary {
-  background: var(--accent-electric, #FF4D00);
-  border-color: var(--accent-electric, #FF4D00);
-  color: white;
+  background: var(--accent-electric);
+  border-color: var(--accent-electric);
+  color: var(--text-on-accent);
 }
 
 .mobile-calendar-btn.primary:hover {
   filter: brightness(1.1);
 }
 
-/* Theme variants for calendar */
-[data-theme="teal"] .mobile-calendar-wrapper .rdp {
-  --rdp-accent-color: #14B8A6;
-  --rdp-background-color: rgba(20, 184, 166, 0.15);
-}
-
-[data-theme="teal"] .mobile-calendar-btn.primary {
-  background: #14B8A6;
-  border-color: #14B8A6;
-}
-
-[data-theme="teal"] .mobile-calendar-wrapper .rdp-nav_button,
-[data-theme="teal"] .mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button,
-[data-theme="teal"] .mobile-calendar-wrapper button.rdp-nav_button {
-  background: rgba(20, 184, 166, 0.12) !important;
-  border-color: rgba(20, 184, 166, 0.4) !important;
-  color: #e6fffa !important;
-}
-
-[data-theme="teal"] .mobile-calendar-wrapper .rdp-nav_button:active,
-[data-theme="teal"] .mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button:active,
-[data-theme="teal"] .mobile-calendar-wrapper button.rdp-nav_button:active {
-  background: #14B8A6 !important;
-  border-color: #14B8A6 !important;
-}
-
-[data-theme="purple"] .mobile-calendar-wrapper .rdp {
-  --rdp-accent-color: #A855F7;
-  --rdp-background-color: rgba(168, 85, 247, 0.15);
-}
-
-[data-theme="purple"] .mobile-calendar-btn.primary {
-  background: #A855F7;
-  border-color: #A855F7;
-}
-
-[data-theme="purple"] .mobile-calendar-wrapper .rdp-nav_button,
-[data-theme="purple"] .mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button,
-[data-theme="purple"] .mobile-calendar-wrapper button.rdp-nav_button {
-  background: rgba(168, 85, 247, 0.12) !important;
-  border-color: rgba(168, 85, 247, 0.4) !important;
-  color: #f5ecff !important;
-}
-
-[data-theme="purple"] .mobile-calendar-wrapper .rdp-nav_button:active,
-[data-theme="purple"] .mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button:active,
-[data-theme="purple"] .mobile-calendar-wrapper button.rdp-nav_button:active {
-  background: #A855F7 !important;
-  border-color: #A855F7 !important;
-}
-
-[data-theme="blue"] .mobile-calendar-wrapper .rdp {
-  --rdp-accent-color: #3B82F6;
-  --rdp-background-color: rgba(59, 130, 246, 0.15);
-}
-
-[data-theme="blue"] .mobile-calendar-btn.primary {
-  background: #3B82F6;
-  border-color: #3B82F6;
-}
-
-[data-theme="blue"] .mobile-calendar-wrapper .rdp-nav_button,
-[data-theme="blue"] .mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button,
-[data-theme="blue"] .mobile-calendar-wrapper button.rdp-nav_button {
-  background: rgba(59, 130, 246, 0.12) !important;
-  border-color: rgba(59, 130, 246, 0.4) !important;
-  color: #e8f1ff !important;
-}
-
-[data-theme="blue"] .mobile-calendar-wrapper .rdp-nav_button:active,
-[data-theme="blue"] .mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button:active,
-[data-theme="blue"] .mobile-calendar-wrapper button.rdp-nav_button:active {
-  background: #3B82F6 !important;
-  border-color: #3B82F6 !important;
-}
-
-[data-theme="rose"] .mobile-calendar-wrapper .rdp {
-  --rdp-accent-color: #F43F5E;
-  --rdp-background-color: rgba(244, 63, 94, 0.15);
-}
-
-[data-theme="rose"] .mobile-calendar-btn.primary {
-  background: #F43F5E;
-  border-color: #F43F5E;
-}
-
-[data-theme="rose"] .mobile-calendar-wrapper .rdp-nav_button,
-[data-theme="rose"] .mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button,
-[data-theme="rose"] .mobile-calendar-wrapper button.rdp-nav_button {
-  background: rgba(244, 63, 94, 0.12) !important;
-  border-color: rgba(244, 63, 94, 0.4) !important;
-  color: #ffe8ed !important;
-}
-
-[data-theme="rose"] .mobile-calendar-wrapper .rdp-nav_button:active,
-[data-theme="rose"] .mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button:active,
-[data-theme="rose"] .mobile-calendar-wrapper button.rdp-nav_button:active {
-  background: #F43F5E !important;
-  border-color: #F43F5E !important;
-}
-
-[data-theme="emerald"] .mobile-calendar-wrapper .rdp {
-  --rdp-accent-color: #10B981;
-  --rdp-background-color: rgba(16, 185, 129, 0.15);
-}
-
-[data-theme="emerald"] .mobile-calendar-btn.primary {
-  background: #10B981;
-  border-color: #10B981;
-}
-
-[data-theme="emerald"] .mobile-calendar-wrapper .rdp-nav_button,
-[data-theme="emerald"] .mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button,
-[data-theme="emerald"] .mobile-calendar-wrapper button.rdp-nav_button {
-  background: rgba(16, 185, 129, 0.12) !important;
-  border-color: rgba(16, 185, 129, 0.4) !important;
-  color: #e5fff6 !important;
-}
-
-[data-theme="emerald"] .mobile-calendar-wrapper .rdp-nav_button:active,
-[data-theme="emerald"] .mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button:active,
-[data-theme="emerald"] .mobile-calendar-wrapper button.rdp-nav_button:active {
-  background: #10B981 !important;
-  border-color: #10B981 !important;
-}
+/* Theme variants for calendar handled by --accent-electric/--accent-surface tokens */
 
 
 .mobile-modal-footer {
@@ -958,20 +1038,19 @@
   gap: 12px;
   padding: 16px 20px;
   padding-bottom: calc(16px + var(--safe-area-bottom, 0px));
-  background: linear-gradient(180deg,
-      rgba(15, 18, 25, 0) 0%,
-      rgba(15, 18, 25, 0.95) 20%,
-      rgba(15, 18, 25, 1) 100%);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--surface-elevated);
+  border-top: 1px solid var(--border-subtle);
+  z-index: 10;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.3);
 }
 
 .mobile-btn-secondary {
   flex: 1;
   padding: 16px;
   border-radius: 14px;
-  border: 1.5px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.7);
+  border: 1.5px solid var(--border-prominent);
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
   font-family: 'Space Grotesk', sans-serif;
   font-size: 16px;
   font-weight: 600;
@@ -980,9 +1059,9 @@
 }
 
 .mobile-btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
-  color: white;
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
 }
 
 .mobile-btn-secondary:active {
@@ -999,19 +1078,19 @@
   padding: 16px;
   border-radius: 14px;
   border: none;
-  background: linear-gradient(180deg, var(--accent-electric, #FF4D00) 0%, var(--accent-dim, #CC3D00) 100%);
-  color: white;
+  background: linear-gradient(180deg, var(--accent-electric) 0%, var(--accent-dim) 100%);
+  color: var(--text-on-accent);
   font-family: 'Space Grotesk', sans-serif;
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s ease;
-  box-shadow: 0 4px 20px var(--accent-glow, rgba(255, 77, 0, 0.4));
+  box-shadow: 0 4px 20px var(--accent-glow);
 }
 
 .mobile-btn-primary:hover {
   filter: brightness(1.1);
-  box-shadow: 0 6px 24px var(--accent-glow, rgba(255, 77, 0, 0.5));
+  box-shadow: 0 6px 24px var(--accent-glow);
 }
 
 .mobile-btn-primary:active {
@@ -1024,31 +1103,7 @@
   box-shadow: none;
 }
 
-/* Theme variants for primary button */
-[data-theme="teal"] .mobile-btn-primary {
-  background: linear-gradient(180deg, #14B8A6 0%, #0D9488 100%);
-  box-shadow: 0 4px 20px rgba(20, 184, 166, 0.4);
-}
-
-[data-theme="purple"] .mobile-btn-primary {
-  background: linear-gradient(180deg, #A855F7 0%, #7E22CE 100%);
-  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
-}
-
-[data-theme="blue"] .mobile-btn-primary {
-  background: linear-gradient(180deg, #3B82F6 0%, #2563EB 100%);
-  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
-}
-
-[data-theme="rose"] .mobile-btn-primary {
-  background: linear-gradient(180deg, #F43F5E 0%, #BE123C 100%);
-  box-shadow: 0 4px 20px rgba(244, 63, 94, 0.4);
-}
-
-[data-theme="emerald"] .mobile-btn-primary {
-  background: linear-gradient(180deg, #10B981 0%, #047857 100%);
-  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
-}
+/* Theme variants for primary button handled by --accent-electric/--accent-dim/--accent-glow tokens */
 
 /* ==========================================================
    Event modal mobile-specific class mappings
@@ -1066,16 +1121,16 @@
   align-items: center;
   justify-content: center;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid var(--border-prominent);
+  background: var(--surface-active);
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .mobile-modal-close:hover {
-  background: rgba(255, 255, 255, 0.14);
-  color: white;
+  background: var(--surface-hover);
+  color: var(--text-primary);
 }
 
 .mobile-modal-close:active {
@@ -1086,8 +1141,8 @@
   margin-top: 10px;
   padding: 14px;
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-default);
+  background: var(--surface-input);
   overflow: hidden;
 }
 
@@ -1100,14 +1155,14 @@
   margin-top: 8px;
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--text-dim);
 }
 
 .mobile-char-count {
   margin-top: 8px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--text-dim);
 }
 
 .mobile-submit-btn {
@@ -1116,7 +1171,7 @@
   border-radius: 14px;
   border: 1px solid color-mix(in srgb, var(--accent-electric) 40%, transparent);
   background: linear-gradient(180deg, var(--accent-electric) 0%, var(--accent-dim) 100%);
-  color: white;
+  color: var(--text-on-accent);
   font-family: 'Space Grotesk', sans-serif;
   font-size: 20px;
   font-weight: 700;
@@ -1137,1054 +1192,4 @@
   opacity: 0.55;
   cursor: not-allowed;
   box-shadow: none;
-}
-
-.mobile-goal-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  display: flex;
-  flex-direction: column;
-  background: linear-gradient(180deg,
-      rgba(15, 18, 25, 0.98) 0%,
-      rgba(10, 12, 18, 0.99) 100%);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  pointer-events: auto;
-}
-
-/* Hide on desktop */
-@media (min-width: 640px) {
-  .mobile-goal-modal {
-    display: none;
-  }
-}
-
-.mobile-modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  padding-top: calc(16px + var(--safe-area-top, 0px));
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(255, 255, 255, 0.02);
-}
-
-.mobile-modal-back {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  border: none;
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.7);
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.mobile-modal-back:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-}
-
-.mobile-modal-back:active {
-  transform: scale(0.95);
-}
-
-.mobile-modal-title {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 18px;
-  font-weight: 600;
-  color: white;
-  letter-spacing: -0.02em;
-}
-
-.mobile-modal-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 24px 20px;
-  padding-bottom: 120px;
-  /* Space for fixed footer */
-}
-
-
-.mobile-modal-error {
-  padding: 14px 16px;
-  margin-bottom: 20px;
-  border-radius: 12px;
-  background: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.25);
-  color: #FCA5A5;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-
-.mobile-field {
-  margin-bottom: 28px;
-}
-
-.mobile-label {
-  display: block;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  color: white;
-  margin-bottom: 12px;
-  letter-spacing: -0.01em;
-}
-
-.mobile-label-optional {
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 13px;
-}
-
-
-.mobile-input {
-  width: 100%;
-  padding: 16px 18px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px;
-  color: white;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 16px;
-  transition: all 0.2s ease;
-}
-
-.mobile-input:focus {
-  outline: none;
-  border-color: var(--accent-electric, #FF4D00);
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 0 4px var(--accent-glow, rgba(255, 77, 0, 0.15));
-}
-
-.mobile-input::placeholder {
-  color: rgba(255, 255, 255, 0.35);
-}
-
-.mobile-textarea {
-  width: 100%;
-  padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px;
-  color: white;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 15px;
-  line-height: 1.5;
-  resize: none;
-  transition: all 0.2s ease;
-}
-
-.mobile-textarea:focus {
-  outline: none;
-  border-color: var(--accent-electric, #FF4D00);
-  background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 0 4px var(--accent-glow, rgba(255, 77, 0, 0.15));
-}
-
-.mobile-textarea::placeholder {
-  color: rgba(255, 255, 255, 0.35);
-}
-
-
-.mobile-toggle-group {
-  display: flex;
-  gap: 12px;
-}
-
-.mobile-toggle-btn {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 18px 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1.5px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  color: rgba(255, 255, 255, 0.5);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.mobile-toggle-btn svg {
-  color: rgba(255, 255, 255, 0.4);
-  transition: all 0.2s ease;
-}
-
-.mobile-toggle-btn span:first-of-type {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.mobile-toggle-desc {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.35);
-}
-
-.mobile-toggle-btn:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.12);
-}
-
-.mobile-toggle-btn.active {
-  background: linear-gradient(180deg,
-      rgba(255, 77, 0, 0.15) 0%,
-      rgba(255, 77, 0, 0.08) 100%);
-  border-color: var(--accent-electric, #FF4D00);
-  color: white;
-}
-
-.mobile-toggle-btn.active svg {
-  color: var(--accent-electric, #FF4D00);
-}
-
-.mobile-toggle-btn.active .mobile-toggle-desc {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-/* Theme variants */
-[data-theme="teal"] .mobile-toggle-btn.active {
-  background: linear-gradient(180deg, rgba(20, 184, 166, 0.15) 0%, rgba(20, 184, 166, 0.08) 100%);
-  border-color: #14B8A6;
-}
-
-[data-theme="teal"] .mobile-toggle-btn.active svg {
-  color: #14B8A6;
-}
-
-[data-theme="purple"] .mobile-toggle-btn.active {
-  background: linear-gradient(180deg, rgba(168, 85, 247, 0.15) 0%, rgba(168, 85, 247, 0.08) 100%);
-  border-color: #A855F7;
-}
-
-[data-theme="purple"] .mobile-toggle-btn.active svg {
-  color: #A855F7;
-}
-
-[data-theme="blue"] .mobile-toggle-btn.active {
-  background: linear-gradient(180deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.08) 100%);
-  border-color: #3B82F6;
-}
-
-[data-theme="blue"] .mobile-toggle-btn.active svg {
-  color: #3B82F6;
-}
-
-[data-theme="rose"] .mobile-toggle-btn.active {
-  background: linear-gradient(180deg, rgba(244, 63, 94, 0.15) 0%, rgba(244, 63, 94, 0.08) 100%);
-  border-color: #F43F5E;
-}
-
-[data-theme="rose"] .mobile-toggle-btn.active svg {
-  color: #F43F5E;
-}
-
-[data-theme="emerald"] .mobile-toggle-btn.active {
-  background: linear-gradient(180deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.08) 100%);
-  border-color: #10B981;
-}
-
-[data-theme="emerald"] .mobile-toggle-btn.active svg {
-  color: #10B981;
-}
-
-
-.mobile-target-row {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.mobile-stepper {
-  display: flex;
-  align-items: stretch;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px;
-  overflow: hidden;
-  flex: 1 1 auto;
-  min-width: 160px;
-  max-width: 100%;
-}
-
-.mobile-stepper.compact {
-  flex: 0 0 auto;
-  min-width: 140px;
-  width: auto;
-  overflow: hidden;
-}
-
-.mobile-stepper-btn {
-  width: 52px;
-  min-width: 52px;
-  flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.05);
-  border: none;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 24px;
-  font-weight: 300;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.mobile-stepper-btn:first-child {
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
-  flex-shrink: 0;
-}
-
-.mobile-stepper-btn:last-child {
-  border-left: 1px solid rgba(255, 255, 255, 0.08);
-  flex-shrink: 0;
-}
-
-.mobile-stepper-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-}
-
-.mobile-stepper-btn:active {
-  background: var(--accent-electric, #FF4D00);
-  color: white;
-}
-
-.mobile-stepper-input {
-  flex: 1 1 auto;
-  background: transparent;
-  border: none;
-  color: white;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 28px;
-  font-weight: 600;
-  text-align: center;
-  padding: 14px 8px;
-  min-width: 60px;
-  width: auto;
-  max-width: none;
-  appearance: textfield;
-  -moz-appearance: textfield;
-}
-
-.mobile-stepper-input::-webkit-outer-spin-button,
-.mobile-stepper-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.mobile-stepper.compact .mobile-stepper-btn {
-  width: 44px;
-  min-width: 44px;
-  flex-shrink: 0;
-}
-
-.mobile-stepper.compact .mobile-stepper-input {
-  font-size: 22px;
-  padding: 12px 8px;
-  min-width: 50px;
-  width: auto;
-  flex: 1;
-}
-
-.mobile-select {
-  flex: 1 1 auto;
-  min-width: 100px;
-  height: 56px;
-  padding: 16px 16px;
-  padding-right: 42px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px;
-  color: white;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 15px;
-  cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='rgba(255,255,255,0.5)'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
-  background-size: 18px;
-  box-sizing: border-box;
-}
-
-.mobile-select:focus {
-  outline: none;
-  border-color: var(--accent-electric, #FF4D00);
-}
-
-.mobile-select option {
-  background: #1a1f2e;
-  color: white;
-}
-
-
-.mobile-presets {
-  display: flex;
-  gap: 10px;
-}
-
-.mobile-preset {
-  flex: 1;
-  padding: 12px;
-  border-radius: 12px;
-  border: 1.5px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.5);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.mobile-preset:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.mobile-preset.active {
-  background: var(--accent-electric, #FF4D00);
-  border-color: var(--accent-electric, #FF4D00);
-  color: white;
-  box-shadow: 0 4px 16px var(--accent-glow, rgba(255, 77, 0, 0.4));
-}
-
-/* Theme variants */
-[data-theme="teal"] .mobile-preset.active {
-  background: #14B8A6;
-  border-color: #14B8A6;
-  box-shadow: 0 4px 16px rgba(20, 184, 166, 0.4);
-}
-
-[data-theme="purple"] .mobile-preset.active {
-  background: #A855F7;
-  border-color: #A855F7;
-  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.4);
-}
-
-[data-theme="blue"] .mobile-preset.active {
-  background: #3B82F6;
-  border-color: #3B82F6;
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
-}
-
-[data-theme="rose"] .mobile-preset.active {
-  background: #F43F5E;
-  border-color: #F43F5E;
-  box-shadow: 0 4px 16px rgba(244, 63, 94, 0.4);
-}
-
-[data-theme="emerald"] .mobile-preset.active {
-  background: #10B981;
-  border-color: #10B981;
-  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
-}
-
-
-.mobile-schedule-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.mobile-schedule-chip {
-  padding: 12px 18px;
-  border-radius: 24px;
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.6);
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.mobile-schedule-chip:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.mobile-schedule-chip.active {
-  background: var(--accent-electric, #FF4D00);
-  border-color: var(--accent-electric, #FF4D00);
-  color: white;
-  box-shadow: 0 4px 16px var(--accent-glow, rgba(255, 77, 0, 0.4));
-}
-
-/* Theme variants */
-[data-theme="teal"] .mobile-schedule-chip.active {
-  background: #14B8A6;
-  border-color: #14B8A6;
-  box-shadow: 0 4px 16px rgba(20, 184, 166, 0.4);
-}
-
-[data-theme="purple"] .mobile-schedule-chip.active {
-  background: #A855F7;
-  border-color: #A855F7;
-  box-shadow: 0 4px 16px rgba(168, 85, 247, 0.4);
-}
-
-[data-theme="blue"] .mobile-schedule-chip.active {
-  background: #3B82F6;
-  border-color: #3B82F6;
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
-}
-
-[data-theme="rose"] .mobile-schedule-chip.active {
-  background: #F43F5E;
-  border-color: #F43F5E;
-  box-shadow: 0 4px 16px rgba(244, 63, 94, 0.4);
-}
-
-[data-theme="emerald"] .mobile-schedule-chip.active {
-  background: #10B981;
-  border-color: #10B981;
-  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
-}
-
-
-.mobile-days-section {
-  margin-top: 16px;
-  overflow: hidden;
-}
-
-.mobile-days-grid {
-  display: flex;
-  gap: 8px;
-}
-
-.mobile-day-btn {
-  flex: 1;
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  border: 1.5px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.5);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.mobile-day-btn:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.12);
-}
-
-.mobile-day-btn.active {
-  background: linear-gradient(180deg, var(--accent-electric, #FF4D00) 0%, var(--accent-dim, #CC3D00) 100%);
-  border-color: var(--accent-electric, #FF4D00);
-  color: white;
-  box-shadow: 0 4px 12px var(--accent-glow, rgba(255, 77, 0, 0.4));
-}
-
-/* Theme variants */
-[data-theme="teal"] .mobile-day-btn.active {
-  background: linear-gradient(180deg, #14B8A6 0%, #0D9488 100%);
-  border-color: #14B8A6;
-  box-shadow: 0 4px 12px rgba(20, 184, 166, 0.4);
-}
-
-[data-theme="purple"] .mobile-day-btn.active {
-  background: linear-gradient(180deg, #A855F7 0%, #7E22CE 100%);
-  border-color: #A855F7;
-  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
-}
-
-[data-theme="blue"] .mobile-day-btn.active {
-  background: linear-gradient(180deg, #3B82F6 0%, #2563EB 100%);
-  border-color: #3B82F6;
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
-}
-
-[data-theme="rose"] .mobile-day-btn.active {
-  background: linear-gradient(180deg, #F43F5E 0%, #BE123C 100%);
-  border-color: #F43F5E;
-  box-shadow: 0 4px 12px rgba(244, 63, 94, 0.4);
-}
-
-[data-theme="emerald"] .mobile-day-btn.active {
-  background: linear-gradient(180deg, #10B981 0%, #047857 100%);
-  border-color: #10B981;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
-}
-
-
-.mobile-interval-section {
-  margin-top: 16px;
-  overflow: hidden;
-}
-
-.mobile-interval-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.mobile-interval-text {
-  font-size: 15px;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.mobile-date-btn {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 14px 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
-  border-radius: 14px;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 15px;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.mobile-date-btn:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.15);
-}
-
-.mobile-date-btn.active {
-  border-color: var(--accent-electric, #FF4D00);
-  background: rgba(255, 77, 0, 0.08);
-}
-
-.mobile-date-value {
-  font-weight: 600;
-  color: white;
-}
-
-.mobile-date-btn svg {
-  color: rgba(255, 255, 255, 0.4);
-}
-
-.mobile-date-btn.active svg {
-  color: var(--accent-electric, #FF4D00);
-}
-
-
-.mobile-calendar-wrapper {
-  margin-top: 16px;
-  padding: 16px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-.mobile-calendar-wrapper .rdp {
-  --rdp-cell-size: 42px;
-  --rdp-accent-color: var(--accent-electric, #FF4D00);
-  --rdp-background-color: rgba(255, 77, 0, 0.15);
-  margin: 0;
-  padding: 4px 6px 10px;
-}
-
-.mobile-calendar-wrapper .rdp-month {
-  width: 100%;
-  margin-bottom: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.mobile-calendar-wrapper .rdp-table {
-  width: 100%;
-  max-width: 100%;
-  margin: 0 auto;
-}
-
-.mobile-calendar-wrapper .rdp-head_cell {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.4);
-  font-weight: 500;
-  padding: 8px 0;
-}
-
-.mobile-calendar-wrapper .rdp-day {
-  border-radius: 10px;
-}
-
-/* Calendar caption and nav */
-.mobile-calendar-wrapper .rdp-caption,
-.mobile-calendar-wrapper .rdp-month_caption {
-  display: flex !important;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px !important;
-  position: relative;
-  height: 44px;
-  padding: 0 4px;
-  width: 100%;
-}
-
-.mobile-calendar-wrapper .rdp-caption>*,
-.mobile-calendar-wrapper .rdp-month_caption>* {
-  display: block;
-}
-
-.mobile-calendar-wrapper .rdp-caption_label,
-.mobile-calendar-wrapper .rdp-month_caption_label,
-.mobile-calendar-wrapper .rdp-caption .rdp-caption_label,
-.mobile-calendar-wrapper .rdp-month_caption .rdp-month_caption_label {
-  font-family: 'Space Grotesk', sans-serif !important;
-  font-size: 17px !important;
-  font-weight: 700 !important;
-  color: white !important;
-  position: absolute !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  text-align: center !important;
-  pointer-events: none !important;
-  z-index: 10 !important;
-  margin: 0 !important;
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  white-space: nowrap !important;
-  width: auto !important;
-  height: auto !important;
-}
-
-.mobile-calendar-wrapper .rdp-nav {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  z-index: 1;
-  position: relative;
-}
-
-.mobile-calendar-wrapper .rdp-nav_button,
-.mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button,
-.mobile-calendar-wrapper button.rdp-nav_button,
-.mobile-calendar-wrapper .rdp-nav button,
-.mobile-calendar-wrapper .rdp-nav .rdp-button_reset {
-  width: 40px;
-  height: 40px;
-  min-width: 40px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  padding: 0;
-  margin: 0;
-  box-shadow: none;
-}
-
-.mobile-calendar-wrapper .rdp-nav_button:hover,
-.mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button:hover,
-.mobile-calendar-wrapper button.rdp-nav_button:hover,
-.mobile-calendar-wrapper .rdp-nav button:hover,
-.mobile-calendar-wrapper .rdp-nav .rdp-button_reset:hover {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(255, 255, 255, 0.3);
-  color: white;
-}
-
-.mobile-calendar-wrapper .rdp-nav_button:active,
-.mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button:active,
-.mobile-calendar-wrapper button.rdp-nav_button:active,
-.mobile-calendar-wrapper .rdp-nav button:active,
-.mobile-calendar-wrapper .rdp-nav .rdp-button_reset:active {
-  background: var(--accent-electric, #FF4D00);
-  border-color: var(--accent-electric, #FF4D00);
-  color: white;
-}
-
-.mobile-calendar-wrapper .rdp-nav_button svg,
-.mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button svg,
-.mobile-calendar-wrapper button.rdp-nav_button svg,
-.mobile-calendar-wrapper .rdp-nav button svg,
-.mobile-calendar-wrapper .rdp-nav .rdp-button_reset svg {
-  width: 20px;
-  height: 20px;
-  stroke-width: 2;
-  color: inherit;
-}
-
-.mobile-calendar-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.mobile-calendar-btn {
-  flex: 1;
-  padding: 12px;
-  border-radius: 12px;
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.7);
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.mobile-calendar-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.15);
-  color: white;
-}
-
-.mobile-calendar-btn.primary {
-  background: var(--accent-electric, #FF4D00);
-  border-color: var(--accent-electric, #FF4D00);
-  color: white;
-}
-
-.mobile-calendar-btn.primary:hover {
-  filter: brightness(1.1);
-}
-
-/* Theme variants for calendar */
-[data-theme="teal"] .mobile-calendar-wrapper .rdp {
-  --rdp-accent-color: #14B8A6;
-  --rdp-background-color: rgba(20, 184, 166, 0.15);
-}
-
-[data-theme="teal"] .mobile-calendar-btn.primary {
-  background: #14B8A6;
-  border-color: #14B8A6;
-}
-
-[data-theme="teal"] .mobile-calendar-wrapper .rdp-nav_button,
-[data-theme="teal"] .mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button,
-[data-theme="teal"] .mobile-calendar-wrapper button.rdp-nav_button {
-  background: rgba(20, 184, 166, 0.12) !important;
-  border-color: rgba(20, 184, 166, 0.4) !important;
-  color: #e6fffa !important;
-}
-
-[data-theme="teal"] .mobile-calendar-wrapper .rdp-nav_button:active,
-[data-theme="teal"] .mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button:active,
-[data-theme="teal"] .mobile-calendar-wrapper button.rdp-nav_button:active {
-  background: #14B8A6 !important;
-  border-color: #14B8A6 !important;
-}
-
-[data-theme="purple"] .mobile-calendar-wrapper .rdp {
-  --rdp-accent-color: #A855F7;
-  --rdp-background-color: rgba(168, 85, 247, 0.15);
-}
-
-[data-theme="purple"] .mobile-calendar-btn.primary {
-  background: #A855F7;
-  border-color: #A855F7;
-}
-
-[data-theme="purple"] .mobile-calendar-wrapper .rdp-nav_button,
-[data-theme="purple"] .mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button,
-[data-theme="purple"] .mobile-calendar-wrapper button.rdp-nav_button {
-  background: rgba(168, 85, 247, 0.12) !important;
-  border-color: rgba(168, 85, 247, 0.4) !important;
-  color: #f5ecff !important;
-}
-
-[data-theme="purple"] .mobile-calendar-wrapper .rdp-nav_button:active,
-[data-theme="purple"] .mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button:active,
-[data-theme="purple"] .mobile-calendar-wrapper button.rdp-nav_button:active {
-  background: #A855F7 !important;
-  border-color: #A855F7 !important;
-}
-
-[data-theme="blue"] .mobile-calendar-wrapper .rdp {
-  --rdp-accent-color: #3B82F6;
-  --rdp-background-color: rgba(59, 130, 246, 0.15);
-}
-
-[data-theme="blue"] .mobile-calendar-btn.primary {
-  background: #3B82F6;
-  border-color: #3B82F6;
-}
-
-[data-theme="blue"] .mobile-calendar-wrapper .rdp-nav_button,
-[data-theme="blue"] .mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button,
-[data-theme="blue"] .mobile-calendar-wrapper button.rdp-nav_button {
-  background: rgba(59, 130, 246, 0.12) !important;
-  border-color: rgba(59, 130, 246, 0.4) !important;
-  color: #e8f1ff !important;
-}
-
-[data-theme="blue"] .mobile-calendar-wrapper .rdp-nav_button:active,
-[data-theme="blue"] .mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button:active,
-[data-theme="blue"] .mobile-calendar-wrapper button.rdp-nav_button:active {
-  background: #3B82F6 !important;
-  border-color: #3B82F6 !important;
-}
-
-[data-theme="rose"] .mobile-calendar-wrapper .rdp {
-  --rdp-accent-color: #F43F5E;
-  --rdp-background-color: rgba(244, 63, 94, 0.15);
-}
-
-[data-theme="rose"] .mobile-calendar-btn.primary {
-  background: #F43F5E;
-  border-color: #F43F5E;
-}
-
-[data-theme="rose"] .mobile-calendar-wrapper .rdp-nav_button,
-[data-theme="rose"] .mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button,
-[data-theme="rose"] .mobile-calendar-wrapper button.rdp-nav_button {
-  background: rgba(244, 63, 94, 0.12) !important;
-  border-color: rgba(244, 63, 94, 0.4) !important;
-  color: #ffe8ed !important;
-}
-
-[data-theme="rose"] .mobile-calendar-wrapper .rdp-nav_button:active,
-[data-theme="rose"] .mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button:active,
-[data-theme="rose"] .mobile-calendar-wrapper button.rdp-nav_button:active {
-  background: #F43F5E !important;
-  border-color: #F43F5E !important;
-}
-
-[data-theme="emerald"] .mobile-calendar-wrapper .rdp {
-  --rdp-accent-color: #10B981;
-  --rdp-background-color: rgba(16, 185, 129, 0.15);
-}
-
-[data-theme="emerald"] .mobile-calendar-btn.primary {
-  background: #10B981;
-  border-color: #10B981;
-}
-
-[data-theme="emerald"] .mobile-calendar-wrapper .rdp-nav_button,
-[data-theme="emerald"] .mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button,
-[data-theme="emerald"] .mobile-calendar-wrapper button.rdp-nav_button {
-  background: rgba(16, 185, 129, 0.12) !important;
-  border-color: rgba(16, 185, 129, 0.4) !important;
-  color: #e5fff6 !important;
-}
-
-[data-theme="emerald"] .mobile-calendar-wrapper .rdp-nav_button:active,
-[data-theme="emerald"] .mobile-calendar-wrapper .rdp-button_reset.rdp-nav_button:active,
-[data-theme="emerald"] .mobile-calendar-wrapper button.rdp-nav_button:active {
-  background: #10B981 !important;
-  border-color: #10B981 !important;
-}
-
-
-.mobile-modal-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  gap: 12px;
-  padding: 16px 20px;
-  padding-bottom: calc(16px + var(--safe-area-bottom, 0px));
-  background: linear-gradient(180deg,
-      rgba(15, 18, 25, 0) 0%,
-      rgba(15, 18, 25, 0.95) 20%,
-      rgba(15, 18, 25, 1) 100%);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.mobile-btn-secondary {
-  flex: 1;
-  padding: 16px;
-  border-radius: 14px;
-  border: 1.5px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.7);
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.mobile-btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
-  color: white;
-}
-
-.mobile-btn-secondary:active {
-  transform: scale(0.98);
-}
-
-.mobile-btn-secondary:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.mobile-btn-primary {
-  flex: 2;
-  padding: 16px;
-  border-radius: 14px;
-  border: none;
-  background: linear-gradient(180deg, var(--accent-electric, #FF4D00) 0%, var(--accent-dim, #CC3D00) 100%);
-  color: white;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  box-shadow: 0 4px 20px var(--accent-glow, rgba(255, 77, 0, 0.4));
-}
-
-.mobile-btn-primary:hover {
-  filter: brightness(1.1);
-  box-shadow: 0 6px 24px var(--accent-glow, rgba(255, 77, 0, 0.5));
-}
-
-.mobile-btn-primary:active {
-  transform: scale(0.98);
-}
-
-.mobile-btn-primary:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-/* Theme variants for primary button */
-[data-theme="teal"] .mobile-btn-primary {
-  background: linear-gradient(180deg, #14B8A6 0%, #0D9488 100%);
-  box-shadow: 0 4px 20px rgba(20, 184, 166, 0.4);
-}
-
-[data-theme="purple"] .mobile-btn-primary {
-  background: linear-gradient(180deg, #A855F7 0%, #7E22CE 100%);
-  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.4);
-}
-
-[data-theme="blue"] .mobile-btn-primary {
-  background: linear-gradient(180deg, #3B82F6 0%, #2563EB 100%);
-  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
-}
-
-[data-theme="rose"] .mobile-btn-primary {
-  background: linear-gradient(180deg, #F43F5E 0%, #BE123C 100%);
-  box-shadow: 0 4px 20px rgba(244, 63, 94, 0.4);
-}
-
-[data-theme="emerald"] .mobile-btn-primary {
-  background: linear-gradient(180deg, #10B981 0%, #047857 100%);
-  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
 }

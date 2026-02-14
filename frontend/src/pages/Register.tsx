@@ -4,6 +4,7 @@ import { FormField } from '../components/FormField';
 import { PasswordInput } from '../components/PasswordInput';
 import { PasswordStrengthChecker, PasswordSatellitePanel } from '../components/PasswordStrengthChecker';
 import { useAuthStore } from '../stores/authStore';
+import { useThemeStore } from '../stores/themeStore';
 
 /**
  * Register - User registration with inline password strength validation.
@@ -11,6 +12,7 @@ import { useAuthStore } from '../stores/authStore';
 export function Register() {
   const navigate = useNavigate();
   const { register } = useAuthStore();
+  const { mode, setMode } = useThemeStore();
   
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -102,6 +104,25 @@ export function Register() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-6 py-12">
+      {/* Dark/Light Mode Toggle */}
+      <button
+        type="button"
+        className="auth-mode-toggle"
+        onClick={() => setMode(mode === 'dark' ? 'light' : 'dark')}
+        aria-label={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}
+        title={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}
+      >
+        {mode === 'light' ? (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v2m0 14v2m7-9h2M3 12H5m11.657-6.657 1.414 1.414M5.929 18.071l1.414-1.414m0-9.9L5.93 5.343m12.728 12.728-1.414-1.414M12 8a4 4 0 100 8 4 4 0 000-8z" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+          </svg>
+        )}
+      </button>
+
       {/* Auth Layout - Card centered, Satellite absolute positioned */}
       <div className="auth-layout">
         
@@ -246,7 +267,7 @@ export function Register() {
 
             {/* Footer */}
             <div className="footer-links">
-              <span className="text-white/50 text-sm">Already have an account?</span>
+              <span className="footer-text">Already have an account?</span>
               {' '}
               <Link to="/login" className="text-link">
                 Sign in

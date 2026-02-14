@@ -1,26 +1,77 @@
-
 :root {
-  /* COLOR PALETTE */
-  --bg-deep: #050505;           /* Pure Black base */
-  --bg-elevated: #0a0a0c;       /* Slightly elevated surfaces */
-  --accent-electric: #FF4D00;   /* High-voltage Orange */
-  --accent-dim: #CC3D00;        /* Darker orange for gradients */
+  /* Accent palette (independent from mode) */
+  --accent-electric: #FF4D00;
+  --accent-dim: #CC3D00;
   --accent-glow: rgba(255, 77, 0, 0.6);
-  
-  /* GLASS VARIABLES */
-  --glass-surface: rgba(20, 20, 25, 0.6);
-  --glass-border: 1px solid rgba(255, 255, 255, 0.08);
-  --glass-blur: 24px;
-  
-  /* TEXT */
-  --text-main: #FFFFFF;
+  --accent-surface: rgba(255, 77, 0, 0.15);
+  --accent-border: rgba(255, 77, 0, 0.25);
+
+  /* Surfaces */
+  --surface-page: #050505;
+  --surface-elevated: #0a0a0c;
+  --surface-glass: rgba(20, 25, 35, 0.55);
+  --surface-glass-solid: rgba(20, 25, 35, 0.65);
+  --surface-glass-heavy: rgba(20, 25, 35, 0.75);
+  --surface-glass-dense: rgba(20, 25, 35, 0.95);
+  --surface-input: rgba(0, 0, 0, 0.35);
+  --surface-input-hover: rgba(0, 0, 0, 0.4);
+  --surface-input-focus: rgba(0, 0, 0, 0.5);
+  --surface-overlay: rgba(5, 8, 15, 0.75);
+  --surface-hover: rgba(255, 255, 255, 0.05);
+  --surface-active: rgba(255, 255, 255, 0.08);
+  --surface-subtle: rgba(255, 255, 255, 0.03);
+  --surface-danger: rgba(239, 68, 68, 0.08);
+  --surface-danger-hover: rgba(239, 68, 68, 0.15);
+  --border-danger: rgba(239, 68, 68, 0.2);
+  --border-danger-hover: rgba(239, 68, 68, 0.35);
+
+  /* Borders */
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --border-default: rgba(255, 255, 255, 0.08);
+  --border-prominent: rgba(255, 255, 255, 0.12);
+  --border-strong: rgba(255, 255, 255, 0.2);
+  --border-input: rgba(255, 255, 255, 0.08);
+  --border-input-hover: rgba(255, 255, 255, 0.12);
+
+  /* Text */
+  --text-primary: #FFFFFF;
+  --text-secondary: rgba(255, 255, 255, 0.7);
   --text-muted: rgba(255, 255, 255, 0.5);
   --text-dim: rgba(255, 255, 255, 0.3);
-  
-  /* FOCUS */
+  --text-placeholder: rgba(255, 255, 255, 0.25);
+  --text-on-accent: #FFFFFF;
+  --text-danger: #EF4444;
+
+  /* Shadows */
+  --shadow-sm: 0 4px 24px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 40px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 24px 80px rgba(0, 0, 0, 0.7);
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+  /* Scrollbar */
+  --scrollbar-track: rgba(255, 255, 255, 0.02);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.1);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.15);
+
+  /* Animated background */
+  --bg-aurora-blue: rgba(40, 100, 180, 0.12);
+  --bg-aurora-warm: rgba(255, 100, 50, 0.08);
+  --bg-aurora-teal: rgba(0, 200, 200, 0.06);
+  --bg-aurora-base: #050508;
+
+  /* Focus / controls */
   --focus-ring: rgba(255, 77, 0, 0.15);
-  
-  /* SAFE AREA INSETS - For notched devices */
+  --calendar-icon-invert: 1;
+
+  /* Backward-compat aliases */
+  --bg-deep: var(--surface-page);
+  --bg-elevated: var(--surface-elevated);
+  --glass-surface: var(--surface-glass);
+  --glass-border: 1px solid var(--border-default);
+  --glass-blur: 24px;
+  --text-main: var(--text-primary);
+
+  /* Safe areas */
   --safe-area-top: env(safe-area-inset-top, 0px);
   --safe-area-right: env(safe-area-inset-right, 0px);
   --safe-area-bottom: env(safe-area-inset-bottom, 0px);
@@ -32,28 +83,92 @@
   --accent-electric: #14B8A6;
   --accent-dim: #0D9488;
   --accent-glow: rgba(20, 184, 166, 0.6);
+  --accent-surface: rgba(20, 184, 166, 0.15);
+  --accent-border: rgba(20, 184, 166, 0.25);
 }
 
 [data-theme="purple"] {
   --accent-electric: #A855F7;
   --accent-dim: #7E22CE;
   --accent-glow: rgba(168, 85, 247, 0.6);
+  --accent-surface: rgba(168, 85, 247, 0.15);
+  --accent-border: rgba(168, 85, 247, 0.25);
 }
 
 [data-theme="blue"] {
   --accent-electric: #3B82F6;
   --accent-dim: #2563EB;
   --accent-glow: rgba(59, 130, 246, 0.6);
+  --accent-surface: rgba(59, 130, 246, 0.15);
+  --accent-border: rgba(59, 130, 246, 0.25);
 }
 
 [data-theme="rose"] {
   --accent-electric: #F43F5E;
   --accent-dim: #BE123C;
   --accent-glow: rgba(244, 63, 94, 0.6);
+  --accent-surface: rgba(244, 63, 94, 0.15);
+  --accent-border: rgba(244, 63, 94, 0.25);
 }
 
 [data-theme="emerald"] {
   --accent-electric: #10B981;
   --accent-dim: #047857;
   --accent-glow: rgba(16, 185, 129, 0.6);
+  --accent-surface: rgba(16, 185, 129, 0.15);
+  --accent-border: rgba(16, 185, 129, 0.25);
+}
+
+[data-mode="light"] {
+  --surface-page: #F5F6F8;
+  --surface-elevated: #FFFFFF;
+  --surface-glass: rgba(255, 255, 255, 0.7);
+  --surface-glass-solid: rgba(255, 255, 255, 0.85);
+  --surface-glass-heavy: rgba(255, 255, 255, 0.95);
+  --surface-glass-dense: #FFFFFF;
+  --surface-input: #FFFFFF;
+  --surface-input-hover: #FFFFFF;
+  --surface-input-focus: #FFFFFF;
+  --surface-overlay: rgba(0, 0, 0, 0.2);
+  --surface-hover: rgba(0, 0, 0, 0.04);
+  --surface-active: rgba(0, 0, 0, 0.08);
+  --surface-subtle: rgba(0, 0, 0, 0.01);
+  --surface-danger: rgba(220, 38, 38, 0.08);
+  --surface-danger-hover: rgba(220, 38, 38, 0.12);
+  --border-danger: rgba(220, 38, 38, 0.2);
+  --border-danger-hover: rgba(220, 38, 38, 0.3);
+
+  --border-subtle: #E2E4E8;
+  --border-default: #D1D5DB;
+  --border-prominent: #9CA3AF;
+  --border-strong: #6B7280;
+  --border-input: #D1D5DB;
+  --border-input-hover: #9CA3AF;
+
+  --text-primary: #111827;
+  --text-secondary: #4B5563;
+  --text-muted: #6B7280;
+  --text-dim: #9CA3AF;
+  --text-placeholder: #9CA3AF;
+  --text-on-accent: #FFFFFF;
+  --text-danger: #DC2626;
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-inset: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+
+  --scrollbar-track: transparent;
+  --scrollbar-thumb: #D1D5DB;
+  --scrollbar-thumb-hover: #9CA3AF;
+
+  /* Cleaner aesthetics - less aurora in light mode */
+  --bg-aurora-blue: rgba(59, 130, 246, 0.08);
+  --bg-aurora-warm: rgba(249, 115, 22, 0.08);
+  --bg-aurora-teal: rgba(20, 184, 166, 0.08);
+  /* Use a solid-ish off-white for the page background to be "concrete" */
+  --bg-aurora-base: #F3F4F6;
+
+  --focus-ring: rgba(0, 0, 0, 0.2);
+  --calendar-icon-invert: 0;
 }

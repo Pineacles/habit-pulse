@@ -8,18 +8,18 @@
   padding: 56px 32px;
 
   /* Glass panel surface */
-  background: rgba(20, 25, 35, 0.4);
+  background: var(--surface-glass);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 
   /* Etched crystal borders */
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-default);
   border-radius: 20px;
 
   /* Depth and inner light effect */
   box-shadow:
-    0 4px 24px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    var(--shadow-sm),
+    var(--shadow-inset);
 
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -45,7 +45,7 @@
 .empty-state-icon {
   font-size: 48px;
   margin-bottom: 20px;
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--text-dim);
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
 }
 
@@ -55,7 +55,7 @@
   font-size: 42px;
   font-weight: 700;
   letter-spacing: -0.03em;
-  color: rgba(255, 255, 255, 0.15);
+  color: var(--text-dim);
   margin-top: 24px;
   margin-bottom: 24px;
   line-height: 1;
@@ -96,7 +96,7 @@
   font-family: 'Space Grotesk', sans-serif;
   font-size: 20px;
   font-weight: 600;
-  color: var(--text-main, #FFFFFF);
+  color: var(--text-primary, #FFFFFF);
   margin-bottom: 8px;
   letter-spacing: -0.01em;
 }
@@ -105,7 +105,7 @@
   font-family: 'Space Grotesk', sans-serif;
   /* or inherit body font */
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--text-muted);
   margin-bottom: 0;
   line-height: 1.6;
   max-width: 400px;
@@ -126,11 +126,11 @@
   padding: 40px 24px;
 
   /* Subtler glass */
-  background: rgba(20, 25, 35, 0.25);
+  background: var(--surface-glass);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
   border-radius: 16px;
 
   display: flex;
@@ -148,7 +148,7 @@
 .empty-state-minimal-text {
   font-family: 'Space Grotesk', sans-serif;
   font-size: 15px;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-dim);
   margin: 0;
   line-height: 1.4;
 }

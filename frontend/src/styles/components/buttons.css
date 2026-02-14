@@ -1,11 +1,10 @@
-
 .btn {
   width: 100%;
   padding: 14px;
   min-height: 44px;
   border: none;
   border-radius: 8px;
-  color: white;
+  color: var(--text-on-accent);
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 700;
   font-size: 15px;
@@ -18,20 +17,116 @@
   gap: 10px;
 }
 
+/* Light mode normalization for button variants */
+[data-mode="light"] :is(.btn-ghost,
+  .goal-action-btn,
+  .modal-close,
+  .preset-btn,
+  .freq-btn,
+  .segment-btn) {
+  background: var(--surface-subtle);
+  border-color: var(--border-default);
+  color: var(--text-secondary);
+}
+
+[data-mode="light"] :is(.btn-ghost:hover,
+  .goal-action-btn:hover,
+  .modal-close:hover,
+  .preset-btn:hover,
+  .freq-btn:hover,
+  .segment-btn:hover) {
+  background: var(--surface-hover);
+  border-color: var(--border-prominent);
+  color: var(--text-primary);
+}
+
+[data-mode="light"] :is(.btn-primary,
+  .btn-glow,
+  .fab-add-goal,
+  .btn-add-goal-desktop,
+  .segment-btn.active) {
+  color: var(--text-on-accent);
+}
+
+/* Preserve accent backgrounds for active states in light mode (buttons.css) */
+[data-mode="light"] :is(.preset-btn.active,
+  .freq-btn.active) {
+  background: var(--surface-active);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+[data-mode="light"] .segment-btn.active {
+  background: var(--accent-electric);
+  border-color: var(--accent-electric);
+  color: var(--text-on-accent);
+}
+
+/* Light mode: soften glow effects and shadows on accent buttons */
+[data-mode="light"] .btn-glow {
+  box-shadow:
+    0 0 12px color-mix(in srgb, var(--accent-electric) 30%, transparent),
+    0 4px 12px color-mix(in srgb, var(--accent-electric) 20%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+[data-mode="light"] .btn-glow:hover {
+  box-shadow:
+    0 0 16px color-mix(in srgb, var(--accent-electric) 40%, transparent),
+    0 6px 16px color-mix(in srgb, var(--accent-electric) 30%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+[data-mode="light"] .fab-add-goal {
+  box-shadow:
+    0 0 12px color-mix(in srgb, var(--accent-electric) 30%, transparent),
+    0 4px 16px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+[data-mode="light"] .segment-btn {
+  color: var(--text-muted);
+}
+
+[data-mode="light"] .segment-btn:hover {
+  color: var(--text-primary);
+  background: var(--surface-hover);
+}
+
+[data-mode="light"] .segment-btn.active {
+  box-shadow: 0 0 8px color-mix(in srgb, var(--accent-electric) 40%, transparent);
+}
+
+[data-mode="light"] :is(.goal-type-toggle, .segmented-control) {
+  background: var(--surface-input);
+  border-color: var(--border-input);
+}
+
+[data-mode="light"] .signout-btn {
+  border-color: var(--border-danger);
+  background: var(--surface-danger);
+  color: var(--text-danger);
+}
+
+[data-mode="light"] .signout-btn:hover {
+  background: var(--surface-danger-hover);
+  border-color: var(--border-danger-hover);
+}
+
 /* Reduced Motion - Disable transform transitions */
 @media (prefers-reduced-motion: reduce) {
   .btn {
     transition: box-shadow 0.2s ease;
   }
-  
+
   .btn-primary:active:not(:disabled) {
     transform: none;
   }
-  
+
   .btn-glow:hover {
     transform: none;
   }
-  
+
   .btn-glow:active {
     transform: none;
   }
@@ -61,24 +156,24 @@
 }
 
 .btn-primary:focus-visible {
-  outline: 2px solid white;
+  outline: 2px solid var(--text-on-accent);
   outline-offset: 2px;
 }
 
 .btn-ghost {
-  background: rgba(255, 255, 255, 0.04);
-  color: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--surface-subtle);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-input);
 }
 
 .btn-ghost:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.15);
-  color: white;
+  background: var(--surface-active);
+  border-color: var(--border-prominent);
+  color: var(--text-primary);
 }
 
 .btn-ghost:focus-visible {
-  outline: 2px solid white;
+  outline: 2px solid var(--text-primary);
   outline-offset: 2px;
 }
 
@@ -91,29 +186,31 @@
 .btn-spinner {
   width: 20px;
   height: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-top-color: white;
+  border: 2px solid var(--border-strong);
+  border-top-color: var(--text-primary);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   will-change: transform;
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Reduced Motion - Disable spinner animation */
 @media (prefers-reduced-motion: reduce) {
   .btn-spinner {
     animation: none;
-    border-top-color: rgba(255, 255, 255, 0.2);
+    border-top-color: var(--text-dim);
   }
 }
 
 
 .btn-glow {
   background: linear-gradient(180deg, var(--accent-electric, #FF4D00) 0%, var(--accent-dim, #CC3D00) 100%);
-  color: white;
+  color: var(--text-on-accent);
   padding: 12px 20px;
   min-height: 44px;
   border-radius: 12px;
@@ -160,7 +257,7 @@
 }
 
 .btn-glow:focus-visible {
-  outline: 2px solid white;
+  outline: 2px solid var(--text-on-accent);
   outline-offset: 2px;
 }
 
@@ -170,71 +267,6 @@
   transform: none !important;
 }
 
-/* Theme-specific glow button variants */
-[data-theme="teal"] .btn-glow {
-  background: linear-gradient(180deg, #14B8A6 0%, #0D9488 100%);
-  box-shadow: 0 0 24px rgba(20, 184, 166, 0.5), 0 4px 16px rgba(20, 184, 166, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-[data-theme="teal"] .btn-glow:hover {
-  box-shadow: 0 0 32px rgba(20, 184, 166, 0.6), 0 6px 24px rgba(20, 184, 166, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-}
-
-[data-theme="teal"] .btn-glow:active {
-  box-shadow: 0 0 20px rgba(20, 184, 166, 0.5), 0 2px 8px rgba(20, 184, 166, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
-[data-theme="purple"] .btn-glow {
-  background: linear-gradient(180deg, #A855F7 0%, #7E22CE 100%);
-  box-shadow: 0 0 24px rgba(168, 85, 247, 0.5), 0 4px 16px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-[data-theme="purple"] .btn-glow:hover {
-  box-shadow: 0 0 32px rgba(168, 85, 247, 0.6), 0 6px 24px rgba(168, 85, 247, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-}
-
-[data-theme="purple"] .btn-glow:active {
-  box-shadow: 0 0 20px rgba(168, 85, 247, 0.5), 0 2px 8px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
-[data-theme="blue"] .btn-glow {
-  background: linear-gradient(180deg, #3B82F6 0%, #2563EB 100%);
-  box-shadow: 0 0 24px rgba(59, 130, 246, 0.5), 0 4px 16px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-[data-theme="blue"] .btn-glow:hover {
-  box-shadow: 0 0 32px rgba(59, 130, 246, 0.6), 0 6px 24px rgba(59, 130, 246, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-}
-
-[data-theme="blue"] .btn-glow:active {
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5), 0 2px 8px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
-[data-theme="rose"] .btn-glow {
-  background: linear-gradient(180deg, #F43F5E 0%, #BE123C 100%);
-  box-shadow: 0 0 24px rgba(244, 63, 94, 0.5), 0 4px 16px rgba(244, 63, 94, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-[data-theme="rose"] .btn-glow:hover {
-  box-shadow: 0 0 32px rgba(244, 63, 94, 0.6), 0 6px 24px rgba(244, 63, 94, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-}
-
-[data-theme="rose"] .btn-glow:active {
-  box-shadow: 0 0 20px rgba(244, 63, 94, 0.5), 0 2px 8px rgba(244, 63, 94, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-
-[data-theme="emerald"] .btn-glow {
-  background: linear-gradient(180deg, #10B981 0%, #047857 100%);
-  box-shadow: 0 0 24px rgba(16, 185, 129, 0.5), 0 4px 16px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-[data-theme="emerald"] .btn-glow:hover {
-  box-shadow: 0 0 32px rgba(16, 185, 129, 0.6), 0 6px 24px rgba(16, 185, 129, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-}
-
-[data-theme="emerald"] .btn-glow:active {
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.5), 0 2px 8px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
 
 
 .fab-add-goal {
@@ -247,7 +279,7 @@
   min-height: 56px;
   border-radius: 50%;
   background: linear-gradient(180deg, var(--accent-electric, #FF4D00) 0%, var(--accent-dim, #CC3D00) 100%);
-  color: white;
+  color: var(--text-on-accent);
   border: none;
   box-shadow:
     0 0 24px var(--accent-glow, rgba(255, 77, 0, 0.6)),
@@ -257,7 +289,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  z-index: 49;
   transition: all 0.2s ease;
   will-change: transform, box-shadow;
 }
@@ -279,7 +311,7 @@
 }
 
 .fab-add-goal:focus-visible {
-  outline: 2px solid white;
+  outline: 2px solid var(--text-on-accent);
   outline-offset: 3px;
 }
 
@@ -321,7 +353,7 @@
     letter-spacing: 0.02em;
     cursor: pointer;
     background: linear-gradient(180deg, var(--accent-electric, #FF4D00) 0%, var(--accent-dim, #CC3D00) 100%);
-    color: white;
+    color: var(--text-on-accent);
     border: 1px solid rgba(255, 255, 255, 0.25);
     box-shadow:
       0 0 24px var(--accent-glow, rgba(255, 77, 0, 0.6)),
@@ -348,7 +380,7 @@
   }
 
   .btn-add-goal-desktop:focus-visible {
-    outline: 2px solid white;
+    outline: 2px solid var(--text-on-accent);
     outline-offset: 2px;
   }
 
@@ -360,93 +392,19 @@
   }
 }
 
-/* Theme-specific desktop button variants */
-@media (min-width: 1024px) {
-  [data-theme="teal"] .btn-add-goal-desktop {
-    background: linear-gradient(180deg, #14B8A6 0%, #0D9488 100%);
-    box-shadow: 0 0 24px rgba(20, 184, 166, 0.5), 0 4px 16px rgba(20, 184, 166, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  }
-
-  [data-theme="teal"] .btn-add-goal-desktop:hover {
-    box-shadow: 0 0 32px rgba(20, 184, 166, 0.6), 0 6px 24px rgba(20, 184, 166, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  }
-
-  [data-theme="purple"] .btn-add-goal-desktop {
-    background: linear-gradient(180deg, #A855F7 0%, #7E22CE 100%);
-    box-shadow: 0 0 24px rgba(168, 85, 247, 0.5), 0 4px 16px rgba(168, 85, 247, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  }
-
-  [data-theme="purple"] .btn-add-goal-desktop:hover {
-    box-shadow: 0 0 32px rgba(168, 85, 247, 0.6), 0 6px 24px rgba(168, 85, 247, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  }
-
-  [data-theme="blue"] .btn-add-goal-desktop {
-    background: linear-gradient(180deg, #3B82F6 0%, #2563EB 100%);
-    box-shadow: 0 0 24px rgba(59, 130, 246, 0.5), 0 4px 16px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  }
-
-  [data-theme="blue"] .btn-add-goal-desktop:hover {
-    box-shadow: 0 0 32px rgba(59, 130, 246, 0.6), 0 6px 24px rgba(59, 130, 246, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  }
-
-  [data-theme="rose"] .btn-add-goal-desktop {
-    background: linear-gradient(180deg, #F43F5E 0%, #BE123C 100%);
-    box-shadow: 0 0 24px rgba(244, 63, 94, 0.5), 0 4px 16px rgba(244, 63, 94, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  }
-
-  [data-theme="rose"] .btn-add-goal-desktop:hover {
-    box-shadow: 0 0 32px rgba(244, 63, 94, 0.6), 0 6px 24px rgba(244, 63, 94, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  }
-
-  [data-theme="emerald"] .btn-add-goal-desktop {
-    background: linear-gradient(180deg, #10B981 0%, #047857 100%);
-    box-shadow: 0 0 24px rgba(16, 185, 129, 0.5), 0 4px 16px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  }
-
-  [data-theme="emerald"] .btn-add-goal-desktop:hover {
-    box-shadow: 0 0 32px rgba(16, 185, 129, 0.6), 0 6px 24px rgba(16, 185, 129, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  }
-}
-
 /* Reduced Motion - Disable desktop button animations */
 @media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
   .btn-add-goal-desktop {
     transition: box-shadow 0.2s ease;
   }
-  
+
   .btn-add-goal-desktop:hover {
     transform: none;
   }
-  
+
   .btn-add-goal-desktop:active {
     transform: none;
   }
-}
-
-/* Theme-specific FAB variants */
-[data-theme="teal"] .fab-add-goal {
-  background: linear-gradient(180deg, #14B8A6 0%, #0D9488 100%);
-  box-shadow: 0 0 24px rgba(20, 184, 166, 0.5), 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-[data-theme="purple"] .fab-add-goal {
-  background: linear-gradient(180deg, #A855F7 0%, #7E22CE 100%);
-  box-shadow: 0 0 24px rgba(168, 85, 247, 0.5), 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-[data-theme="blue"] .fab-add-goal {
-  background: linear-gradient(180deg, #3B82F6 0%, #2563EB 100%);
-  box-shadow: 0 0 24px rgba(59, 130, 246, 0.5), 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-[data-theme="rose"] .fab-add-goal {
-  background: linear-gradient(180deg, #F43F5E 0%, #E11D48 100%);
-  box-shadow: 0 0 24px rgba(244, 63, 94, 0.5), 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-[data-theme="emerald"] .fab-add-goal {
-  background: linear-gradient(180deg, #10B981 0%, #059669 100%);
-  box-shadow: 0 0 24px rgba(16, 185, 129, 0.5), 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 /* Reduced Motion - Disable FAB animations */
@@ -454,55 +412,18 @@
   .fab-add-goal {
     transition: box-shadow 0.2s ease;
   }
-  
+
   .fab-add-goal:hover {
     transform: none;
   }
-  
+
   .fab-add-goal:active {
     transform: none;
   }
 }
 
 
-/* Goal Action Buttons */
-.goal-action-btn {
-  width: 38px;
-  height: 38px;
-  min-width: 44px;
-  min-height: 44px;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.4);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.15s ease-out;
-}
-
-.goal-action-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.12);
-  color: white;
-}
-
-.goal-action-btn.danger:hover {
-  background: rgba(239, 68, 68, 0.15);
-  border-color: rgba(239, 68, 68, 0.3);
-  color: #EF4444;
-}
-
-.goal-action-btn:focus-visible {
-  outline: 2px solid var(--accent-electric, #FF4D00);
-  outline-offset: 2px;
-}
-
-.goal-action-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+/* Goal Action Buttons — base definition lives in cards.css */
 
 /* Modal Close Button */
 .modal-close {
@@ -511,9 +432,9 @@
   min-width: 44px;
   min-height: 44px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.4);
+  border: 1px solid var(--border-default);
+  background: var(--surface-subtle);
+  color: var(--text-dim);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -522,13 +443,13 @@
 }
 
 .modal-close:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.12);
-  color: white;
+  background: var(--surface-active);
+  border-color: var(--border-prominent);
+  color: var(--text-primary);
 }
 
 .modal-close:focus-visible {
-  outline: 2px solid var(--accent-electric, #FF4D00);
+  outline: 2px solid var(--accent-electric);
   outline-offset: 2px;
 }
 
@@ -541,9 +462,9 @@
 .preset-btn {
   padding: 8px 14px;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--border-default);
+  background: var(--surface-subtle);
+  color: var(--text-muted);
   font-family: 'JetBrains Mono', monospace;
   font-size: 12px;
   letter-spacing: 0.02em;
@@ -552,19 +473,19 @@
 }
 
 .preset-btn:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.7);
+  background: var(--surface-hover);
+  border-color: var(--border-prominent);
+  color: var(--text-secondary);
 }
 
 .preset-btn.active {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-  color: white;
+  background: var(--surface-active);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
 }
 
 .preset-btn:focus-visible {
-  outline: 2px solid var(--accent-electric, #FF4D00);
+  outline: 2px solid var(--accent-electric);
   outline-offset: 2px;
 }
 
@@ -577,9 +498,9 @@
 .freq-btn {
   padding: 8px 12px;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--border-default);
+  background: var(--surface-subtle);
+  color: var(--text-muted);
   font-family: 'Space Grotesk', sans-serif;
   font-size: 12px;
   white-space: nowrap;
@@ -589,19 +510,19 @@
 }
 
 .freq-btn:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.7);
+  background: var(--surface-hover);
+  border-color: var(--border-prominent);
+  color: var(--text-secondary);
 }
 
 .freq-btn.active {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-  color: white;
+  background: var(--surface-active);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
 }
 
 .freq-btn:focus-visible {
-  outline: 2px solid var(--accent-electric, #FF4D00);
+  outline: 2px solid var(--accent-electric);
   outline-offset: 2px;
 }
 
@@ -610,71 +531,7 @@
   cursor: not-allowed;
 }
 
-/* Segmented Control Buttons */
-.segment-btn {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 10px 16px;
-  font-size: 13px;
-  font-weight: 500;
-  border: none;
-  border-radius: 10px;
-  background: transparent;
-  color: rgba(255, 255, 255, 0.5);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.segment-btn:hover {
-  color: rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.03);
-}
-
-.segment-btn.active {
-  background: var(--accent-electric, #FF4D00);
-  color: white;
-  font-weight: 600;
-  box-shadow: 0 0 16px var(--accent-glow, rgba(255, 77, 0, 0.6));
-}
-
-/* Theme-specific segmented control variants */
-[data-theme="teal"] .segment-btn.active {
-  background: #14B8A6;
-  box-shadow: 0 0 16px rgba(20, 184, 166, 0.5);
-}
-
-[data-theme="purple"] .segment-btn.active {
-  background: #A855F7;
-  box-shadow: 0 0 16px rgba(168, 85, 247, 0.5);
-}
-
-[data-theme="blue"] .segment-btn.active {
-  background: #3B82F6;
-  box-shadow: 0 0 16px rgba(59, 130, 246, 0.5);
-}
-
-[data-theme="rose"] .segment-btn.active {
-  background: #F43F5E;
-  box-shadow: 0 0 16px rgba(244, 63, 94, 0.5);
-}
-
-[data-theme="emerald"] .segment-btn.active {
-  background: #10B981;
-  box-shadow: 0 0 16px rgba(16, 185, 129, 0.5);
-}
-
-.segment-btn:focus-visible {
-  outline: 2px solid var(--accent-electric, #FF4D00);
-  outline-offset: 2px;
-}
-
-.segment-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+/* Segment buttons — base definition lives in forms.css */
 
 /* Signout Button */
 .signout-btn {
@@ -685,9 +542,9 @@
   gap: 10px;
   padding: 14px;
   border-radius: 12px;
-  border: 1px solid rgba(239, 68, 68, 0.2);
-  background: rgba(239, 68, 68, 0.08);
-  color: #EF4444;
+  border: 1px solid var(--border-danger);
+  background: var(--surface-danger);
+  color: var(--text-danger);
   font-family: 'Space Grotesk', sans-serif;
   font-size: 14px;
   font-weight: 600;
@@ -696,12 +553,12 @@
 }
 
 .signout-btn:hover {
-  background: rgba(239, 68, 68, 0.15);
-  border-color: rgba(239, 68, 68, 0.35);
+  background: var(--surface-danger-hover);
+  border-color: var(--border-danger-hover);
 }
 
 .signout-btn:focus-visible {
-  outline: 2px solid #EF4444;
+  outline: 2px solid var(--text-danger);
   outline-offset: 2px;
 }
 

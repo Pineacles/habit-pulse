@@ -21,7 +21,7 @@
   font-size: 48px;
   font-weight: 700;
   letter-spacing: -0.03em;
-  color: white;
+  color: var(--text-primary);
   margin: 0;
 }
 
@@ -45,7 +45,7 @@
 .spinner-ring {
   position: absolute;
   inset: 0;
-  border: 3px solid rgba(255, 255, 255, 0.1);
+  border: 3px solid var(--border-prominent);
   border-top-color: var(--accent-electric, #FF4D00);
   border-radius: 50%;
   animation: spin 1s linear infinite;
@@ -62,7 +62,7 @@
 @media (prefers-reduced-motion: reduce) {
   .spinner-ring {
     animation: none;
-    border-top-color: rgba(255, 255, 255, 0.1);
+    border-top-color: var(--border-prominent);
   }
 }
 
@@ -70,7 +70,7 @@
   font-family: 'JetBrains Mono', monospace;
   font-size: 14px;
   letter-spacing: 0.05em;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-dim);
   text-transform: uppercase;
   margin: 0;
 }
@@ -87,9 +87,9 @@
 }
 
 .alert-error {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.2);
-  color: #FCA5A5;
+  background: var(--surface-danger);
+  border: 1px solid var(--border-danger);
+  color: var(--text-danger);
 }
 
 /* Shake animation for repeated errors */

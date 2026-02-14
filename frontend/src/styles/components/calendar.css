@@ -31,7 +31,7 @@
   display: grid !important;
   grid-template-columns: repeat(7, 1fr) !important;
   margin-bottom: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid var(--border-default);
   padding-bottom: 8px;
   width: 100%;
 }
@@ -41,7 +41,7 @@
   font-family: "JetBrains Mono", monospace;
   font-size: 11px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--text-dim);
   text-transform: uppercase;
   text-align: center;
   display: flex;
@@ -87,7 +87,7 @@
   border-radius: 10px;
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   font-family: "JetBrains Mono", monospace;
   font-size: 14px;
   cursor: pointer;
@@ -101,17 +101,17 @@
 .rdp-day:hover:not([disabled]),
 .rdp-day_button:hover:not([disabled]),
 .rdp-button:hover:not([disabled]) {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: var(--surface-active);
+  color: var(--text-primary);
 }
 
 
 /* When modifier class is on the button element */
 .schedule-day-highlighted {
   background-color: var(--accent-electric) !important;
-  color: white !important;
+  color: var(--text-on-accent) !important;
   font-weight: 700 !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid var(--border-strong) !important;
   box-shadow: 0 0 15px var(--accent-glow) !important;
 }
 
@@ -121,9 +121,9 @@
 .schedule-day-highlighted .rdp-button,
 .schedule-day-highlighted .rdp-button_reset {
   background-color: var(--accent-electric) !important;
-  color: white !important;
+  color: var(--text-on-accent) !important;
   font-weight: 700 !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid var(--border-strong) !important;
   box-shadow: 0 0 15px var(--accent-glow) !important;
 }
 
@@ -133,9 +133,9 @@
 .rdp-day_button[aria-selected="true"],
 .rdp-button[aria-selected="true"] {
   background-color: var(--accent-electric) !important;
-  color: white !important;
+  color: var(--text-on-accent) !important;
   font-weight: 700 !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid var(--border-strong) !important;
   box-shadow: 0 0 15px var(--accent-glow) !important;
 }
 
@@ -174,7 +174,7 @@
 .rdp-day[disabled],
 .rdp-day_button[disabled],
 .rdp-button[disabled] {
-  color: rgba(255, 255, 255, 0.18) !important;
+  color: var(--text-dim) !important;
   opacity: 0.45 !important;
   background: transparent !important;
   text-decoration: none !important;
@@ -191,7 +191,7 @@
   gap: 24px;
   padding-top: 16px;
   margin-top: 8px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--border-default);
 }
 
 .legend-item {
@@ -200,7 +200,7 @@
   gap: 8px;
   font-family: "JetBrains Mono", monospace;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-muted);
   text-transform: uppercase;
 }
 
@@ -235,7 +235,7 @@
   font-family: "Space Grotesk", sans-serif;
   font-size: 16px;
   font-weight: 700;
-  color: white;
+  color: var(--text-primary);
   position: absolute;
   left: 0;
   right: 0;
@@ -257,9 +257,9 @@
   height: 40px;
   min-width: 40px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.9);
+  background: var(--surface-active);
+  border: 1.5px solid var(--border-strong);
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -268,45 +268,19 @@
 }
 
 .rdp-nav_button:hover {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(255, 255, 255, 0.3);
-  color: white;
+  background: var(--surface-hover);
+  border-color: var(--border-prominent);
+  color: var(--text-primary);
 }
 
 .rdp-nav_button:active {
-  background: var(--accent-electric, #FF4D00);
-  border-color: var(--accent-electric, #FF4D00);
-  color: white;
+  background: var(--accent-electric);
+  border-color: var(--accent-electric);
+  color: var(--text-on-accent);
 }
 
 .rdp-nav_button svg {
   width: 20px;
   height: 20px;
   stroke-width: 2;
-}
-
-/* Theme variants for nav buttons */
-[data-theme="teal"] .rdp-nav_button:active {
-  background: #14B8A6;
-  border-color: #14B8A6;
-}
-
-[data-theme="purple"] .rdp-nav_button:active {
-  background: #A855F7;
-  border-color: #A855F7;
-}
-
-[data-theme="blue"] .rdp-nav_button:active {
-  background: #3B82F6;
-  border-color: #3B82F6;
-}
-
-[data-theme="rose"] .rdp-nav_button:active {
-  background: #F43F5E;
-  border-color: #F43F5E;
-}
-
-[data-theme="emerald"] .rdp-nav_button:active {
-  background: #10B981;
-  border-color: #10B981;
 }

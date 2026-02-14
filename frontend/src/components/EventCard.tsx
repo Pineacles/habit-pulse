@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { createPortal } from "react-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { type Event } from "../types";
 import { useEventStore } from "../stores/eventStore";
 
@@ -12,7 +14,21 @@ interface EventCardProps {
  */
 export function EventCard({ event, onEdit }: EventCardProps) {
   const { deleteEvent } = useEventStore();
-  const [openKebabMenuId, setOpenKebabMenuId] = useState<string | null>(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const closeMenu = useCallback(() => setIsMenuOpen(false), []);
+
+  // Close on any outside click (safety net alongside backdrop)
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const onClickOutside = (e: MouseEvent) => {
+      if (!(e.target as HTMLElement).closest('.kebab-menu-container')) {
+        closeMenu();
+      }
+    };
+    document.addEventListener('click', onClickOutside);
+    return () => document.removeEventListener('click', onClickOutside);
+  }, [isMenuOpen, closeMenu]);
 
   const handleDelete = async () => {
     if (confirm(`Delete "${event.title}"? This cannot be undone.`)) {
@@ -20,7 +36,6 @@ export function EventCard({ event, onEdit }: EventCardProps) {
     }
   };
 
-  // Format time as HH:MM (strip seconds if present)
   const formatTimeShort = (time: string): string => {
     const parts = time.split(':');
     return `${parts[0]}:${parts[1]}`;
@@ -101,13 +116,11 @@ export function EventCard({ event, onEdit }: EventCardProps) {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              setOpenKebabMenuId(
-                openKebabMenuId === event.id ? null : event.id
-              );
+              setIsMenuOpen((prev) => !prev);
             }}
             className="kebab-menu-btn"
             aria-label="More options"
-            aria-expanded={openKebabMenuId === event.id}
+            aria-expanded={isMenuOpen}
           >
             <svg
               className="w-5 h-5"
@@ -123,31 +136,53 @@ export function EventCard({ event, onEdit }: EventCardProps) {
               />
             </svg>
           </button>
-          {openKebabMenuId === event.id && (
-            <div className="kebab-menu-dropdown">
-              <button
-                onClick={() => {
-                  handleDelete();
-                  setOpenKebabMenuId(null);
-                }}
-                className="kebab-menu-item kebab-menu-item-danger"
-              >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+          {/* Portal the action sheet to body so position:fixed works
+              even inside Framer Motion transform containers */}
+          {createPortal(
+            <AnimatePresence>
+              {isMenuOpen && (
+                <>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.15 }}
+                    className="kebab-menu-backdrop"
+                    onClick={closeMenu}
                   />
-                </svg>
-                <span>Delete</span>
-              </button>
-            </div>
+                  <motion.div
+                    initial={{ y: 60, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: 60, opacity: 0 }}
+                    transition={{ type: 'spring', damping: 28, stiffness: 380 }}
+                    className="kebab-menu-dropdown"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <div className="kebab-menu-handle" />
+                    <div className="kebab-menu-items">
+                      <button
+                        onClick={() => {
+                          closeMenu();
+                          handleDelete();
+                        }}
+                        className="kebab-menu-item kebab-menu-item-danger"
+                      >
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
+                        </svg>
+                        <span>Delete</span>
+                      </button>
+                    </div>
+                  </motion.div>
+                </>
+              )}
+            </AnimatePresence>,
+            document.body
           )}
         </div>
       </div>

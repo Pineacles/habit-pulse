@@ -958,13 +958,7 @@ export function GoalModal({ isOpen, onClose, goal }: GoalModalProps) {
                   autoFocus
                 />
 
-                <div
-                  style={{
-                    fontSize: "12px",
-                    color: "rgba(255, 255, 255, 0.4)",
-                    textAlign: "right",
-                  }}
-                >
+                <div className="description-drawer-char-count">
                   {description.length}/500
                 </div>
 

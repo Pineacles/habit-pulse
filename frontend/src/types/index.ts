@@ -74,9 +74,11 @@ export interface ToggleResponse {
 
 // Theme types
 export type ThemeColor = 'orange' | 'teal' | 'purple' | 'blue' | 'rose' | 'emerald';
+export type ThemeMode = 'dark' | 'light' | 'system';
 
 export interface UserSettings {
   theme: ThemeColor;
+  mode?: ThemeMode;
 }
 
 // Unit options for measurable goals
