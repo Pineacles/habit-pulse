@@ -7,11 +7,27 @@
 - .NET 9 SDK
 - Node.js 20+
 
+### Secrets Setup (Required)
+
+`appsettings.json` ships with **empty** values for secrets — never commit real keys.
+
+For local development, copy the example and fill in your values:
+
+```bash
+cd src/HabitPulse.Api
+cp appsettings.Development.json.example appsettings.Development.json
+# Edit appsettings.Development.json:
+#   ConnectionStrings:Default — point to your dev Postgres
+#   Jwt:Key                   — any string >= 32 chars (dev only)
+```
+
+`appsettings.Development.json` is gitignored. Never put production secrets there.
+
 ### Setup
 
 1. **Start PostgreSQL:**
    ```bash
-   docker-compose -f docker-compose.dev.yml up -d
+   docker compose -f docker-compose.dev.yml up -d
    ```
 
 2. **Run Backend:**
@@ -70,13 +86,13 @@
 
 4. **Start Services:**
    ```bash
-   docker-compose up -d
+   docker compose up -d
    ```
 
 5. **Check Status:**
    ```bash
-   docker-compose ps
-   docker-compose logs -f
+   docker compose ps
+   docker compose logs -f
    ```
 
 6. **Test Locally:**
@@ -193,30 +209,30 @@ sudo systemctl restart caddy
 
 ### View Logs
 ```bash
-docker-compose logs -f api
-docker-compose logs -f frontend
-docker-compose logs -f db
+docker compose logs -f api
+docker compose logs -f frontend
+docker compose logs -f db
 ```
 
 ### Restart Services
 ```bash
-docker-compose restart
+docker compose restart
 ```
 
 ### Rebuild Without Cache
 ```bash
-docker-compose down
-docker-compose build --no-cache
-docker-compose up -d
+docker compose down
+docker compose build --no-cache
+docker compose up -d
 ```
 
 ### Database Access
 ```bash
-docker-compose exec db psql -U postgres -d habitpulse
+docker compose exec db psql -U postgres -d habitpulse
 ```
 
 ### Reset Database (CAUTION)
 ```bash
-docker-compose down -v  # This deletes all data!
-docker-compose up -d
+docker compose down -v  # This deletes all data!
+docker compose up -d
 ```

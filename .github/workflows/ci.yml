@@ -31,7 +31,7 @@ jobs:
       
       - name: Run ESLint
         working-directory: frontend
-        run: npm run lint || true  # Don't fail on lint warnings
+        run: npm run lint
       
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
