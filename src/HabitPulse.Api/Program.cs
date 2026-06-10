@@ -1,6 +1,8 @@
 using System.Text;
 using System.Text.Json;
+using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
@@ -9,6 +11,24 @@ using HabitPulse.Api.Endpoints;
 using HabitPulse.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// ─── Production startup validation ──────────────────────────────────────────
+if (builder.Environment.IsProduction())
+{
+    var jwtKey = builder.Configuration["Jwt:Key"];
+    if (string.IsNullOrWhiteSpace(jwtKey) || jwtKey.Length < 32)
+        throw new InvalidOperationException(
+            "Jwt:Key is missing, empty, or shorter than 32 characters. " +
+            "Set the Jwt__Key environment variable before starting in Production.");
+
+    var connStr = builder.Configuration.GetConnectionString("Default") ?? string.Empty;
+    if (!connStr.Contains("Password=", StringComparison.OrdinalIgnoreCase) ||
+        connStr.Contains("Password=;", StringComparison.OrdinalIgnoreCase) ||
+        connStr.Contains("Password= ;", StringComparison.OrdinalIgnoreCase))
+        throw new InvalidOperationException(
+            "ConnectionStrings:Default is missing a password. " +
+            "Set the ConnectionStrings__Default environment variable before starting in Production.");
+}
 
 // Configure JSON to use camelCase (match frontend)
 builder.Services.ConfigureHttpJsonOptions(options =>
@@ -39,12 +59,34 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] 
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]
                     ?? throw new InvalidOperationException("JWT Key not configured")))
         };
     });
 
 builder.Services.AddAuthorization();
+
+// ─── Rate limiting ───────────────────────────────────────────────────────────
+// 10 requests per minute per IP on auth endpoints; responds 429 when exceeded.
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddFixedWindowLimiter("auth", limiterOptions =>
+    {
+        limiterOptions.PermitLimit = 10;
+        limiterOptions.Window = TimeSpan.FromMinutes(1);
+        limiterOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        limiterOptions.QueueLimit = 0;
+    });
+
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.OnRejected = async (context, cancellationToken) =>
+    {
+        context.HttpContext.Response.Headers.RetryAfter = "60";
+        await context.HttpContext.Response.WriteAsJsonAsync(
+            new { error = "Too many requests. Please wait before trying again." },
+            cancellationToken);
+    };
+});
 
 // OpenAPI / Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -89,7 +131,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowFrontend", policy =>
     {
         policy.WithOrigins(
-                builder.Configuration.GetSection("Cors:Origins").Get<string[]>() 
+                builder.Configuration.GetSection("Cors:Origins").Get<string[]>()
                 ?? ["http://localhost:5173"])
             .AllowAnyHeader()
             .AllowAnyMethod();
@@ -99,12 +141,18 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Middleware pipeline
-app.UseSwagger();
-app.UseSwaggerUI(options =>
-{
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Habit Pulse API v1");
-});
 
+// Swagger — development only
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Habit Pulse API v1");
+    });
+}
+
+app.UseRateLimiter();
 app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();

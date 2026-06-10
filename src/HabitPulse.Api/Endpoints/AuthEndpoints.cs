@@ -18,6 +18,7 @@ public static class AuthEndpoints
 
             return Results.Created("/api/auth/me", new { message = "User registered successfully" });
         })
+        .RequireRateLimiting("auth")
         .WithName("Register")
         .WithSummary("Register a new user");
 
@@ -30,6 +31,7 @@ public static class AuthEndpoints
 
             return Results.Ok(token);
         })
+        .RequireRateLimiting("auth")
         .WithName("Login")
         .WithSummary("Login and receive JWT token");
 
