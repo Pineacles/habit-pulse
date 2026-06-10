@@ -1,69 +1,71 @@
 # Contributing to Habit Pulse
 
-## 🧪 Testing Before Committing
+Thank you for your interest in contributing! This guide covers how to get set up, run tests, and submit changes.
 
-**IMPORTANT: Always test your changes before committing to prevent deployment failures.**
+## Getting Started
 
-### Quick Test (Required Before Every Commit)
+1. Fork the repository and clone your fork.
+2. Follow the **Development Setup** steps in [README.md](README.md).
+3. Create a branch for your change: `git checkout -b feat/my-feature` or `fix/bug-description`.
 
-Before committing any changes, run these checks:
+## Running Tests
+
+### Backend (xUnit)
 
 ```bash
-# 1. Test frontend build (catches TypeScript errors, unused imports, etc.)
+# Requires Docker (no local .NET SDK needed)
+docker run --rm -v "$(pwd):/src" -w /src mcr.microsoft.com/dotnet/sdk:9.0 dotnet test
+```
+
+All 51 tests should pass. The suite uses an InMemory database — Postgres-specific behavior is noted in test comments.
+
+### Frontend (ESLint + TypeScript)
+
+```bash
 cd frontend
-npm run build
-
-# 2. Test backend build (catches C# compilation errors)
-cd ../src/HabitPulse.Api
-dotnet build
+npm ci
+npm run lint      # ESLint — must pass with 0 errors
+npm run build     # TypeScript compile + Vite build — must succeed
 ```
 
-### What These Tests Catch
+## Code Style
 
-- ✅ TypeScript errors (unused imports, type errors, syntax issues)
-- ✅ Build failures
-- ✅ Missing dependencies
-- ✅ Compilation errors
+### Backend (C#)
 
-### Full Docker Test (Optional, but Recommended Before Pushing to Main)
+- Follow the existing Minimal API pattern: endpoints in `Endpoints/`, business logic in `Services/`.
+- Use `Results.BadRequest`, `Results.NotFound`, etc. consistently.
+- Add input validation in the endpoint handler before calling the service.
+- New migrations: make them safe (nullable columns or defaults; no DROP TABLE).
 
-To test exactly what production does:
+### Frontend (TypeScript / React)
 
-```bash
-# From project root
-docker compose build --no-cache
-```
+- Functional components with hooks only.
+- State in Zustand stores; keep components presentational where possible.
+- CSS lives in `src/styles/` — use existing CSS variables (`--color-*`, etc.).
+- No inline styles for new code unless there is no alternative.
 
-This will catch Docker-specific issues that might not appear in local builds.
+## Branch & PR Conventions
 
-## 📝 Development Workflow
+- Branch names: `feat/`, `fix/`, `refactor/`, `docs/`, `test/` prefixes.
+- Commit messages use [Conventional Commits](https://www.conventionalcommits.org/):
+  `feat:`, `fix:`, `refactor:`, `test:`, `docs:`, `chore:`.
+- Keep commits small and focused. One logical change per commit.
+- Open a PR against `main`. The CI pipeline must be green before merging.
 
-1. **Make your changes**
-2. **Test locally** (run the quick test above)
-3. **If tests pass** → commit and push
-4. **If tests fail** → fix issues and test again
+## Before Submitting a PR
 
-## 🚀 CI/CD Pipeline
+- [ ] `npm run lint` passes with no errors
+- [ ] `npm run build` succeeds in `frontend/`
+- [ ] `dotnet test` passes (all tests green)
+- [ ] `docker compose build` succeeds (test Docker images build)
+- [ ] No secrets, credentials, or `.env` files committed
+- [ ] New features include tests where reasonable
 
-- **CI checks run automatically** on every push to `main`
-- **Deployment happens automatically** if CI passes
-- **Never push broken code** - it will fail in production
+## Reporting Issues
 
-## 🐛 Common Issues
+Open a GitHub issue with:
+- A clear title and description
+- Steps to reproduce (for bugs)
+- Expected vs. actual behaviour
 
-### TypeScript: "Unused import" error
-- Remove unused imports before committing
-- Example: `import { motion, AnimatePresence }` → remove `AnimatePresence` if not used
-
-### Build fails in Docker but works locally
-- Check for environment-specific issues
-- Ensure all dependencies are in `package.json` or `.csproj`
-- Test with `docker compose build` locally
-
-## 💡 Tips for AI Assistants
-
-When making code changes:
-1. Always run `npm run build` in `frontend/` before committing
-2. Check for unused imports/variables
-3. Ensure TypeScript compiles without errors
-4. Test Docker builds if making infrastructure changes
+For security vulnerabilities, see [SECURITY.md](SECURITY.md).
