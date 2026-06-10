@@ -139,13 +139,6 @@ export function Login() {
             </FormField>
           </div>
 
-          {/* Forgot Password Link */}
-          <div className="forgot-link-container">
-            <Link to="/forgot-password" className="text-link">
-              Forgot password?
-            </Link>
-          </div>
-
           {/* Submit Button */}
           <button
             type="submit"
