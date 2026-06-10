@@ -30,7 +30,8 @@ export interface Goal {
   isMeasurable: boolean;
   targetValue: number;
   unit: string;
-  targetMinutes: number; // Backward compatibility
+  /** @deprecated Use targetValue + unit instead */
+  targetMinutes: number;
   scheduleDays: number[];
   intervalDays: number | null;
   intervalStartDate: string | null; // ISO date string "2025-01-05"
