@@ -12,6 +12,8 @@ services:
       - Jwt__Issuer=HabitPulse
       - Jwt__Audience=HabitPulse
       - Cors__Origins__0=${FRONTEND_URL:-http://localhost}
+    volumes:
+      - dataprotection_keys:/home/app/.aspnet/DataProtection-Keys
     depends_on:
       db:
         condition: service_healthy
@@ -52,6 +54,7 @@ services:
 
 volumes:
   postgres_data:
+  dataprotection_keys:
 
 networks:
   habit-pulse-network:
