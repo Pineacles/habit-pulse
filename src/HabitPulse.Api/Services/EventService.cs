@@ -214,7 +214,7 @@ public class EventService
     {
         var events = await _context.Events
             .Where(e => e.UserId == userId && e.Date == date)
-            .OrderBy(e => e.Time.HasValue ? 0 : 1) // All-day events first or last (0 = first)
+            .OrderBy(e => e.Time.HasValue ? 1 : 0) // All-day events first (no time = 0)
             .ThenBy(e => e.Time)
             .ThenBy(e => e.SortOrder)
             .ToListAsync();
