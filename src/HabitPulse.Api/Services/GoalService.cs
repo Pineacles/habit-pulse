@@ -144,11 +144,20 @@ public class GoalService
         if (request.ScheduleDays != null) goal.ScheduleDays = request.ScheduleDays;
         if (request.SortOrder != null) goal.SortOrder = request.SortOrder.Value;
         if (request.IsActive != null) goal.IsActive = request.IsActive.Value;
-        
-        // Handle interval fields - allow setting to null to clear
-        if (request.IntervalDays != null) goal.IntervalDays = request.IntervalDays;
-        if (request.IntervalStartDate != null) goal.IntervalStartDate = request.IntervalStartDate;
-        
+
+        // ClearInterval=true explicitly removes interval scheduling (reverts to weekday-based).
+        // Otherwise update individual fields when provided.
+        if (request.ClearInterval)
+        {
+            goal.IntervalDays = null;
+            goal.IntervalStartDate = null;
+        }
+        else
+        {
+            if (request.IntervalDays != null) goal.IntervalDays = request.IntervalDays;
+            if (request.IntervalStartDate != null) goal.IntervalStartDate = request.IntervalStartDate;
+        }
+
         // Handle description - allow setting to null to clear
         if (request.Description != null) goal.Description = request.Description;
 
