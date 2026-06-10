@@ -39,7 +39,7 @@ jobs:
           dotnet-version: '9.0.x'
       
       - name: Restore backend dependencies
-        run: dotnet restore habit-pulse.sln
+        run: dotnet restore habit-pulse.sln --locked-mode
       
       - name: Build backend
         run: dotnet build habit-pulse.sln --no-restore
