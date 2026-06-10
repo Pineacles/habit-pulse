@@ -7,10 +7,10 @@
     }
   },
   "ConnectionStrings": {
-    "Default": "Host=localhost;Port=5433;Database=habitpulse;Username=postgres;Password=postgres"
+    "Default": "Host=localhost;Port=5433;Database=habitpulse;Username=postgres;Password=YOUR_DEV_PASSWORD"
   },
   "Jwt": {
-    "Key": "DevOnlyKey-ChangeThisInProduction-MustBe32CharsOrMore!",
+    "Key": "DevOnlyKey-ChangeThisInProduction-MustBe32CharsOrMore!!",
     "Issuer": "HabitPulse",
     "Audience": "HabitPulse"
   },
