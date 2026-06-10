@@ -21,7 +21,12 @@ public record UpdateGoalRequest(
     DateOnly? IntervalStartDate = null,
     string? Description = null,
     int? SortOrder = null,
-    bool? IsActive = null
+    bool? IsActive = null,
+    /// <summary>
+    /// When true, clears the interval schedule (IntervalDays and IntervalStartDate)
+    /// and reverts to weekday-based scheduling.
+    /// </summary>
+    bool ClearInterval = false
 );
 
 public record ReorderGoalsRequest(
