@@ -40,9 +40,12 @@
       },
       "Microsoft.OpenApi": {
         "type": "Direct",
-        "requested": "[1.6.29, )",
-        "resolved": "1.6.29",
-        "contentHash": "mLoYWWwRP3C7Iier4dDzepq0kw1Tpdlh+B6KZ1SNcgq/tWI8aC41WYvIsJpsAS4UG1IV4c0AAnZs8qCPobzBkQ=="
+        "requested": "[3.7.0, )",
+        "resolved": "3.7.0",
+        "contentHash": "7Ld/wUsxSEKBjAk8nPZ13qkju5kNoh20gf0JHPeHrK41tMZRpIq9amXFAOHncicjg0U5M035I+6/z3cBsYBHfg==",
+        "dependencies": {
+          "System.Text.Json": "8.0.5"
+        }
       },
       "Npgsql.EntityFrameworkCore.PostgreSQL": {
         "type": "Direct",
