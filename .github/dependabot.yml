@@ -6,11 +6,18 @@ updates:
       interval: "weekly"
     open-pull-requests-limit: 5
 
+  # Solution root, not the API project alone: the test project pins some of the
+  # same packages, and updating only one side produces assembly version
+  # conflicts (CS1705) at build time.
   - package-ecosystem: "nuget"
-    directory: "/src/HabitPulse.Api"
+    directory: "/"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5
+    groups:
+      dotnet:
+        patterns:
+          - "*"
 
   - package-ecosystem: "github-actions"
     directory: "/"

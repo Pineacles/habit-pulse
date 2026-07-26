@@ -38,8 +38,17 @@ jobs:
         with:
           dotnet-version: '9.0.x'
       
+      # Dependabot bumps package versions but does not regenerate
+      # packages.lock.json, so locked mode always fails on its branches
+      # (NU1004). Re-evaluate the lock there, and keep it strict everywhere
+      # else so a normal push cannot silently change resolved versions.
       - name: Restore backend dependencies
-        run: dotnet restore habit-pulse.sln --locked-mode
+        run: |
+          if [ "${{ github.actor }}" = "dependabot[bot]" ]; then
+            dotnet restore habit-pulse.sln --force-evaluate
+          else
+            dotnet restore habit-pulse.sln --locked-mode
+          fi
       
       - name: Build backend
         run: dotnet build habit-pulse.sln --no-restore
